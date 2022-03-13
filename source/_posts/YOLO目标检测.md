@@ -6,7 +6,6 @@ last_modified_at: 2020-02-09 02:08:25 +0800
 tags: [CV, 目标检测, YOLO]
 toc:  true
 ---
-{: .message }
 
 
 ### YOLO目标检测

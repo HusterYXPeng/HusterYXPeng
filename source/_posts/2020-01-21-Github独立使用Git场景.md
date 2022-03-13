@@ -6,7 +6,6 @@ last_modified_at: 2020-10-01 01:08:25 +0800
 tags: [代码提交, Github, Git提交代码]
 toc:  true
 ---
-{: .message }
 
 
 ## 删除无效的分支
