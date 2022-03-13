@@ -86,25 +86,25 @@
 <meta property="og:site_name" content="JoliceYu的个人博客">
 <meta property="og:description" content="YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/Temp%5C1526956557757.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526958570626.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526959795473.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526959559732.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526959131291.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526959284764.png">
-<meta property="og:image" content="http://example.com/Temp%5C1536029366324.png">
-<meta property="og:image" content="http://example.com/Temp%5C1536029429182.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526960227974.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526961176544.png">
-<meta property="og:image" content="http://example.com/Temp%5C1526974178903.png">
+<meta property="og:image" content="http://example.com/image/1526956557757.png">
+<meta property="og:image" content="http://example.com/image/1526958570626.png">
+<meta property="og:image" content="http://example.com/image/1526959795473.png">
+<meta property="og:image" content="http://example.com/image/1526959559732.png">
+<meta property="og:image" content="http://example.com/image/1526959131291.png">
+<meta property="og:image" content="http://example.com/image/1526959284764.png">
+<meta property="og:image" content="http://example.com/image/1536029366324.png">
+<meta property="og:image" content="http://example.com/image/1536029429182.png">
+<meta property="og:image" content="http://example.com/image/1526960227974.png">
+<meta property="og:image" content="http://example.com/image/1526961176544.png">
+<meta property="og:image" content="http://example.com/image/1526974178903.png">
 <meta property="article:published_time" content="2020-02-08T15:18:00.000Z">
-<meta property="article:modified_time" content="2022-03-13T11:05:54.489Z">
+<meta property="article:modified_time" content="2022-03-13T11:30:10.428Z">
 <meta property="article:author" content="Xipeng Yu">
 <meta property="article:tag" content="CV">
 <meta property="article:tag" content="目标检测">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/Temp%5C1526956557757.png">
+<meta name="twitter:image" content="http://example.com/image/1526956557757.png">
 
 
 
@@ -316,7 +316,7 @@
       
         <h3 id="YOLO目标检测"><a href="#YOLO目标检测" class="headerlink" title="YOLO目标检测"></a>YOLO目标检测</h3><h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到<strong>45fps，FastYOLO可以达到155fps</strong>，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法迁移到其他场景如艺术品识别中效果还是很好。</p>
 <h4 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h4><p>与基于two-stage的目标检测算法相比，YOLO系列的目标检测算法使用的直接回归的思想进行检测，没有RPN之类的需要预测bbox的步骤，可以直接回归。算法优势速度快，同时检测的精度还是可以的。整体上把目标检测任务看作是目标区域预测和类别预测的回归问题，采用单个神经网络直接预测目标的边界和类别，实现了端到端的检测。YOLO结构如下：</p>
-<p><img src="/Temp%5C1526956557757.png" alt="1526956557757"></p>
+<p><img src="/image/1526956557757.png" alt="1526956557757"></p>
 <p><strong>YOLO的优势</strong>：</p>
 <ul>
 <li>YOLO特别快，基本版本45fps，Fast版本155fps。</li>
@@ -339,23 +339,23 @@
 <h4 id="二、Unified-Detection"><a href="#二、Unified-Detection" class="headerlink" title="二、Unified Detection"></a>二、Unified Detection</h4><h5 id="1、算法框架和思路"><a href="#1、算法框架和思路" class="headerlink" title="1、算法框架和思路"></a>1、算法框架和思路</h5><p>（1）YOLO将整个图像分为S*S个格子（grid cell）。在训练的时候，如果一个目标的中心落入某个grid cell，这个cell就负责检测该目标。（这里是以cell来做判别和match GT）</p>
 <p>（2）每个cell预测B个box（实际：B&#x3D;2），每个box预测一个置信值Confidence和四个位置的偏移量x、y、w、h，x和y代表了box的中心相对与cell边界的偏移，w和h是相对整个图像的高度和宽度。在预测中，Confidence代表了预测的Box与GT之间的IOU。</p>
 <p>每个cell预测C个类别（eg：VOC就是20个类别）。这样一个cell就预测了（B* 5 + C）个值，整个图像上预测了：</p>
-<p><img src="/Temp%5C1526958570626.png" alt="1526958570626"></p>
+<p><img src="/image/1526958570626.png" alt="1526958570626"></p>
 <p>个值的tensor张量。</p>
-<p><img src="/Temp%5C1526959795473.png" alt="1526959795473"></p>
-<p>（3）<strong>关于置信度</strong>：置信值Confidence代表了该box含有一个目标的置信度以及认为当前预测正确的精确度。正式定义为Confidence为：<img src="/Temp%5C1526959559732.png" alt="1526959559732"></p>
+<p><img src="/image/1526959795473.png" alt="1526959795473"></p>
+<p>（3）<strong>关于置信度</strong>：置信值Confidence代表了该box含有一个目标的置信度以及认为当前预测正确的精确度。正式定义为Confidence为：<img src="/image/1526959559732.png" alt="1526959559732"></p>
 <p>注意这里的Confidence的正式定义，Pr（Objecet）是一个cell是否含有一个目标的概率，在训练的时候，就是0或者1，因此，在实际训练中，如果一个cell负责了一个目标，那么这个cell中两个box的置信度的label分别为两个box与GT之间的IOU；如果一个cell没有负责一个目标，那么这个cell中两个box的置信度的label为0。</p>
 <p><strong>注意点：</strong></p>
 <ul>
-<li><p>每个cell预测C个类别的条件概率<img src="/Temp%5C1526959131291.png" alt="1526959131291">这个条件概率的前提是一个cell含有了一个目标。在测试的时候，将预测的条件类别概率乘以Confidence：</p>
-<p><img src="/Temp%5C1526959284764.png" alt="1526959284764"></p>
+<li><p>每个cell预测C个类别的条件概率<img src="/image/1526959131291.png" alt="1526959131291">这个条件概率的前提是一个cell含有了一个目标。在测试的时候，将预测的条件类别概率乘以Confidence：</p>
+<p><img src="/image/1526959284764.png" alt="1526959284764"></p>
 <p>这样就得到最后预测的每个box的每个特定类别的置信度的socre。这个score encode了特定类别出现在box中的概率以及这个预测的box正确的可能性。</p>
 </li>
 <li><p>类别概率是每个cell格子预测每个类别的概率值，概率的预测是对应于一个cell的 ，不是针对每个box预测概率值。但是Confidence和坐标长宽等5个值是针对特定的box的。</p>
 </li>
 </ul>
-<h5 id="2、算法训练"><a href="#2、算法训练" class="headerlink" title="2、算法训练"></a>2、算法训练</h5><p><img src="/Temp%5C1536029366324.png" alt="1536029366324"></p>
+<h5 id="2、算法训练"><a href="#2、算法训练" class="headerlink" title="2、算法训练"></a>2、算法训练</h5><p><img src="/image/1536029366324.png" alt="1536029366324"></p>
 <p><strong>总的损失函数如下</strong></p>
-<p><img src="/Temp%5C1536029429182.png" alt="1536029429182"></p>
+<p><img src="/image/1536029429182.png" alt="1536029429182"></p>
 <p>loss公式中： 1i(obj)表示目标中心在第i个cell中，1ij(obj)表示第i个cell中第j个box负责了这个预测。对于loss的惩罚，如果一个目标在一个cell中，会对这个cell的分类loss加惩罚；如果一个box预测器对一个预测负责（目标落在一个cell中，且cell中多个box与GT的IOU最大的那个box），会惩罚其位置损失。</p>
 <p><strong>需要注意以下几点</strong>：</p>
 <ul>
@@ -370,7 +370,7 @@
 <p>不加根号，这样大box和小box的error是同等重要的。但是这是不符合逻辑的，比如小的偏移，在大box中的影响比在小box中的影响要小很多。所以开根号，降低这个误差。</p>
 <p><strong>为什么整体loss用平方误差损失</strong>：</p>
 <p>在这里使用平方误差loss，即sum-squard loss，是因为这个平方误差和的loss更好去优化optimize。</p>
-<h5 id="3、网络结构"><a href="#3、网络结构" class="headerlink" title="3、网络结构"></a>3、网络结构</h5><p><img src="/Temp%5C1526960227974.png" alt="1526960227974"></p>
+<h5 id="3、网络结构"><a href="#3、网络结构" class="headerlink" title="3、网络结构"></a>3、网络结构</h5><p><img src="/image/1526960227974.png" alt="1526960227974"></p>
 <p>在训练时候注意点：</p>
 <ul>
 <li><p>开始是一个224 * 224输入的图像分类模型。在ImageNet上训练分类模型。</p>
@@ -378,7 +378,7 @@
 <li><p>再将分类模型上加卷积层和fc层，变成检测模型，输入为448 * 448.</p>
 </li>
 <li><p>最后一层后加了一个线性激活层，其余的层加的都是leak-relu层：</p>
-<p><img src="/Temp%5C1526961176544.png" alt="1526961176544"></p>
+<p><img src="/image/1526961176544.png" alt="1526961176544"></p>
 </li>
 </ul>
 <h5 id="4、其他"><a href="#4、其他" class="headerlink" title="4、其他"></a>4、其他</h5><p>1、在训练的过程中，在每个grid cell会预测多个Box，在训练的时候，只希望一个box来负责预测一个GT，每个GT只有一个box来预测，选择IOU最大的box（这里自己理解是：先根据GT中心点将GT对应到cell，再在cell中2box选择IOU最大的来作为一个Box与GT对应，这样最后其实每个GT只有一个Box与之对应）。这样好处是：每个位置cell的Box预测都是不同的、特殊的，更擅长去预测特定size、长宽比、特定类别的目标，这会提高recall。这里有点SSD的味道了。</p>
@@ -400,7 +400,7 @@
 </li>
 <li><p>每个cell有B个box，经过一轮后每个box都会有四个值（xy相对于cell左上角的偏移，以及wh都是归一化的）以及一个Confid值，根据xywh可以计算B个box中与GT的IOU最大的box，这样就可以得到box与GT对应起来，每个GT只会与一个cell中的一个box对应，对应box的confid的label值就是对应的IOU值。</p>
 </li>
-<li><p>关于loss中中心点位置的损失：<img src="/Temp%5C1526974178903.png" alt="1526974178903"></p>
+<li><p>关于loss中中心点位置的损失：<img src="/image/1526974178903.png" alt="1526974178903"></p>
 <p>在train时，GT与cell对应后，GT的坐标就转化为相对于cell左上角的坐标（按照cell再归一化的），预测x^和y^也是相对于cell左上角的坐标（也是在cell内的，0到1的坐标值）。这样做的好处：在cell内归一化的坐标变化m，对应到全图偏移本质就只有m&#x2F;7。这样可以让位置的预测和训练更稳定，如果都是基于全图的位置loss，这样位置预测就会出现不稳定。</p>
 </li>
 </ul>
@@ -438,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/08/2020-04-28-YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="next" title="YOLO-V1目标检测">
-                <i class="fa fa-chevron-left"></i> YOLO-V1目标检测
+              <a href="/2020/02/05/2020-02-05-Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="next" title="Python常用的路径相关操作">
+                <i class="fa fa-chevron-left"></i> Python常用的路径相关操作
               </a>
             
           </div>
@@ -527,7 +527,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -540,7 +540,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
