@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="{: .message } YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目">
+<meta name="description" content="YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="YOLO-V1目标检测">
 <meta property="og:url" content="http://example.com/2020/02/08/YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.html">
 <meta property="og:site_name" content="JoliceYu的个人博客">
-<meta property="og:description" content="{: .message } YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目">
+<meta property="og:description" content="YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/Temp%5C1526956557757.png">
 <meta property="og:image" content="http://example.com/Temp%5C1526958570626.png">
@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://example.com/Temp%5C1526961176544.png">
 <meta property="og:image" content="http://example.com/Temp%5C1526974178903.png">
 <meta property="article:published_time" content="2020-02-08T15:18:00.000Z">
-<meta property="article:modified_time" content="2022-03-13T10:32:11.593Z">
+<meta property="article:modified_time" content="2022-03-13T11:05:54.489Z">
 <meta property="article:author" content="Xipeng Yu">
 <meta property="article:tag" content="CV">
 <meta property="article:tag" content="目标检测">
@@ -314,8 +314,7 @@
       
 
       
-        <p>{: .message }</p>
-<h3 id="YOLO目标检测"><a href="#YOLO目标检测" class="headerlink" title="YOLO目标检测"></a>YOLO目标检测</h3><h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到<strong>45fps，FastYOLO可以达到155fps</strong>，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法迁移到其他场景如艺术品识别中效果还是很好。</p>
+        <h3 id="YOLO目标检测"><a href="#YOLO目标检测" class="headerlink" title="YOLO目标检测"></a>YOLO目标检测</h3><h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到<strong>45fps，FastYOLO可以达到155fps</strong>，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法迁移到其他场景如艺术品识别中效果还是很好。</p>
 <h4 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h4><p>与基于two-stage的目标检测算法相比，YOLO系列的目标检测算法使用的直接回归的思想进行检测，没有RPN之类的需要预测bbox的步骤，可以直接回归。算法优势速度快，同时检测的精度还是可以的。整体上把目标检测任务看作是目标区域预测和类别预测的回归问题，采用单个神经网络直接预测目标的边界和类别，实现了端到端的检测。YOLO结构如下：</p>
 <p><img src="/Temp%5C1526956557757.png" alt="1526956557757"></p>
 <p><strong>YOLO的优势</strong>：</p>
@@ -439,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/05/2020-02-05-Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="next" title="Python常用的路径相关操作">
-                <i class="fa fa-chevron-left"></i> Python常用的路径相关操作
+              <a href="/2020/02/08/2020-04-28-YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="next" title="YOLO-V1目标检测">
+                <i class="fa fa-chevron-left"></i> YOLO-V1目标检测
               </a>
             
           </div>
@@ -449,8 +448,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/08/2020-04-01-YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="prev" title="YOLO-V1目标检测">
-                YOLO-V1目标检测 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/08/2020-02-05-Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="prev" title="Python常用的文件夹相关操作">
+                Python常用的文件夹相关操作 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
