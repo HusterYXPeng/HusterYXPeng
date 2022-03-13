@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CV、目标检测、YOLO," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="{: .message } YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YOLO-V1目标检测">
+<meta property="og:url" content="http://example.com/2020/02/08/2020-04-01-YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="{: .message } YOLO目标检测摘要YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到45fps，FastYOLO可以达到155fps，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/Temp%5C1526956557757.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526958570626.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526959795473.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526959559732.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526959131291.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526959284764.png">
+<meta property="og:image" content="http://example.com/Temp%5C1536029366324.png">
+<meta property="og:image" content="http://example.com/Temp%5C1536029429182.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526960227974.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526961176544.png">
+<meta property="og:image" content="http://example.com/Temp%5C1526974178903.png">
+<meta property="article:published_time" content="2020-02-08T15:18:00.000Z">
+<meta property="article:modified_time" content="2022-03-13T10:32:11.575Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="CV、目标检测、YOLO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/Temp%5C1526956557757.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/02/08/2020-04-01-YOLO目标检测/"/>
+
+
+
+
+
+  <title>YOLO-V1目标检测 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/02/08/2020-04-01-YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">YOLO-V1目标检测</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-08T23:18:00+08:00">
+                2020-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>{: .message }</p>
+<h3 id="YOLO目标检测"><a href="#YOLO目标检测" class="headerlink" title="YOLO目标检测"></a>YOLO目标检测</h3><h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>YOLO把检测问题当做一个regression problem，空间上将边框预测和类别预测分离了，整个预测在整个图像上一次evaluation。YOLO标准本可以达到<strong>45fps，FastYOLO可以达到155fps</strong>，mAP还是可以达到当前最好的检测器的mAP。相比其他的检测器：YOLO定位误差更大，将背景错误预测成目标的概率降低了；YOLO学习到了目标更普遍性的特征，比如将算法迁移到其他场景如艺术品识别中效果还是很好。</p>
+<p>####一、背景</p>
+<p>与基于two-stage的目标检测算法相比，YOLO系列的目标检测算法使用的直接回归的思想进行检测，没有RPN之类的需要预测bbox的步骤，可以直接回归。算法优势速度快，同时检测的精度还是可以的。整体上把目标检测任务看作是目标区域预测和类别预测的回归问题，采用单个神经网络直接预测目标的边界和类别，实现了端到端的检测。YOLO结构如下：</p>
+<p><img src="/Temp%5C1526956557757.png" alt="1526956557757"></p>
+<p><strong>YOLO的优势</strong>：</p>
+<ul>
+<li>YOLO特别快，基本版本45fps，Fast版本155fps。</li>
+<li>YOLO在预测时候是基于全局信息的。在测试和训练中see the entire image，因此，encode了目标的类别以及是否出现的上下文信息。这里其他的two-stage的算法，因为只在roi上做预测，没有上下文信息，容易将背景预测成目标，假阳率增加。YOLO在这块错误率降低了一半左右。</li>
+<li>YOLO学习到了目标的更一般的特性。当在自然图像上训练，可以在艺术品图上识别；另外，当有unexpected  input时候，YOLO不容易break down。</li>
+</ul>
+<p><strong>YOLO不足和限制</strong>：</p>
+<ul>
+<li>定位精度差，因为其在一次性预测中定位精度和类别。比较难，特别是在小目标上精度更低；另一方面，因为虽然加了根号，但是定位误差，大小box的误差相同对待的，但是不同相等对待，同样的误差，大box的影响要比小box对IOU影响要小。</li>
+<li>预测的box个数是固定的，同一个cell只预测了2个box，对于那种有多个目连在一起的情况就没法准确预测了。目标的个数有上限。比如一群鸟预测，就出了问题。</li>
+<li>yolo的box的预测是从数据中预测的，因此，对于新的或者是不常见角度或者是不常见长宽比的的目标是无法准确识别以及预测其box的。（自己理解：因为YOLO的边框是来自于数据，没有Anchor以及SSD的预先设定的框，这样导致eg数据集中大部分GT都是正方形的，这样训练出的YOLO对于比如极端点的长方形就很难预测了）</li>
+<li>该算法核心的error就是定位的误差。</li>
+</ul>
+<p><strong>2、之前的two-stage的方法的不足</strong>：</p>
+<ul>
+<li>算法流程复杂，需要先预测出bbox，再识别与回归。比较难优化。</li>
+<li>训练困难，存在RPN和CNN的双重训练。</li>
+<li>速度慢，流程较多，识别的时候速度慢。</li>
+</ul>
+<h4 id="二、Unified-Detection"><a href="#二、Unified-Detection" class="headerlink" title="二、Unified Detection"></a>二、Unified Detection</h4><p>#####1、算法框架和思路</p>
+<p>（1）YOLO将整个图像分为S*S个格子（grid cell）。在训练的时候，如果一个目标的中心落入某个grid cell，这个cell就负责检测该目标。（这里是以cell来做判别和match GT）</p>
+<p>（2）每个cell预测B个box（实际：B&#x3D;2），每个box预测一个置信值Confidence和四个位置的偏移量x、y、w、h，x和y代表了box的中心相对与cell边界的偏移，w和h是相对整个图像的高度和宽度。在预测中，Confidence代表了预测的Box与GT之间的IOU。</p>
+<p>每个cell预测C个类别（eg：VOC就是20个类别）。这样一个cell就预测了（B* 5 + C）个值，整个图像上预测了：</p>
+<p><img src="/Temp%5C1526958570626.png" alt="1526958570626"></p>
+<p>个值的tensor张量。</p>
+<p><img src="/Temp%5C1526959795473.png" alt="1526959795473"></p>
+<p>（3）<strong>关于置信度</strong>：置信值Confidence代表了该box含有一个目标的置信度以及认为当前预测正确的精确度。正式定义为Confidence为：<img src="/Temp%5C1526959559732.png" alt="1526959559732"></p>
+<p>注意这里的Confidence的正式定义，Pr（Objecet）是一个cell是否含有一个目标的概率，在训练的时候，就是0或者1，因此，在实际训练中，如果一个cell负责了一个目标，那么这个cell中两个box的置信度的label分别为两个box与GT之间的IOU；如果一个cell没有负责一个目标，那么这个cell中两个box的置信度的label为0。</p>
+<p><strong>注意点：</strong></p>
+<ul>
+<li><p>每个cell预测C个类别的条件概率<img src="/Temp%5C1526959131291.png" alt="1526959131291">这个条件概率的前提是一个cell含有了一个目标。在测试的时候，将预测的条件类别概率乘以Confidence：</p>
+<p><img src="/Temp%5C1526959284764.png" alt="1526959284764"></p>
+<p>这样就得到最后预测的每个box的每个特定类别的置信度的socre。这个score encode了特定类别出现在box中的概率以及这个预测的box正确的可能性。</p>
+</li>
+<li><p>类别概率是每个cell格子预测每个类别的概率值，概率的预测是对应于一个cell的 ，不是针对每个box预测概率值。但是Confidence和坐标长宽等5个值是针对特定的box的。</p>
+</li>
+</ul>
+<p>#####2、算法训练</p>
+<p><img src="/Temp%5C1536029366324.png" alt="1536029366324"></p>
+<p><strong>总的损失函数如下</strong></p>
+<p><img src="/Temp%5C1536029429182.png" alt="1536029429182"></p>
+<p>loss公式中： 1i(obj)表示目标中心在第i个cell中，1ij(obj)表示第i个cell中第j个box负责了这个预测。对于loss的惩罚，如果一个目标在一个cell中，会对这个cell的分类loss加惩罚；如果一个box预测器对一个预测负责（目标落在一个cell中，且cell中多个box与GT的IOU最大的那个box），会惩罚其位置损失。</p>
+<p><strong>需要注意以下几点</strong>：</p>
+<ul>
+<li>置信值的误差：计算了所有的box的置信度误差，无论是否含有目标的box的置信度都参加了误差的计算。因为不含目标的box很多，所有其在总的误差中的比例小，乘以一个小于1的系数为0.5；对于有目标的cell的box的Confidence，其误差乘以系数5。</li>
+<li>-坐标预测的误差：整个框要确定需要知道其坐标x和y，以及宽度w和高度h，计算坐标误差的时候只计算了含有目标对应的box的误差。由于含有目标的box的数目少，因此，这部分误差前面加了一个大于1的系数，取值为5.</li>
+<li>类别预测的误差：类别是整个cell格子预测一个类别，对应误差是整个概率向量进行作差计算误差，这里也是只计算了有目标的cell的分类概率的误差。</li>
+<li>计算边框误差是长宽的开方：因为大的box如果预测的值和真实的ground truth差一点点，与小的box如果预测的值和真实的ground truth差一点，小box的偏差实际是更大的。Eg：长宽各偏移10个像素，但是对于大box来说这个误差很小，对于长宽都是10的小box来说，这点小偏差就很大了，不能忍。</li>
+</ul>
+<p><strong>为什么要加5 和0.5的loss的权重</strong>：</p>
+<p>如果不对包含和不包含目标的cell和box的loss同等对待，一方面这不是很ideal，另一方面，一个大图像中，可能没有目标或者是目标很少，这导致了大部分的cell的box的confidence 必须push到0，这样不含有目标的cell和box的梯度将占据主导，超过有目标的cell和box的误差对应的梯度。这将导致模型的不稳定，以及训练的时候提前终止和收敛。</p>
+<p><strong>为什么长宽loss要开根号</strong>：</p>
+<p>不加根号，这样大box和小box的error是同等重要的。但是这是不符合逻辑的，比如小的偏移，在大box中的影响比在小box中的影响要小很多。所以开根号，降低这个误差。</p>
+<p><strong>为什么整体loss用平方误差损失</strong>：</p>
+<p>在这里使用平方误差loss，即sum-squard loss，是因为这个平方误差和的loss更好去优化optimize。</p>
+<h5 id="3、网络结构"><a href="#3、网络结构" class="headerlink" title="3、网络结构"></a>3、网络结构</h5><p><img src="/Temp%5C1526960227974.png" alt="1526960227974"></p>
+<p>在训练时候注意点：</p>
+<ul>
+<li><p>开始是一个224 * 224输入的图像分类模型。在ImageNet上训练分类模型。</p>
+</li>
+<li><p>再将分类模型上加卷积层和fc层，变成检测模型，输入为448 * 448.</p>
+</li>
+<li><p>最后一层后加了一个线性激活层，其余的层加的都是leak-relu层：</p>
+<p><img src="/Temp%5C1526961176544.png" alt="1526961176544"></p>
+</li>
+</ul>
+<h5 id="4、其他"><a href="#4、其他" class="headerlink" title="4、其他"></a>4、其他</h5><p>1、在训练的过程中，在每个grid cell会预测多个Box，在训练的时候，只希望一个box来负责预测一个GT，每个GT只有一个box来预测，选择IOU最大的box（这里自己理解是：先根据GT中心点将GT对应到cell，再在cell中2box选择IOU最大的来作为一个Box与GT对应，这样最后其实每个GT只有一个Box与之对应）。这样好处是：每个位置cell的Box预测都是不同的、特殊的，更擅长去预测特定size、长宽比、特定类别的目标，这会提高recall。这里有点SSD的味道了。</p>
+<p>2、在网络前向预测的时候，一些大的目标（因为大的目标中心一般处在map的最中心，会在四个cell的中心）或者是目标处在多个cell的边缘上，将会被多个cell预测到，后面再经过NMS处理，这会对mAP提升了2% ~3%。</p>
+<h4 id="三、其他细节理解"><a href="#三、其他细节理解" class="headerlink" title="三、其他细节理解"></a>三、其他细节理解</h4><p>7、关于YOLO算法为何具有全局的信息，基于全图来进行预测的一些思考</p>
+<p>因为最后预测出7<em>7</em>30个值之前是FC层后的结果，因此这里最后的7<em>7</em>30个神经元与之前的所有的卷积后的结果都相连了，所以每个神经元的感受野以及获取的信息都是全局的，基于全局的信息进行预测的。</p>
+<p>8、为何YOLO连续的小目标以及紧连的多类目标效果不好</p>
+<p>原因： 因为YOLO的预测是按照cell划分的，每个cell只预测了一个类别，每个cell也只预测了两个box，也就是说一个cell最多可以预测出两个同类的目标。这也是YOLO的从最开始思想上带来的缺陷。</p>
+<p>9、YOLO定位不精准的原因</p>
+<p>（1）最后使用全连接层预测了box的坐标，由于之前的全连接层的出现的，导致了物体位置信息的丢失，卷积层是有利于物体的位置信息的。</p>
+<p>（2）每个cell就预测两个box，也导致了精度的低下。</p>
+<p>（3）每个box从很小回归到很大过程，是基于局部的特征回归的，这样定位不准。在two-stage中，RPN会给出大致的box的位置，再回归预测，但是这里就不同了。</p>
+<p>（4）大小box的定位误差是相同对待的，但是实际中，同样的误差，大box的比小box对IOU的影响要小很多。eg：同样的中心loss大小，对小box的IOU影响大，对大box的IOU影响小。</p>
+<p>10、关于Box与GT之间匹配的一些理解（5.22与阳哥讨论后）</p>
+<ul>
+<li><p>在YOLO中应该将所有GT的位置和长宽都是归一化的，同时GT与box之间的match都是在map上进行的，不是在原图上进行的，这点需要注意。</p>
+</li>
+<li><p>YOLO中在训练中一个GT是只有GT与之对应。首先将GT的坐标归一化，对map的分为s*s的区域就可以得到GT匹配到哪个cell。这是第一步，cell与GT匹配。</p>
+</li>
+<li><p>每个cell有B个box，经过一轮后每个box都会有四个值（xy相对于cell左上角的偏移，以及wh都是归一化的）以及一个Confid值，根据xywh可以计算B个box中与GT的IOU最大的box，这样就可以得到box与GT对应起来，每个GT只会与一个cell中的一个box对应，对应box的confid的label值就是对应的IOU值。</p>
+</li>
+<li><p>关于loss中中心点位置的损失：<img src="/Temp%5C1526974178903.png" alt="1526974178903"></p>
+<p>在train时，GT与cell对应后，GT的坐标就转化为相对于cell左上角的坐标（按照cell再归一化的），预测x^和y^也是相对于cell左上角的坐标（也是在cell内的，0到1的坐标值）。这样做的好处：在cell内归一化的坐标变化m，对应到全图偏移本质就只有m&#x2F;7。这样可以让位置的预测和训练更稳定，如果都是基于全图的位置loss，这样位置预测就会出现不稳定。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CV%E3%80%81%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E3%80%81YOLO/" rel="tag"># CV、目标检测、YOLO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/08/YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="next" title="YOLO-V1目标检测">
+                <i class="fa fa-chevron-left"></i> YOLO-V1目标检测
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/08/2020-02-05-Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="prev" title="Python常用的文件夹相关操作">
+                Python常用的文件夹相关操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">YOLO目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Unified-Detection"><span class="nav-number">1.2.</span> <span class="nav-text">二、Unified Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3%E3%80%81%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">3、网络结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4%E3%80%81%E5%85%B6%E4%BB%96"><span class="nav-number">1.2.2.</span> <span class="nav-text">4、其他</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82%E7%90%86%E8%A7%A3"><span class="nav-number">1.3.</span> <span class="nav-text">三、其他细节理解</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

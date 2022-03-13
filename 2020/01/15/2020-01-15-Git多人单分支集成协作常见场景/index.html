@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Git提交代码,Git基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="{: .message } 针对多人协作使用Git的场景 不同人修改不同文件场景即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。 1、使用 git clone 的时候注意点： 1git clone  xxx.git   xxxx2  作用：在git clone后指定clone到本地后的文件夹命名为x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git多人单分支集成协作常见场景">
+<meta property="og:url" content="http://example.com/2020/01/15/2020-01-15-Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="{: .message } 针对多人协作使用Git的场景 不同人修改不同文件场景即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。 1、使用 git clone 的时候注意点： 1git clone  xxx.git   xxxx2  作用：在git clone后指定clone到本地后的文件夹命名为x">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-15T15:18:00.000Z">
+<meta property="article:modified_time" content="2022-03-13T10:32:11.575Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="Git提交代码">
+<meta property="article:tag" content="Git基础">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/15/2020-01-15-Git多人单分支集成协作常见场景/"/>
+
+
+
+
+
+  <title>Git多人单分支集成协作常见场景 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/2020-01-15-Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git多人单分支集成协作常见场景</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T23:18:00+08:00">
+                2020-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>{: .message }</p>
+<p>针对多人协作使用Git的场景</p>
+<h2 id="不同人修改不同文件场景"><a href="#不同人修改不同文件场景" class="headerlink" title="不同人修改不同文件场景"></a>不同人修改不同文件场景</h2><p>即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。</p>
+<p>1、使用 git clone 的时候注意点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone  xxx.git   xxxx2</span><br></pre></td></tr></table></figure>
+
+<p>作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。</p>
+<p>2、git fetch 说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin     //吧origin远端代码fetch到本地	</span><br></pre></td></tr></table></figure>
+
+<p>注意：这个时候，远程分支到本地后，不会对本地代码有影响。</p>
+<p>使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av       //查看本地和远程分支情况</span><br></pre></td></tr></table></figure>
+
+<p>3、使用 get merge 命令对本地代码与刚fetch的远程分支的代码进行merge</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge   xxx       //xxx为刚fetch下来的远程分支</span><br></pre></td></tr></table></figure>
+
+<p>由于是不同人修改的不同的文件，可以直接merge，不会有冲突。</p>
+<h2 id="不同人修改同一文件的不同区域"><a href="#不同人修改同一文件的不同区域" class="headerlink" title="不同人修改同一文件的不同区域"></a>不同人修改同一文件的不同区域</h2><p>1、本地修改代码前使用 git pull</p>
+<p>在每次修改代码中，先执行 git pull 命令，将远程分支与本地分支同步，将本地分支做一个更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<p>直接 git pull 即可，无需任何其他命令。</p>
+<p>2、解决步骤：同上。</p>
+<h2 id="不同人修改同一文件的相同区域"><a href="#不同人修改同一文件的相同区域" class="headerlink" title="不同人修改同一文件的相同区域"></a>不同人修改同一文件的相同区域</h2><p>即：merge的时候存在 conflict 的时候。</p>
+<p>1、方法1：</p>
+<p>直接使用git merge 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge xxx   // xxx为远程分支</span><br></pre></td></tr></table></figure>
+
+<p>有conflict：打开冲突文件，修改</p>
+<p>注意：修改后一定要git add 和commit  将修改再提交一个commit；或者是直接add，再使用 git merge –continue即可。</p>
+<p>最后再提交。</p>
+<p>2、方法2： git cherry-pick commitID</p>
+<ul>
+<li>将远程分支fetch到本地</li>
+<li>切换到fetch的分支</li>
+<li>cherry-pick 后加原来冲突分支的那个commit的ID</li>
+</ul>
+<p>遇到冲突：修改。</p>
+<p>修改后：git add后，提交一个commit 或者 git cherry-pick –continue 即可。</p>
+<h2 id="不同人修改同一个文件的名字"><a href="#不同人修改同一个文件的名字" class="headerlink" title="不同人修改同一个文件的名字"></a>不同人修改同一个文件的名字</h2><p>1、方法： git push 会有冲突。</p>
+<p>pull一下，本地会有两个文件，自己决定用哪个文件名，删除哪几个，再git add和commit即可。</p>
+<p>注意git 中删除文件：git rm xxxx；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81/" rel="tag"># Git提交代码</a>
+          
+            <a href="/tags/Git%E5%9F%BA%E7%A1%80/" rel="tag"># Git基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/01/2020-01-01-Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/" rel="next" title="Git提交代码基础应用">
+                <i class="fa fa-chevron-left"></i> Git提交代码基础应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/05/2020-02-05-Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="prev" title="Python常用的路径相关操作">
+                Python常用的路径相关操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E4%B8%8D%E5%90%8C%E6%96%87%E4%BB%B6%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">不同人修改不同文件场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8D%E5%90%8C%E5%8C%BA%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">不同人修改同一文件的不同区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%90%8C%E5%8C%BA%E5%9F%9F"><span class="nav-number">3.</span> <span class="nav-text">不同人修改同一文件的相同区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E5%90%8D%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">不同人修改同一个文件的名字</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

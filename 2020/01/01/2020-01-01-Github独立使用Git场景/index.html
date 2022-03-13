@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="代码提交,Github,Git提交代码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="{: .message } 删除无效的分支12git branch -d branch1   &#x2F;&#x2F;不一定成功删除git branch -D branch2   &#x2F;&#x2F;一定成功删除，强制删除    修改最新commit的message已经提交了commit，但是其message写错了，需要修改下：（即修改最新commit的message） 1git commit --amend   &#x2F;&#x2F;进一步编辑后保">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git提交代码基础应用">
+<meta property="og:url" content="http://example.com/2020/01/01/2020-01-01-Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="{: .message } 删除无效的分支12git branch -d branch1   &#x2F;&#x2F;不一定成功删除git branch -D branch2   &#x2F;&#x2F;一定成功删除，强制删除    修改最新commit的message已经提交了commit，但是其message写错了，需要修改下：（即修改最新commit的message） 1git commit --amend   &#x2F;&#x2F;进一步编辑后保">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-01T15:18:00.000Z">
+<meta property="article:modified_time" content="2022-03-13T10:32:11.575Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="代码提交">
+<meta property="article:tag" content="Github">
+<meta property="article:tag" content="Git提交代码">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/01/2020-01-01-Github独立使用Git场景/"/>
+
+
+
+
+
+  <title>Git提交代码基础应用 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/01/2020-01-01-Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git提交代码基础应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-01T23:18:00+08:00">
+                2020-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>{: .message }</p>
+<h2 id="删除无效的分支"><a href="#删除无效的分支" class="headerlink" title="删除无效的分支"></a>删除无效的分支</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch -d branch1   //不一定成功删除</span><br><span class="line">git branch -D branch2   //一定成功删除，强制删除</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改最新commit的message"><a href="#修改最新commit的message" class="headerlink" title="修改最新commit的message"></a>修改最新commit的message</h2><p>已经提交了commit，但是其message写错了，需要修改下：（即修改最新commit的message）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend   //进一步编辑后保存即可</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改老旧commit的message"><a href="#修改老旧commit的message" class="headerlink" title="修改老旧commit的message"></a>修改老旧commit的message</h2><p>即修改非第一个commit的mesage：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i commitID  // commitID为待修改message的前一个commit的ID（注意是前一个commit的ID）</span><br><span class="line"></span><br><span class="line">第二步：在弹出vim中，将待修改的message的commit的ID前的pick改为r，再wq退出。</span><br><span class="line"></span><br><span class="line">再修改对应的commit的message即可。</span><br></pre></td></tr></table></figure>
+
+<p>注意：这种处理方式，会修改待修改message的commit的ID以及其后面的所有commit的ID。</p>
+<p>但是其所有commit的内容和修改都不会改变，只改了待修改message的commit的message。</p>
+<h2 id="将连续的多个commit合并为1个commit"><a href="#将连续的多个commit合并为1个commit" class="headerlink" title="将连续的多个commit合并为1个commit"></a>将连续的多个commit合并为1个commit</h2><p>假设 commit 的提交记录为： commit1、commit2、commit3、commit4、commit5，这是时间顺序，head在commit5，要将中间的commit2、commit3和commit4合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i commit1 </span><br><span class="line">在弹出的vim中：</span><br><span class="line">将commit2和commit3前面的pick改为 squash，再wq  （注意：不能三个commit都改为squash，要保留一个不变）</span><br><span class="line">在vim中：</span><br><span class="line">写新的commit的信息。</span><br></pre></td></tr></table></figure>
+
+<p>注意： git rebase -i commitX</p>
+<ul>
+<li>接下来vim中会展示从commitX之后一直到head的所有的commit（包括head，但不包括commitX）</li>
+<li>排列顺序：从上到下，commit的顺序依次靠前</li>
+</ul>
+<h2 id="将不连续的多个commit合并为一个commit"><a href="#将不连续的多个commit合并为一个commit" class="headerlink" title="将不连续的多个commit合并为一个commit"></a>将不连续的多个commit合并为一个commit</h2><p>假设 commit 的提交记录为： commit1、commit2、commit3、commit4、commit5，这是时间顺序，head在commit5，要将中间的commit2和commit4合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i commit1 </span><br><span class="line">在弹出的vim中：</span><br><span class="line">将 commit2和commit3的顺序换下</span><br><span class="line">将commit2前面的pick改为 squash，再wq  （注意：不能三个commit都改为squash，要保留一个不变）</span><br><span class="line">在vim中：</span><br><span class="line">写新的commit的信息。</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="比较修改-git-diff"><a href="#比较修改-git-diff" class="headerlink" title="比较修改 git diff"></a>比较修改 git diff</h2><p>1、比较<strong>当前修改与暂存区</strong>对应版本的差异：（这个时候修改还没在缓存区，即没有add）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+
+<p>2、add后就到了缓存区，比较<strong>暂存区与head</strong>指针对应版本的差异：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff --cached</span><br></pre></td></tr></table></figure>
+
+<p>注意：理解暂存区的概念，修改只有add后才能到暂存区中去。</p>
+<p>进一步：一次性修改了多个文件，可以一个个的add到暂存区，git diff 后再一个个commit。</p>
+<h2 id="工作区、暂存区和两者的diff"><a href="#工作区、暂存区和两者的diff" class="headerlink" title="工作区、暂存区和两者的diff"></a>工作区、暂存区和两者的diff</h2><p>1、工作区：当前修改的，还未add的时候，修改在工作区</p>
+<p>2、暂存区：修改 add 后，修改就到了暂存区。</p>
+<p>3、<strong>git diff  – filename</strong>： 代表比较某个filename文件的差异。</p>
+<p><strong>git diff –cached 后面可以加 – 再加 filename</strong>。</p>
+<h2 id="将暂存区的修改（恢复到HEAD版本）去掉恢复到工作区"><a href="#将暂存区的修改（恢复到HEAD版本）去掉恢复到工作区" class="headerlink" title="将暂存区的修改（恢复到HEAD版本）去掉恢复到工作区"></a>将暂存区的修改（恢复到HEAD版本）去掉恢复到工作区</h2><p>背景：对代码进行修改，并已经add到暂存区，但是现在不想要这个修改，咋办。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD   //将暂存区恢复到与HEDA指针相同的版本的代码</span><br><span class="line">git reset HEAD -- filename    // 将暂存区的某个文件恢复到与HEDA指针相同的版本的代码</span><br></pre></td></tr></table></figure>
+
+<p>这个时候要注意：暂存区的修改不是完全都没有了，而是恢复到了工作区。</p>
+<p>这个时候： git status ，之前add的修改，就变成了红色了。</p>
+<h2 id="将工作区恢复成暂存区的版本"><a href="#将工作区恢复成暂存区的版本" class="headerlink" title="将工作区恢复成暂存区的版本"></a>将工作区恢复成暂存区的版本</h2><p>背景：开始进行了修改，并进行了add，修改添加到了暂存区；后面又一次在工作区进行了修改，但是呢发现这个修改不好（并未add还在工作区的修改），想把工作区恢复成暂存区的代码版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- filename     //对工作区中filename文件恢复成暂存区的版本</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="暂存区与工作区"><a href="#暂存区与工作区" class="headerlink" title="暂存区与工作区"></a>暂存区与工作区</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>绿色：暂存区</li>
+<li>红色：工作区</li>
+</ul>
+<h2 id="消除最近几次的commit，暂存区和工作区都恢复到某个commit的版本"><a href="#消除最近几次的commit，暂存区和工作区都恢复到某个commit的版本" class="headerlink" title="消除最近几次的commit，暂存区和工作区都恢复到某个commit的版本"></a>消除最近几次的commit，暂存区和工作区都恢复到某个commit的版本</h2><p>背景：文件进行了3次修改，提交了三个commit，分别是commit1、commit2、commit3（最后一个），现在要把代码（HEAD指针、工作区、暂存区）都恢复到 commit1的代码版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard commit1(ID)</span><br></pre></td></tr></table></figure>
+
+<p>命令慎用：因为会直接将commit删除，修改都没了，commit2和3的修改永远都找不回来了。这种操作会直接导致本地文件的改变。</p>
+<h2 id="比较不同commit的指定（所有）文件的差异"><a href="#比较不同commit的指定（所有）文件的差异" class="headerlink" title="比较不同commit的指定（所有）文件的差异"></a>比较不同commit的指定（所有）文件的差异</h2><p>背景：比较不同commit对应代码版本的区别，或者某个文件的区别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git diff commitID1 commitID2 -- filename   //比较 commit1和2对应代码版本中 filename文件的差异</span><br><span class="line">git diff commitID1 commitID2  //不加filename代表所有比较所有文件的区别</span><br></pre></td></tr></table></figure>
+
+<p>注意理解：不同分支名就是代表了分支了HEAD指针，不同分支HEAD指针本质上也是指向了某个commitID，所以可以直接：（不同分支分支名本质就是对应分支最新commit的ID）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git diff branch1 branch2 -- filename    </span><br><span class="line">//比较 branch1和2两个分支最新代码版本的filename文件的差异</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="正确删除文件"><a href="#正确删除文件" class="headerlink" title="正确删除文件"></a>正确删除文件</h2><p>背景：一般情况下 删除文件，都是现在工作区  rm -rf  filename， 删除文件。然后在add，提交一个删除文件的commit。可以直接通过 git  的 rm命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm filename   //从工作区和暂存区同时删除了该文件</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="stash相关操作"><a href="#stash相关操作" class="headerlink" title="stash相关操作"></a>stash相关操作</h2><p>背景：当前在工作区修改，修改还没有到缓存区，又接到一个新的需求，要开发，那么，可以当前工作区的修改存起来，然后再在当前的工作区进行新需求的开发，开发后需求的修改保存到暂存区后，再进行吧之前保存的工作区的修改拿出来继续修改。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash    //将当前工作区的修改缓存起来</span><br></pre></td></tr></table></figure>
+
+<p>注意：git stash  再 git status 工作区就是clean的了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash list   //查看当前保存了那些 stash的内容，每次stash一下都会压栈保存，pop后就没了</span><br></pre></td></tr></table></figure>
+
+<p>注意：git stash本质是将修改放到一个堆栈中，可以多次 stash，每次pop一下弹出一个最新保存的。</p>
+<p>恢复缓存区的修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git stash apply   //将当前缓存区的修改拿出来放到工作区，但是缓存区的堆栈不变</span><br><span class="line">git stash pop     //将当前缓存区堆栈的最新修改拿出来放到工作区，但是现在缓存区会改变，即 git stash                       list 的结果会改变。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="指定不需要Git管理的文件"><a href="#指定不需要Git管理的文件" class="headerlink" title="指定不需要Git管理的文件"></a>指定不需要Git管理的文件</h2><p>进： <a target="_blank" rel="noopener" href="http://www.github.com/github/gitignore">www.github.com/github/gitignore</a>  可以看官方的 ignore文件如何写。（github针对不同的编程语言和框架会有不同的gitingore的模板）</p>
+<p>写在 gitignore 中文件都是不会被 git 管理的。</p>
+<p>eg：比如一些编译后的结果，比如C++编译后的exe文件等都是需要加到git管控中的，因为exe文件是可以由代码编译生成的。</p>
+<p>注意：gitignore必须在代码工程目录下，且必须是隐藏文件，即 <strong>.gitignore</strong> 文件。</p>
+<p>将不需要管的文件夹、文件、或者特定后缀的文件添加到 .gitignore 文件中即可。</p>
+<h2 id="GIt仓库本地备份"><a href="#GIt仓库本地备份" class="headerlink" title="GIt仓库本地备份"></a>GIt仓库本地备份</h2><p>1、常用协议：</p>
+<p>（1）本地协议：（本地之间 git 仓库的移动与备份）</p>
+<ul>
+<li>哑协议</li>
+<li>智能协议</li>
+</ul>
+<p>哑协议传输进度不可见，智能协议传输速度课件，智能协议更快。</p>
+<p>（2）非本地协议</p>
+<ul>
+<li>http&#x2F;https：采用账号和密码对接</li>
+<li>ssh：采用一堆秘钥对接</li>
+</ul>
+<p>2、注意理解：</p>
+<p>Git中的仓库的概念，仓库可以理解为一个代码库，这个Git代码库可以在本地，也可以在远程，那么就存在远程与远程、远程与本地、本地与本地三种形式的Git仓库之间的传输。</p>
+<p>要注意的是：GIt本地仓库之间也是可以通过协议传输复制、push等操作的。eg：可以在C盘创一个Git仓库，在D盘clone一下，然后，提MR、push等都push到C盘的那个仓库。这个时候 git remote add xx的时候，给一个本地的git仓库的地址就可以了。然后还是和正常一样提MR等一样了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4/" rel="tag"># 代码提交</a>
+          
+            <a href="/tags/Github/" rel="tag"># Github</a>
+          
+            <a href="/tags/Git%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81/" rel="tag"># Git提交代码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/01/2019-01-01-%E5%9F%BA%E4%BA%8EXXX%E7%9A%84XXXX/" rel="next" title="基于XXXX的XXXX">
+                <i class="fa fa-chevron-left"></i> 基于XXXX的XXXX
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/15/2020-01-15-Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/" rel="prev" title="Git多人单分支集成协作常见场景">
+                Git多人单分支集成协作常见场景 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%97%A0%E6%95%88%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text">删除无效的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E6%96%B0commit%E7%9A%84message"><span class="nav-number">2.</span> <span class="nav-text">修改最新commit的message</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%80%81%E6%97%A7commit%E7%9A%84message"><span class="nav-number">3.</span> <span class="nav-text">修改老旧commit的message</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%A4%9A%E4%B8%AAcommit%E5%90%88%E5%B9%B6%E4%B8%BA1%E4%B8%AAcommit"><span class="nav-number">4.</span> <span class="nav-text">将连续的多个commit合并为1个commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E4%B8%8D%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%A4%9A%E4%B8%AAcommit%E5%90%88%E5%B9%B6%E4%B8%BA%E4%B8%80%E4%B8%AAcommit"><span class="nav-number">5.</span> <span class="nav-text">将不连续的多个commit合并为一个commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E4%BF%AE%E6%94%B9-git-diff"><span class="nav-number">6.</span> <span class="nav-text">比较修改 git diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E3%80%81%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E4%B8%A4%E8%80%85%E7%9A%84diff"><span class="nav-number">7.</span> <span class="nav-text">工作区、暂存区和两者的diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%9A%82%E5%AD%98%E5%8C%BA%E7%9A%84%E4%BF%AE%E6%94%B9%EF%BC%88%E6%81%A2%E5%A4%8D%E5%88%B0HEAD%E7%89%88%E6%9C%AC%EF%BC%89%E5%8E%BB%E6%8E%89%E6%81%A2%E5%A4%8D%E5%88%B0%E5%B7%A5%E4%BD%9C%E5%8C%BA"><span class="nav-number">8.</span> <span class="nav-text">将暂存区的修改（恢复到HEAD版本）去掉恢复到工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%81%A2%E5%A4%8D%E6%88%90%E6%9A%82%E5%AD%98%E5%8C%BA%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-number">9.</span> <span class="nav-text">将工作区恢复成暂存区的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%82%E5%AD%98%E5%8C%BA%E4%B8%8E%E5%B7%A5%E4%BD%9C%E5%8C%BA"><span class="nav-number">10.</span> <span class="nav-text">暂存区与工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E9%99%A4%E6%9C%80%E8%BF%91%E5%87%A0%E6%AC%A1%E7%9A%84commit%EF%BC%8C%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E5%B7%A5%E4%BD%9C%E5%8C%BA%E9%83%BD%E6%81%A2%E5%A4%8D%E5%88%B0%E6%9F%90%E4%B8%AAcommit%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-number">11.</span> <span class="nav-text">消除最近几次的commit，暂存区和工作区都恢复到某个commit的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E4%B8%8D%E5%90%8Ccommit%E7%9A%84%E6%8C%87%E5%AE%9A%EF%BC%88%E6%89%80%E6%9C%89%EF%BC%89%E6%96%87%E4%BB%B6%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="nav-number">12.</span> <span class="nav-text">比较不同commit的指定（所有）文件的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-number">13.</span> <span class="nav-text">正确删除文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stash%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="nav-number">14.</span> <span class="nav-text">stash相关操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E4%B8%8D%E9%9C%80%E8%A6%81Git%E7%AE%A1%E7%90%86%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">15.</span> <span class="nav-text">指定不需要Git管理的文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIt%E4%BB%93%E5%BA%93%E6%9C%AC%E5%9C%B0%E5%A4%87%E4%BB%BD"><span class="nav-number">16.</span> <span class="nav-text">GIt仓库本地备份</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
