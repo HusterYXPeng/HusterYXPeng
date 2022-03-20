@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Git基础,Git命令," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在本地一个文件夹新创建一个 git 仓库1git init   这句命令后会在本地文件夹中创建一个 .git 文件夹。 默认情况下这个文件夹是无法显示的，是隐藏的，但是该文件夹是存在的。 git remote 相关操作（1）创建本地库与远程库的链接 1git remote add xxx(连接名字)    xxx.git   连接名字用于确定一个连接。 （2）查看当前所有的remote连接 1gi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git常用命令使用总结">
+<meta property="og:url" content="http://example.com/2020/01/18/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="在本地一个文件夹新创建一个 git 仓库1git init   这句命令后会在本地文件夹中创建一个 .git 文件夹。 默认情况下这个文件夹是无法显示的，是隐藏的，但是该文件夹是存在的。 git remote 相关操作（1）创建本地库与远程库的链接 1git remote add xxx(连接名字)    xxx.git   连接名字用于确定一个连接。 （2）查看当前所有的remote连接 1gi">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/image/1572437584873.png">
+<meta property="og:image" content="http://example.com/image/1572437693305.png">
+<meta property="og:image" content="http://example.com/image/1572438860560.png">
+<meta property="article:published_time" content="2020-01-18T15:18:00.000Z">
+<meta property="article:modified_time" content="2022-03-20T09:36:21.369Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="Git基础">
+<meta property="article:tag" content="Git命令">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/1572437584873.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/18/Git常用命令总结/"/>
+
+
+
+
+
+  <title>Git常用命令使用总结 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/18/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git常用命令使用总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-18T23:18:00+08:00">
+                2020-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="在本地一个文件夹新创建一个-git-仓库"><a href="#在本地一个文件夹新创建一个-git-仓库" class="headerlink" title="在本地一个文件夹新创建一个 git 仓库"></a>在本地一个文件夹新创建一个 git 仓库</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init </span><br></pre></td></tr></table></figure>
+
+<p>这句命令后会在本地文件夹中创建一个 .git 文件夹。</p>
+<p>默认情况下这个文件夹是无法显示的，是隐藏的，但是该文件夹是存在的。</p>
+<h4 id="git-remote-相关操作"><a href="#git-remote-相关操作" class="headerlink" title="git remote 相关操作"></a>git remote 相关操作</h4><p>（1）创建本地库与远程库的链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add xxx(连接名字)    xxx.git</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572437584873.png" alt="1572437584873"></p>
+<p>连接名字用于确定一个连接。</p>
+<p>（2）查看当前所有的remote连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572437693305.png" alt="1572437693305"></p>
+<p>可以查看当前所有的连接</p>
+<p>（3）删除远程连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote remove   xxx(连接名)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Clone"><a href="#Clone" class="headerlink" title="Clone"></a>Clone</h4><p>知道一个远程库的git地址，直接通过  git clone 就代码库的地址就将代码下载下来。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone   https:xxxxx.xxx.git</span><br></pre></td></tr></table></figure>
+
+<p>注意：这个时候会在本地自动创建一个 origin 的远程连接，这个分支默认的。</p>
+<h4 id="fetch：将远程库的某个分支拉到本地就形成新的分支"><a href="#fetch：将远程库的某个分支拉到本地就形成新的分支" class="headerlink" title="fetch：将远程库的某个分支拉到本地就形成新的分支"></a>fetch：将远程库的某个分支拉到本地就形成新的分支</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin develop:dev1</span><br><span class="line">#将远程origin库的develop分支最新代码拉到本地就形成新的分支dev1</span><br></pre></td></tr></table></figure>
+
+<p>这样好处：在于每次最新开发都可以从远程库上develop分支的最新的代码开始开发，并在本地建新的分支，到时候MR的时候，将dev1分支提到远程的develop分支。</p>
+<h4 id="当有多个分支的时候，分支之间切换、删除分支、查看分支"><a href="#当有多个分支的时候，分支之间切换、删除分支、查看分支" class="headerlink" title="当有多个分支的时候，分支之间切换、删除分支、查看分支"></a>当有多个分支的时候，分支之间切换、删除分支、查看分支</h4><p>（1）切换分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout dev1    //由当前分支切换到dev1分支</span><br></pre></td></tr></table></figure>
+
+<p>注意：切换分支了当前本地目录的内容会变化。</p>
+<p>（2）查看当前仓库有哪些分支（本地&#x2F;远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch       //仅查看本地分支</span><br><span class="line">git branch -a    //查看当前本地和远程仓库的所有分支</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572438860560.png" alt="1572438860560"></p>
+<p>执行结果中：带*号的为当前分支</p>
+<p>（3）删除某一分支（本地&#x2F;远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch dev1                           //删除本地库的dev1分支</span><br><span class="line">git push origin --delete [branchname]     //删除远程库的某个分支</span><br></pre></td></tr></table></figure>
+
+<p>（4）本地创建分支（本地）：</p>
+<ul>
+<li>通过fetch拉分支，可以在本地创建分支以外，还有另外办法可以创建分支。</li>
+<li>通过checkout在本地创建分支。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev4    //创建dev4分支，并切换到dev4分支，并且这个时候，假设之前在dev1分支，这时候，dev4分支下面还会有dev1分支下的内容。</span><br><span class="line">---------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>（5）将本地当前分支推送到远程新分支，如果远程分支不存在，则会自动创建分支（远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin dev2:dev1    //将本地的dev2的push到远程仓库origin的dev1分支，如果远程没有dev1分支会自动创建新的dev1分支</span><br></pre></td></tr></table></figure>
+
+<h4 id="git配置github用户名和邮箱"><a href="#git配置github用户名和邮箱" class="headerlink" title="git配置github用户名和邮箱"></a>git配置github用户名和邮箱</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;HusterYXPeng&quot;</span><br><span class="line">git config --global user.email &quot;xxxx.@&quot; </span><br></pre></td></tr></table></figure>
+
+<h4 id="修改已经提交commit的名字和配置commit的文字"><a href="#修改已经提交commit的名字和配置commit的文字" class="headerlink" title="修改已经提交commit的名字和配置commit的文字"></a>修改已经提交commit的名字和配置commit的文字</h4><p>（1）修改commit名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend  # 修改提交的commit的 -m 的信息</span><br></pre></td></tr></table></figure>
+
+<p>（2）如何标准配置commit后面 -m 的描述信息</p>
+<ul>
+<li>创建一个commit模板txt文件，文本内容可如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D://commit.txt</span><br><span class="line">-----------------------</span><br><span class="line">单号：</span><br><span class="line">特性/模块名称：</span><br><span class="line">修改原因：</span><br><span class="line">修改内容：</span><br><span class="line">修改人：</span><br><span class="line">检视人：</span><br><span class="line">-----------------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>git配置下该txt，这样后面每次 git commit 的时候，后面不用加 -m 描述信息，后自动弹出上面txt的内容，再自己补上相关的内容即可。git 配置命令如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global commit.template 模板txt的路径（eg：&quot;D://commit.txt&quot;）</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="多个已经commit的commit合并"><a href="#多个已经commit的commit合并" class="headerlink" title="多个已经commit的commit合并"></a>多个已经commit的commit合并</h4><p>比如现在你已经提了一个commit，现在又想改了，并生成了一个commit，加这两个commit合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i HEAD~n  （n表示将最前面的n个commit合并）</span><br></pre></td></tr></table></figure>
+
+<p>然后在显示的bash中，将准备合并的n-1个commit前面的单词由 pick 改为 squash， 另外一个的commit信息可以修改为合并后commit的信息，但其前面单词还是pick，最后，保存退出即可。</p>
+<h4 id="查看当前的commit-记录"><a href="#查看当前的commit-记录" class="headerlink" title="查看当前的commit 记录"></a>查看当前的commit 记录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git log -n    # 查看当前前n个commit的详细信息</span><br><span class="line">git log    # 查看当前所有commit的详细信息</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="分支合并：git-merge"><a href="#分支合并：git-merge" class="headerlink" title="分支合并：git merge"></a>分支合并：git merge</h4><p>本地有dev1和dev2分支，将dev2合并到dev1分支。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout dev1 # 先切换到dev1分支</span><br><span class="line">git merge dev2 # 将dev2分支合并到dev1分支，合并后当前还是处于dev1分支</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="将本地分支推到远程主库的分支"><a href="#将本地分支推到远程主库的分支" class="headerlink" title="将本地分支推到远程主库的分支"></a>将本地分支推到远程主库的分支</h4><p>将本地的dev1分支push到远程主库的dev2分支。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin dev1:dev2  # 注意本地分支在前</span><br><span class="line">git push origin dev1:dev2 -f    # 将本地dev1强制推到远程dev2分支，注意这个时候，即使有冲突，也会push成功，远程库dev2分支就是本质dev1的分支一模一样，会覆盖之前dev2分支的内容。</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git%E5%9F%BA%E7%A1%80/" rel="tag"># Git基础</a>
+          
+            <a href="/tags/Git%E5%91%BD%E4%BB%A4/" rel="tag"># Git命令</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/" rel="next" title="Git多人单分支集成协作常见场景">
+                <i class="fa fa-chevron-left"></i> Git多人单分支集成协作常见场景
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/22/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="prev" title="Python常用的文件夹相关操作">
+                Python常用的文件夹相关操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9%E6%96%B0%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-git-%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">在本地一个文件夹新创建一个 git 仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-remote-%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">git remote 相关操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Clone"><span class="nav-number">3.</span> <span class="nav-text">Clone</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fetch%EF%BC%9A%E5%B0%86%E8%BF%9C%E7%A8%8B%E5%BA%93%E7%9A%84%E6%9F%90%E4%B8%AA%E5%88%86%E6%94%AF%E6%8B%89%E5%88%B0%E6%9C%AC%E5%9C%B0%E5%B0%B1%E5%BD%A2%E6%88%90%E6%96%B0%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">4.</span> <span class="nav-text">fetch：将远程库的某个分支拉到本地就形成新的分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%93%E6%9C%89%E5%A4%9A%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%88%86%E6%94%AF%E4%B9%8B%E9%97%B4%E5%88%87%E6%8D%A2%E3%80%81%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF%E3%80%81%E6%9F%A5%E7%9C%8B%E5%88%86%E6%94%AF"><span class="nav-number">5.</span> <span class="nav-text">当有多个分支的时候，分支之间切换、删除分支、查看分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git%E9%85%8D%E7%BD%AEgithub%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1"><span class="nav-number">6.</span> <span class="nav-text">git配置github用户名和邮箱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%B7%B2%E7%BB%8F%E6%8F%90%E4%BA%A4commit%E7%9A%84%E5%90%8D%E5%AD%97%E5%92%8C%E9%85%8D%E7%BD%AEcommit%E7%9A%84%E6%96%87%E5%AD%97"><span class="nav-number">7.</span> <span class="nav-text">修改已经提交commit的名字和配置commit的文字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%B7%B2%E7%BB%8Fcommit%E7%9A%84commit%E5%90%88%E5%B9%B6"><span class="nav-number">8.</span> <span class="nav-text">多个已经commit的commit合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%9A%84commit-%E8%AE%B0%E5%BD%95"><span class="nav-number">9.</span> <span class="nav-text">查看当前的commit 记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%EF%BC%9Agit-merge"><span class="nav-number">10.</span> <span class="nav-text">分支合并：git merge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E6%9C%AC%E5%9C%B0%E5%88%86%E6%94%AF%E6%8E%A8%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%B8%BB%E5%BA%93%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">11.</span> <span class="nav-text">将本地分支推到远程主库的分支</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
