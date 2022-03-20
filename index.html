@@ -300,7 +300,29 @@
       
         
           
-            
+            <h2 id="准备软件包"><a href="#准备软件包" class="headerlink" title="准备软件包"></a>准备软件包</h2><p>Java环境：从Oracle官方网站下载即可。</p>
+<p>PySpark包： 从Apache网站下载</p>
+<p>Hadoop环境：本地单机版可以不需要下载。</p>
+<h2 id="配置-Java-环境"><a href="#配置-Java-环境" class="headerlink" title="配置 Java 环境"></a>配置 Java 环境</h2><p>下载Java的JDK，双击exe一直安装，并配置环境变量。</p>
+<p>配置  <strong>JAVA_HOME</strong>为Java安装环境 根目录。</p>
+<p><img src="/image/1642684167470.png" alt="1642684167470"></p>
+<p>检验，打开cmd，输入 java -version 如下图所示</p>
+<p><img src="/image/1642684205839.png" alt="1642684205839"></p>
+<h2 id="配置Spark和Hadoop环境变量"><a href="#配置Spark和Hadoop环境变量" class="headerlink" title="配置Spark和Hadoop环境变量"></a>配置Spark和Hadoop环境变量</h2><p>从Spark官网下载Spark安装包。</p>
+<p>配置 SPARK_HOME和HADOOP_HOME两个环境变量。</p>
+<p><img src="/image/1642684374799.png" alt="1642684374799"></p>
+<h2 id="拷贝Spark包中包到Python环境"><a href="#拷贝Spark包中包到Python环境" class="headerlink" title="拷贝Spark包中包到Python环境"></a>拷贝Spark包中包到Python环境</h2><p>1、将Spark解压后的路径下的，Python环境包，拷贝到Python环境下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E:\Bigdata\spark-3.2.0-bin-hadoop2.7\python\lib</span><br></pre></td></tr></table></figure>
+
+<p>将这个路径下的两个压缩包，解压后，放到对应Python环境中放置安装包的目录。</p>
+<p><img src="/image/1642685093362.png" alt="1642685093362"></p>
+<p>在Python代码中 输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import pyspark</span><br></pre></td></tr></table></figure>
+
+<p>则证明配置正确。</p>
+<h2 id="Spark初始化-amp-Demo程序"><a href="#Spark初始化-amp-Demo程序" class="headerlink" title="Spark初始化&amp;Demo程序"></a>Spark初始化&amp;Demo程序</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 初始化spark环境</span><br><span class="line">def init_spark():</span><br><span class="line">    spark_conf = SparkConf().setAppName(&#x27;app&#x27;)\</span><br><span class="line">        .set(&#x27;spark.ui.showConsoleProgress&#x27;, &#x27;false&#x27;)</span><br><span class="line">    sc = SparkContext.getOrCreate(conf=spark_conf)</span><br><span class="line">    spark = SparkSession(sc)</span><br><span class="line">    return sc, spark</span><br><span class="line"></span><br><span class="line">if __name__==&quot;__main__&quot;:</span><br><span class="line">	sc, spark = init_spark()</span><br></pre></td></tr></table></figure>
+
+
           
         
       
