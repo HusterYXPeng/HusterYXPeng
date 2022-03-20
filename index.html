@@ -229,6 +229,223 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/ubuntu%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/03/24/ubuntu%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8docker/" itemprop="url">Ubuntu安装与使用docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-24T22:07:00+08:00">
+                2022-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Ubuntu安装Docker"><a href="#Ubuntu安装Docker" class="headerlink" title="Ubuntu安装Docker"></a>Ubuntu安装Docker</h2><p>1、在Ubuntu中添加子用户并添加root权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(1) useradd -m xxx  # 创建子用户</span><br><span class="line">(2) passwd xxx  # 修改子用户密码</span><br><span class="line">(3) 在 /etc/sudoers 中写入 xxx ALL=(ALL) NOPASSWD:ALL  # 添加sudo权限</span><br></pre></td></tr></table></figure>
+
+<p>后续的操作全部在子用户中进行。</p>
+<p>2、安装docker</p>
+<p>（1）安装 wget：如果当前系统有 wget 可忽略</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update </span><br><span class="line">sudo apt-get install wget</span><br></pre></td></tr></table></figure>
+
+<p>（2）下载docker安装包并安装环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://get.docker.com/ | sh</span><br></pre></td></tr></table></figure>
+
+<p>（3）验证是否安装成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker ps   # 查看当前容器情况</span><br></pre></td></tr></table></figure>
+
+<p>（4）创建docker用户组，并将当前子用户（具有sudo权限）的加到用户组中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker xxxx  (xxx为子用户名)</span><br></pre></td></tr></table></figure>
+
+<p>验证成功与否，进入xxx子用户，直接不加sudo使用docker命令看是否报错，无错则正确。</p>
+<h2 id="pull镜像并起容器"><a href="#pull镜像并起容器" class="headerlink" title="pull镜像并起容器"></a>pull镜像并起容器</h2><p>1、从DockerHub中pull镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:14.04   # pull ubuntu：14.04镜像</span><br><span class="line">docker images 			   # 查看当前本地已有镜像</span><br></pre></td></tr></table></figure>
+
+<p>2、起容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i ubuntu:14.04 /bin/bash   # 起ubuntu容器，直接进伪终端进行交互式操作</span><br><span class="line">docker ps  -a  							  # 查看当前起的容器</span><br></pre></td></tr></table></figure>
+
+<p>（1）创建容器并创建可以交互的伪终端：run后直接进入容器终端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -t -i ubuntu:14.04 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>注意：这种情况下，再退出容器，容器即结束状态。</p>
+<p>（2）创建容器并以进程运行：创建后返回容器ID，使用容器ID进入容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d ubuntu:14.04 /bin/bash -c &quot;sleep 1000000000000&quot;</span><br><span class="line">-d : 指定容器在主机上以进程运行。</span><br></pre></td></tr></table></figure>
+
+<p>注意：这里后面 -c 指定容器创建后要执行的命令，命令执行结束后，容器就结束了。所以一般在后面可以写sleep等让容器停住的命令，可以让容器一直处于 running 状态。</p>
+<p>这个时候 <code>docker ps</code> 可以看到刚刚起的容器。</p>
+<p>3、看日志&#x2F;停止&#x2F;启动&#x2F;删除容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker ps  					# 查看当前running的容器和容器ID</span><br><span class="line">docker logs -f containID    # 查看容器日志</span><br><span class="line">docker stop containID		# 停止容器</span><br><span class="line">docker start containID      # 启动已经停止的存在的容器</span><br><span class="line">docker rm containID 		# 删除容器</span><br></pre></td></tr></table></figure>
+
+<p>4、查看容器详细信息：（类似于k8s的deployment文件）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect containID</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用容器"><a href="#使用容器" class="headerlink" title="使用容器"></a>使用容器</h2><p>1、创建容器—将容器的端口映射到主机：<code>-p</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 10000:22 ubuntu:14.04 /bin/bash -c &quot;sleep xxxxx&quot;</span><br><span class="line"># 将容器内的22端口映射到主机的10000端口</span><br></pre></td></tr></table></figure>
+
+<p>注意： <code>-p p1:p2</code> 其中p1为主机端口，p2为容器内的端口。</p>
+<p>2、创建容器—指定容器的name</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name tset-docker ubuntu:14.04 /bin/bash -c &quot;sleep xxxxx&quot;</span><br></pre></td></tr></table></figure>
+
+<p>3、根据容器ID进入running的容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps   						# 查看容器ID</span><br><span class="line">docker exec -it containID  bash 	# 进入容器</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="修改并创建自己的镜像"><a href="#修改并创建自己的镜像" class="headerlink" title="修改并创建自己的镜像"></a>修改并创建自己的镜像</h1><p>背景： 使用 ubuntu:14.04 镜像生成一个自带Python的新镜像（原 ubuntu:14.04 不带Python）。</p>
+<h2 id="使用-commit"><a href="#使用-commit" class="headerlink" title="使用 commit"></a>使用 commit</h2><p>1、创建一个  ubuntu:14.04  容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d ubuntu:14.04 /bin/bash -c &quot;sleep 100000000000&quot;</span><br></pre></td></tr></table></figure>
+
+<p>2、进入容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it containerID  bash</span><br></pre></td></tr></table></figure>
+
+<p>3、安装Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install python</span><br></pre></td></tr></table></figure>
+
+<p>4、退出容器：exit</p>
+<p>5、生成新镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m=&quot;install-python&quot; -a=&quot;yxp&quot; containerID ubuntu-14.04:v1</span><br><span class="line">其中：</span><br><span class="line"> -m：指定修改，类似git的commnit</span><br><span class="line"> -a： 指定修改的作者</span><br><span class="line"> 跟上当前修改的containerID，最后为新镜像的名和版本号。</span><br></pre></td></tr></table></figure>
+
+<p>6、查看新镜像： docker images</p>
+<p>7、利用新镜像起容器即可。</p>
+<h2 id="使用-Dockerfile"><a href="#使用-Dockerfile" class="headerlink" title="使用 Dockerfile"></a>使用 Dockerfile</h2><p>1、创建一个Dockerfile文件</p>
+<p>内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from ubuntu:14.04</span><br><span class="line">MAINTAINER yuxipeng</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt install python</span><br></pre></td></tr></table></figure>
+
+<p>MAINTAINER 指定谁在维护这个新镜像</p>
+<p>2、执行Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build yxp/ubuntu-14.04:v1 .</span><br></pre></td></tr></table></figure>
+
+<p>注意： yxp为user信息，后面的新镜像的名字和版本号， 最后 <code>.</code>表示Dockerfile在当前文件夹下。</p>
+<p>创建后： 查看当前镜像信息如下</p>
+<p><img src="/Temp/1622971504421.png" alt="1622971504421"></p>
+<p>3、对新镜像打tag信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker tag 8bd5b69956dd yxp/ubuntu-14.04:v1</span><br><span class="line"># 参数1 镜像ID</span><br><span class="line"># 参数2 镜像user和镜像信息</span><br></pre></td></tr></table></figure>
+
+<p>再查看： docker images</p>
+<p><img src="/Temp/1622971652513.png" alt="1622971652513"></p>
+<h2 id="容器连接与挂载"><a href="#容器连接与挂载" class="headerlink" title="容器连接与挂载"></a>容器连接与挂载</h2><h3 id="容器连接"><a href="#容器连接" class="headerlink" title="容器连接"></a>容器连接</h3><p>1、 使用 <code>-p</code> 将容器内的端口映射到宿主机上：</p>
+<p><code>-p p1:p2</code>： 将宿主机上的p1端口映射到容器内的p2端口上。</p>
+<h3 id="容器挂载"><a href="#容器挂载" class="headerlink" title="容器挂载"></a>容器挂载</h3><p>作用：将宿主机上的某个目录或者磁盘挂载到容器内，实现在容器内对宿主机上文件的修改。</p>
+<p>数据卷：数据卷是指在存在于一个或多个容器中的特定目录，此目录能够提供一些用于持续存储或共享数据的特性，即相当于在容器内部创建一个目录。</p>
+<p>指令： <code>-v</code> 在 run容器的时候，通过-v 在容器内创建数据卷（目录）。</p>
+<p>1、在容器内添加一个数据卷，容器结束数据卷的修改即消失</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name container-yuxipeng-v1 -v /yuxipeng ubuntu-14.04:v1 bash -c &quot;sleep 100000000000000000000000&quot;</span><br></pre></td></tr></table></figure>
+
+<p>创建容器后，进入容器的根目录：（多了一个根目录）</p>
+<p><img src="/Temp/1623667689709.png" alt="1623667689709"></p>
+<p>2、将容器内的数据卷挂载到宿主机的对应目录：如果宿主机对应目录（必须是绝对路径）不存在，则会自动创建。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name container-yuxipeng-v1 -v /ddd:/yuxipeng ubuntu-14.04:v1 bash -c &quot;sleep 100000000000000000000000&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将宿主机上的 <code>/ddd</code>根目录映射到容器内的 <code>/yuxipeng</code>目录下，在容器内对 <code>/yuxipeng</code>目录下的修改，即是对宿主机上的 <code>/ddd</code>目录的修改，即使容器删除后，相关修改会存在。如果 <code>/ddd</code>目录在宿主机上不存在，会自动创建。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/11/YOLO%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -438,7 +655,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/02/08/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/10/18/Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -457,7 +674,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/02/08/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Python常用的文件夹相关操作</a></h1>
+                <a class="post-title-link" href="/2020/10/18/Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/" itemprop="url">Git提交代码基础应用</a></h1>
         
 
         <div class="post-meta">
@@ -469,580 +686,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-08T23:18:00+08:00">
-                2020-02-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Python常用的文件夹相关操作</p>
-<p>在python经常遇到文件夹相关的操作，比如：文件夹的创建、复制、删除、移动；文件的创建、复制、删除等，在python中常用的涉及到文件夹的包有：os、shutil。</p>
-<h2 id="文件夹的复制"><a href="#文件夹的复制" class="headerlink" title="文件夹的复制"></a>文件夹的复制</h2><p>作用：文件夹全部复制到另一个文件夹（遍历复制）。</p>
-<p>函数：<strong>shutil.copytree</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp&quot;</span><br><span class="line">dstPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp2&quot;</span><br><span class="line">shutil.copytree(rootPath,dstPath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数是赋值整个文件夹（无论文件夹下还有多少个文件或者是文件夹，都可以复制）</li>
-<li>即使dstpath的文件夹不存在，该函数也是可以自己创建的。</li>
-</ul>
-<h2 id="文件的复制"><a href="#文件的复制" class="headerlink" title="文件的复制"></a>文件的复制</h2><p>作用：将一个文件复制到另一个文件夹下</p>
-<p>函数：<strong>shutil.copy(src,dst)</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 将文件复制到某文件夹下</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2&quot;)</span><br><span class="line"># 将文件复制到某文件夹下并重命名</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2/2.txt&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数只能复制文件，即src的path只能是具体的文件的路径</li>
-<li>复制到具体的文件夹后，在dst的path可以是文件夹路径也可以是具体文件名（重命名）</li>
-</ul>
-<h2 id="文件夹-x2F-文件的移动（剪切）"><a href="#文件夹-x2F-文件的移动（剪切）" class="headerlink" title="文件夹&#x2F;文件的移动（剪切）"></a>文件夹&#x2F;文件的移动（剪切）</h2><p>作用：将一个文件移动（剪切）到另一个文件夹下</p>
-<p>函数：<strong>shutil.move(srcpath, dstpath)</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将文件夹移动到某文件夹下</span><br><span class="line">shutil.move(dirpath1,dirpath2)</span><br><span class="line"># 将某文件移动到某文件夹下</span><br><span class="line">shutil.move(filepath1, dirpath1)</span><br><span class="line"># 将某文件移动到某文件夹下并重命名</span><br><span class="line">shutil.move(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以移动文件和文件夹都可以</li>
-<li>文件移动，dst可以是文件夹也可以是文件名</li>
-<li>文件夹移动，dst只能是文件夹名</li>
-</ul>
-<h2 id="文件夹的删除移除"><a href="#文件夹的删除移除" class="headerlink" title="文件夹的删除移除"></a>文件夹的删除移除</h2><p>（1）删除空目录</p>
-<p>函数：os.rmdir  ; os.removedirs(相同功能)</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.rmdir(dirpath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>只能删除文件夹</li>
-<li>必须是空的文件夹（文件夹下再有空文件夹也不行）</li>
-</ul>
-<p>（2）删除文件夹文件（最好使用的）</p>
-<p>函数：<strong>shutil.rmtree()</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">### 删除文件夹</span><br><span class="line">shutil.rmtree(dirpath)</span><br><span class="line">### 删除文件</span><br><span class="line">shutil.rmtree(filepath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以删除文件夹和文件</li>
-<li>文件path中可嵌套多个文件和文件都可以删除</li>
-<li>也可以删除空文件夹</li>
-</ul>
-<h2 id="文件的删除移除"><a href="#文件的删除移除" class="headerlink" title="文件的删除移除"></a>文件的删除移除</h2><p>（1）将一个文件删除移除</p>
-<p>函数： os.remove</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.remove(filepath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数只能删除文件，参数不能是文件夹，只能是文件</li>
-<li>被删除的文件必须是存在的</li>
-</ul>
-<h2 id="文件-x2F-文件夹的重命名"><a href="#文件-x2F-文件夹的重命名" class="headerlink" title="文件&#x2F;文件夹的重命名"></a>文件&#x2F;文件夹的重命名</h2><p>功能：将一个文件夹或者是文件名重命名</p>
-<p>函数：<strong>os.rename()</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 对文件夹重命名（与移动的功能类似）</span><br><span class="line">os.rename(dirpath1,dirpath2)</span><br><span class="line"></span><br><span class="line"># 对文件重命名</span><br><span class="line">os.rename(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
-
-<h2 id="创建文件夹"><a href="#创建文件夹" class="headerlink" title="创建文件夹"></a>创建文件夹</h2><p>（1） <strong>os.mkdir函数</strong>  </p>
-<p>功能：创建文件夹</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建文件夹</span><br><span class="line">path = &quot;xxx/xxxx&quot;</span><br><span class="line">os.mkdir(path)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以在创建多级目录</li>
-</ul>
-<p>（2）os.makedirs（）函数</p>
-<p>同上。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/02/05/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/05/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Python常用的路径相关操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-05T23:18:00+08:00">
-                2020-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>{: .message }</p>
-<h2 id="遍历文件夹"><a href="#遍历文件夹" class="headerlink" title="遍历文件夹"></a>遍历文件夹</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.listdir(root)</span><br></pre></td></tr></table></figure>
-
-<p>作用：遍历root文件夹下所有的文件名</p>
-<p>注意：</p>
-<ul>
-<li>可以获取root文件夹下所有文件夹和文件的名字</li>
-<li>返回值是一个list</li>
-</ul>
-<h2 id="判断一个路径是文件名还是文件夹"><a href="#判断一个路径是文件名还是文件夹" class="headerlink" title="判断一个路径是文件名还是文件夹"></a>判断一个路径是文件名还是文件夹</h2><p>（1）判断一个路径是不是已经存在的文件的文件名</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy\a.txt&quot;</span><br><span class="line">os.path.isfile(root)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>路径必须是已经存在的文件的路径名</li>
-</ul>
-<p>（2）判断一个路径是不是已经存在的一个文件夹的路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.path.isdir(root)</span><br></pre></td></tr></table></figure>
-
-<h2 id="判断一个路径-文件名或者文件夹名-是否存在"><a href="#判断一个路径-文件名或者文件夹名-是否存在" class="headerlink" title="判断一个路径(文件名或者文件夹名)是否存在"></a>判断一个路径(文件名或者文件夹名)是否存在</h2><p>无论是文件路径还是文件夹路径，判断该路径是否是存在的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.path.exists(rootpath)</span><br></pre></td></tr></table></figure>
-
-<h2 id="路径合并"><a href="#路径合并" class="headerlink" title="路径合并"></a>路径合并</h2><p>将多个路径合并成一个综合路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:&quot;</span><br><span class="line">path2 = &quot;11.txt&quot;</span><br><span class="line">os.path.join(rootpath,path2)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>合并操作会自动处理路径最后的斜杠问题</li>
-<li>可以合并多个路径，即join的参数可以有三个及以上</li>
-</ul>
-<h2 id="路径分离相关"><a href="#路径分离相关" class="headerlink" title="路径分离相关"></a>路径分离相关</h2><p>（1） 分离路径获得<strong>后缀名</strong></p>
-<p>输入一个文件路径，返回该文件的文件名路径和后缀名。以点号分离字符串。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.splitext(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：temp = (&#x27;F:\总结\Python语言\环境配置\mm&#x27;,&#x27;.txt&#x27;)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>输出的文件名是路径</li>
-<li>函数返回值是一个tuple，即（）</li>
-</ul>
-<p>（2）分离路径获得<strong>文件名</strong></p>
-<p>输入一个文件路径，返回该文件的文件名（含后缀）。以最后一个”&#x2F;“分离字符串。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.split(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：temp = (&#x27;F:\总结\Python语言\环境配置&#x27;,&#x27;mm.txt&#x27;)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以获得路径中的文件名（含后缀）</li>
-<li>函数返回值是一个tuple，即（）</li>
-</ul>
-<p>（3）分离路径获得<strong>磁盘名</strong></p>
-<p>输入一个文件路径，返回该路径的磁盘名。以第一个”&#x2F;“分离字符串。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.splitdrive(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：(&#x27;F:&#x27;, &#x27;\\总结\\Python语言\\环境配置\\mm.txt&#x27;)</span><br></pre></td></tr></table></figure>
-
-<p>（4）直接获得路径最后文件名</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">os.path.basename(path)</span><br><span class="line"></span><br><span class="line"># 输出： “mm.txt”</span><br></pre></td></tr></table></figure>
-
-<p>作用：输入一个路径，返回该路径中最后的文件名（含后缀）</p>
-<p>注意：</p>
-<ul>
-<li>与前面的不同，这里返回的就是一个字符串</li>
-</ul>
-<h2 id="绝对路径相关"><a href="#绝对路径相关" class="headerlink" title="绝对路径相关"></a>绝对路径相关</h2><p>（1）判断一个路径是否是绝对路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">os.path.isabs(rootpath)</span><br><span class="line"></span><br><span class="line"># 判断一个路径是不是绝对路径</span><br></pre></td></tr></table></figure>
-
-<p>（2）返回一个路径的绝对路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;../txt.txt&quot;</span><br><span class="line">pp = os.path.abspath(path)</span><br><span class="line"></span><br><span class="line"># 输出：C:\Users\hust_yxp\Desktop\txt.txt</span><br></pre></td></tr></table></figure>
-
-<h2 id="获得文件的一些属性信息"><a href="#获得文件的一些属性信息" class="headerlink" title="获得文件的一些属性信息"></a>获得文件的一些属性信息</h2><p>（1）获得path的文件的大小（字节）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; os.path.getsize(&#x27;c:\\boot.ini&#x27;) </span><br><span class="line">299L </span><br></pre></td></tr></table></figure>
-
-<p>（2）获得path的文件或者目录最后存取时间</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getatime(path) </span><br></pre></td></tr></table></figure>
-
-<p>（3）获得path的文件或者目录最后修改时间</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getmtime(path) </span><br></pre></td></tr></table></figure>
-
-<p>（4）获得path的文件或者目录创建时间</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getmtime(path)</span><br></pre></td></tr></table></figure>
-
-<p>注意：2到4中获得时间无法直接显示成时间，要做处理。以2为例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line">import os</span><br><span class="line">fileName=‘m.txt‘</span><br><span class="line">fileTimesOfAccess=time.localtime(os.path.getatime(fileName))</span><br><span class="line"></span><br><span class="line"># 获取详细具体时间</span><br><span class="line">yearOfAccess=fileTimesOfAccess.tm_year</span><br><span class="line">monthOfAccess=fileTimesOfAccess.tm_mon</span><br><span class="line">dayOfAccess=fileTimesOfAccess.tm_mday</span><br><span class="line">hourOfAccess=fileTimesOfAccess.tm_hour</span><br><span class="line">minuteOfAccess=fileTimesOfAccess.tm_min</span><br><span class="line">secondOfAccess=fileTimesOfAccess.tm_sec</span><br><span class="line"></span><br><span class="line">print(&#x27;文件最近访问时间:  &#x27;,yearOfAccess,&#x27;年&#x27;,monthOfAccess,&#x27;月&#x27;,dayOfAccess,&#x27;日&#x27;,&#x27;  &#x27;,hourOfAccess,&#x27;时&#x27;,minuteOfAccess,&#x27;分&#x27;,secondOfAccess,&#x27;秒&#x27;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="返回当前path的上一级目录"><a href="#返回当前path的上一级目录" class="headerlink" title="返回当前path的上一级目录"></a>返回当前path的上一级目录</h2><p>作用：输入一个路径获得path的上一级目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\csji\sji&quot;</span><br><span class="line">pp = os.path.dirname(path)</span><br><span class="line"></span><br><span class="line"># 输出： &#x27;F:\csji&#x27;</span><br></pre></td></tr></table></figure>
-
-<h2 id="获得当前目录"><a href="#获得当前目录" class="headerlink" title="获得当前目录"></a>获得当前目录</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">os.getcwd()</span><br><span class="line"></span><br><span class="line"># 返回当前运行的工程目录</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>返回的是当前运行的工程目录，注意不是代码py文件所在的目录</li>
-</ul>
-<h2 id="路径的规范化"><a href="#路径的规范化" class="headerlink" title="路径的规范化"></a>路径的规范化</h2><p>规范化路径</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\csji\sji\sxuio\sacua\mmscji\../../&quot;</span><br><span class="line">pp = os.path.normpath(path)</span><br><span class="line"></span><br><span class="line"># 返回：&#x27;F:\csji\sji\sxuio&#x27;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/" itemprop="url">Git多人单分支集成协作常见场景</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T23:18:00+08:00">
-                2020-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>{: .message }</p>
-<p>针对多人协作使用Git的场景</p>
-<h2 id="不同人修改不同文件场景"><a href="#不同人修改不同文件场景" class="headerlink" title="不同人修改不同文件场景"></a>不同人修改不同文件场景</h2><p>即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。</p>
-<p>1、使用 git clone 的时候注意点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone  xxx.git   xxxx2</span><br></pre></td></tr></table></figure>
-
-<p>作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。</p>
-<p>2、git fetch 说明：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin     //吧origin远端代码fetch到本地	</span><br></pre></td></tr></table></figure>
-
-<p>注意：这个时候，远程分支到本地后，不会对本地代码有影响。</p>
-<p>使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av       //查看本地和远程分支情况</span><br></pre></td></tr></table></figure>
-
-<p>3、使用 get merge 命令对本地代码与刚fetch的远程分支的代码进行merge</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge   xxx       //xxx为刚fetch下来的远程分支</span><br></pre></td></tr></table></figure>
-
-<p>由于是不同人修改的不同的文件，可以直接merge，不会有冲突。</p>
-<h2 id="不同人修改同一文件的不同区域"><a href="#不同人修改同一文件的不同区域" class="headerlink" title="不同人修改同一文件的不同区域"></a>不同人修改同一文件的不同区域</h2><p>1、本地修改代码前使用 git pull</p>
-<p>在每次修改代码中，先执行 git pull 命令，将远程分支与本地分支同步，将本地分支做一个更新。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-
-<p>直接 git pull 即可，无需任何其他命令。</p>
-<p>2、解决步骤：同上。</p>
-<h2 id="不同人修改同一文件的相同区域"><a href="#不同人修改同一文件的相同区域" class="headerlink" title="不同人修改同一文件的相同区域"></a>不同人修改同一文件的相同区域</h2><p>即：merge的时候存在 conflict 的时候。</p>
-<p>1、方法1：</p>
-<p>直接使用git merge 命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge xxx   // xxx为远程分支</span><br></pre></td></tr></table></figure>
-
-<p>有conflict：打开冲突文件，修改</p>
-<p>注意：修改后一定要git add 和commit  将修改再提交一个commit；或者是直接add，再使用 git merge –continue即可。</p>
-<p>最后再提交。</p>
-<p>2、方法2： git cherry-pick commitID</p>
-<ul>
-<li>将远程分支fetch到本地</li>
-<li>切换到fetch的分支</li>
-<li>cherry-pick 后加原来冲突分支的那个commit的ID</li>
-</ul>
-<p>遇到冲突：修改。</p>
-<p>修改后：git add后，提交一个commit 或者 git cherry-pick –continue 即可。</p>
-<h2 id="不同人修改同一个文件的名字"><a href="#不同人修改同一个文件的名字" class="headerlink" title="不同人修改同一个文件的名字"></a>不同人修改同一个文件的名字</h2><p>1、方法： git push 会有冲突。</p>
-<p>pull一下，本地会有两个文件，自己决定用哪个文件名，删除哪几个，再git add和commit即可。</p>
-<p>注意git 中删除文件：git rm xxxx；</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/01/Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/01/Github%E7%8B%AC%E7%AB%8B%E4%BD%BF%E7%94%A8Git%E5%9C%BA%E6%99%AF/" itemprop="url">Git提交代码基础应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-01T23:18:00+08:00">
-                2020-01-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-18T14:45:00+08:00">
+                2020-10-18
               </time>
             
 
@@ -1219,6 +864,576 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/08/05/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/05/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Python常用的路径相关操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-05T23:18:00+08:00">
+                2020-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="遍历文件夹"><a href="#遍历文件夹" class="headerlink" title="遍历文件夹"></a>遍历文件夹</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.listdir(root)</span><br></pre></td></tr></table></figure>
+
+<p>作用：遍历root文件夹下所有的文件名</p>
+<p>注意：</p>
+<ul>
+<li>可以获取root文件夹下所有文件夹和文件的名字</li>
+<li>返回值是一个list</li>
+</ul>
+<h2 id="判断一个路径是文件名还是文件夹"><a href="#判断一个路径是文件名还是文件夹" class="headerlink" title="判断一个路径是文件名还是文件夹"></a>判断一个路径是文件名还是文件夹</h2><p>（1）判断一个路径是不是已经存在的文件的文件名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy\a.txt&quot;</span><br><span class="line">os.path.isfile(root)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>路径必须是已经存在的文件的路径名</li>
+</ul>
+<p>（2）判断一个路径是不是已经存在的一个文件夹的路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.path.isdir(root)</span><br></pre></td></tr></table></figure>
+
+<h2 id="判断一个路径-文件名或者文件夹名-是否存在"><a href="#判断一个路径-文件名或者文件夹名-是否存在" class="headerlink" title="判断一个路径(文件名或者文件夹名)是否存在"></a>判断一个路径(文件名或者文件夹名)是否存在</h2><p>无论是文件路径还是文件夹路径，判断该路径是否是存在的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root  = &quot;C\yyy&quot;</span><br><span class="line">os.path.exists(rootpath)</span><br></pre></td></tr></table></figure>
+
+<h2 id="路径合并"><a href="#路径合并" class="headerlink" title="路径合并"></a>路径合并</h2><p>将多个路径合并成一个综合路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:&quot;</span><br><span class="line">path2 = &quot;11.txt&quot;</span><br><span class="line">os.path.join(rootpath,path2)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>合并操作会自动处理路径最后的斜杠问题</li>
+<li>可以合并多个路径，即join的参数可以有三个及以上</li>
+</ul>
+<h2 id="路径分离相关"><a href="#路径分离相关" class="headerlink" title="路径分离相关"></a>路径分离相关</h2><p>（1） 分离路径获得<strong>后缀名</strong></p>
+<p>输入一个文件路径，返回该文件的文件名路径和后缀名。以点号分离字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.splitext(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：temp = (&#x27;F:\总结\Python语言\环境配置\mm&#x27;,&#x27;.txt&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>输出的文件名是路径</li>
+<li>函数返回值是一个tuple，即（）</li>
+</ul>
+<p>（2）分离路径获得<strong>文件名</strong></p>
+<p>输入一个文件路径，返回该文件的文件名（含后缀）。以最后一个”&#x2F;“分离字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.split(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：temp = (&#x27;F:\总结\Python语言\环境配置&#x27;,&#x27;mm.txt&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>可以获得路径中的文件名（含后缀）</li>
+<li>函数返回值是一个tuple，即（）</li>
+</ul>
+<p>（3）分离路径获得<strong>磁盘名</strong></p>
+<p>输入一个文件路径，返回该路径的磁盘名。以第一个”&#x2F;“分离字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">temp = os.path.splitdrive(rootpath)</span><br><span class="line"></span><br><span class="line"># 输出：(&#x27;F:&#x27;, &#x27;\\总结\\Python语言\\环境配置\\mm.txt&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>（4）直接获得路径最后文件名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">os.path.basename(path)</span><br><span class="line"></span><br><span class="line"># 输出： “mm.txt”</span><br></pre></td></tr></table></figure>
+
+<p>作用：输入一个路径，返回该路径中最后的文件名（含后缀）</p>
+<p>注意：</p>
+<ul>
+<li>与前面的不同，这里返回的就是一个字符串</li>
+</ul>
+<h2 id="绝对路径相关"><a href="#绝对路径相关" class="headerlink" title="绝对路径相关"></a>绝对路径相关</h2><p>（1）判断一个路径是否是绝对路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rootpath = &quot;F:\总结\Python语言\环境配置\mm.txt&quot;</span><br><span class="line">os.path.isabs(rootpath)</span><br><span class="line"></span><br><span class="line"># 判断一个路径是不是绝对路径</span><br></pre></td></tr></table></figure>
+
+<p>（2）返回一个路径的绝对路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;../txt.txt&quot;</span><br><span class="line">pp = os.path.abspath(path)</span><br><span class="line"></span><br><span class="line"># 输出：C:\Users\hust_yxp\Desktop\txt.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="获得文件的一些属性信息"><a href="#获得文件的一些属性信息" class="headerlink" title="获得文件的一些属性信息"></a>获得文件的一些属性信息</h2><p>（1）获得path的文件的大小（字节）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; os.path.getsize(&#x27;c:\\boot.ini&#x27;) </span><br><span class="line">299L </span><br></pre></td></tr></table></figure>
+
+<p>（2）获得path的文件或者目录最后存取时间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getatime(path) </span><br></pre></td></tr></table></figure>
+
+<p>（3）获得path的文件或者目录最后修改时间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getmtime(path) </span><br></pre></td></tr></table></figure>
+
+<p>（4）获得path的文件或者目录创建时间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.getmtime(path)</span><br></pre></td></tr></table></figure>
+
+<p>注意：2到4中获得时间无法直接显示成时间，要做处理。以2为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line">import os</span><br><span class="line">fileName=‘m.txt‘</span><br><span class="line">fileTimesOfAccess=time.localtime(os.path.getatime(fileName))</span><br><span class="line"></span><br><span class="line"># 获取详细具体时间</span><br><span class="line">yearOfAccess=fileTimesOfAccess.tm_year</span><br><span class="line">monthOfAccess=fileTimesOfAccess.tm_mon</span><br><span class="line">dayOfAccess=fileTimesOfAccess.tm_mday</span><br><span class="line">hourOfAccess=fileTimesOfAccess.tm_hour</span><br><span class="line">minuteOfAccess=fileTimesOfAccess.tm_min</span><br><span class="line">secondOfAccess=fileTimesOfAccess.tm_sec</span><br><span class="line"></span><br><span class="line">print(&#x27;文件最近访问时间:  &#x27;,yearOfAccess,&#x27;年&#x27;,monthOfAccess,&#x27;月&#x27;,dayOfAccess,&#x27;日&#x27;,&#x27;  &#x27;,hourOfAccess,&#x27;时&#x27;,minuteOfAccess,&#x27;分&#x27;,secondOfAccess,&#x27;秒&#x27;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="返回当前path的上一级目录"><a href="#返回当前path的上一级目录" class="headerlink" title="返回当前path的上一级目录"></a>返回当前path的上一级目录</h2><p>作用：输入一个路径获得path的上一级目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\csji\sji&quot;</span><br><span class="line">pp = os.path.dirname(path)</span><br><span class="line"></span><br><span class="line"># 输出： &#x27;F:\csji&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="获得当前目录"><a href="#获得当前目录" class="headerlink" title="获得当前目录"></a>获得当前目录</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">os.getcwd()</span><br><span class="line"></span><br><span class="line"># 返回当前运行的工程目录</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>返回的是当前运行的工程目录，注意不是代码py文件所在的目录</li>
+</ul>
+<h2 id="路径的规范化"><a href="#路径的规范化" class="headerlink" title="路径的规范化"></a>路径的规范化</h2><p>规范化路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">path = &quot;F:\csji\sji\sxuio\sacua\mmscji\../../&quot;</span><br><span class="line">pp = os.path.normpath(path)</span><br><span class="line"></span><br><span class="line"># 返回：&#x27;F:\csji\sji\sxuio&#x27;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/07/22/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/22/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Python常用的文件夹相关操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T21:18:00+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Python常用的文件夹相关操作</p>
+<p>在python经常遇到文件夹相关的操作，比如：文件夹的创建、复制、删除、移动；文件的创建、复制、删除等，在python中常用的涉及到文件夹的包有：os、shutil。</p>
+<h2 id="文件夹的复制"><a href="#文件夹的复制" class="headerlink" title="文件夹的复制"></a>文件夹的复制</h2><p>作用：文件夹全部复制到另一个文件夹（遍历复制）。</p>
+<p>函数：<strong>shutil.copytree</strong></p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp&quot;</span><br><span class="line">dstPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp2&quot;</span><br><span class="line">shutil.copytree(rootPath,dstPath)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>该函数是赋值整个文件夹（无论文件夹下还有多少个文件或者是文件夹，都可以复制）</li>
+<li>即使dstpath的文件夹不存在，该函数也是可以自己创建的。</li>
+</ul>
+<h2 id="文件的复制"><a href="#文件的复制" class="headerlink" title="文件的复制"></a>文件的复制</h2><p>作用：将一个文件复制到另一个文件夹下</p>
+<p>函数：<strong>shutil.copy(src,dst)</strong></p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 将文件复制到某文件夹下</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2&quot;)</span><br><span class="line"># 将文件复制到某文件夹下并重命名</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2/2.txt&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>该函数只能复制文件，即src的path只能是具体的文件的路径</li>
+<li>复制到具体的文件夹后，在dst的path可以是文件夹路径也可以是具体文件名（重命名）</li>
+</ul>
+<h2 id="文件夹-x2F-文件的移动（剪切）"><a href="#文件夹-x2F-文件的移动（剪切）" class="headerlink" title="文件夹&#x2F;文件的移动（剪切）"></a>文件夹&#x2F;文件的移动（剪切）</h2><p>作用：将一个文件移动（剪切）到另一个文件夹下</p>
+<p>函数：<strong>shutil.move(srcpath, dstpath)</strong></p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将文件夹移动到某文件夹下</span><br><span class="line">shutil.move(dirpath1,dirpath2)</span><br><span class="line"># 将某文件移动到某文件夹下</span><br><span class="line">shutil.move(filepath1, dirpath1)</span><br><span class="line"># 将某文件移动到某文件夹下并重命名</span><br><span class="line">shutil.move(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>可以移动文件和文件夹都可以</li>
+<li>文件移动，dst可以是文件夹也可以是文件名</li>
+<li>文件夹移动，dst只能是文件夹名</li>
+</ul>
+<h2 id="文件夹的删除移除"><a href="#文件夹的删除移除" class="headerlink" title="文件夹的删除移除"></a>文件夹的删除移除</h2><p>（1）删除空目录</p>
+<p>函数：os.rmdir  ; os.removedirs(相同功能)</p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.rmdir(dirpath)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>只能删除文件夹</li>
+<li>必须是空的文件夹（文件夹下再有空文件夹也不行）</li>
+</ul>
+<p>（2）删除文件夹文件（最好使用的）</p>
+<p>函数：<strong>shutil.rmtree()</strong></p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">### 删除文件夹</span><br><span class="line">shutil.rmtree(dirpath)</span><br><span class="line">### 删除文件</span><br><span class="line">shutil.rmtree(filepath)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>可以删除文件夹和文件</li>
+<li>文件path中可嵌套多个文件和文件都可以删除</li>
+<li>也可以删除空文件夹</li>
+</ul>
+<h2 id="文件的删除移除"><a href="#文件的删除移除" class="headerlink" title="文件的删除移除"></a>文件的删除移除</h2><p>（1）将一个文件删除移除</p>
+<p>函数： os.remove</p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.remove(filepath)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>该函数只能删除文件，参数不能是文件夹，只能是文件</li>
+<li>被删除的文件必须是存在的</li>
+</ul>
+<h2 id="文件-x2F-文件夹的重命名"><a href="#文件-x2F-文件夹的重命名" class="headerlink" title="文件&#x2F;文件夹的重命名"></a>文件&#x2F;文件夹的重命名</h2><p>功能：将一个文件夹或者是文件名重命名</p>
+<p>函数：<strong>os.rename()</strong></p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 对文件夹重命名（与移动的功能类似）</span><br><span class="line">os.rename(dirpath1,dirpath2)</span><br><span class="line"></span><br><span class="line"># 对文件重命名</span><br><span class="line">os.rename(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建文件夹"><a href="#创建文件夹" class="headerlink" title="创建文件夹"></a>创建文件夹</h2><p>（1） <strong>os.mkdir函数</strong>  </p>
+<p>功能：创建文件夹</p>
+<p>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建文件夹</span><br><span class="line">path = &quot;xxx/xxxx&quot;</span><br><span class="line">os.mkdir(path)</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>可以在创建多级目录</li>
+</ul>
+<p>（2）os.makedirs（）函数</p>
+<p>同上。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/" itemprop="url">Git多人单分支集成协作常见场景</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T23:18:00+08:00">
+                2020-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>针对多人协作使用Git的场景</p>
+<h2 id="不同人修改不同文件场景"><a href="#不同人修改不同文件场景" class="headerlink" title="不同人修改不同文件场景"></a>不同人修改不同文件场景</h2><p>即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。</p>
+<p>1、使用 git clone 的时候注意点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone  xxx.git   xxxx2</span><br></pre></td></tr></table></figure>
+
+<p>作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。</p>
+<p>2、git fetch 说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin     //吧origin远端代码fetch到本地	</span><br></pre></td></tr></table></figure>
+
+<p>注意：这个时候，远程分支到本地后，不会对本地代码有影响。</p>
+<p>使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av       //查看本地和远程分支情况</span><br></pre></td></tr></table></figure>
+
+<p>3、使用 get merge 命令对本地代码与刚fetch的远程分支的代码进行merge</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge   xxx       //xxx为刚fetch下来的远程分支</span><br></pre></td></tr></table></figure>
+
+<p>由于是不同人修改的不同的文件，可以直接merge，不会有冲突。</p>
+<h2 id="不同人修改同一文件的不同区域"><a href="#不同人修改同一文件的不同区域" class="headerlink" title="不同人修改同一文件的不同区域"></a>不同人修改同一文件的不同区域</h2><p>1、本地修改代码前使用 git pull</p>
+<p>在每次修改代码中，先执行 git pull 命令，将远程分支与本地分支同步，将本地分支做一个更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<p>直接 git pull 即可，无需任何其他命令。</p>
+<p>2、解决步骤：同上。</p>
+<h2 id="不同人修改同一文件的相同区域"><a href="#不同人修改同一文件的相同区域" class="headerlink" title="不同人修改同一文件的相同区域"></a>不同人修改同一文件的相同区域</h2><p>即：merge的时候存在 conflict 的时候。</p>
+<p>1、方法1：</p>
+<p>直接使用git merge 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge xxx   // xxx为远程分支</span><br></pre></td></tr></table></figure>
+
+<p>有conflict：打开冲突文件，修改</p>
+<p>注意：修改后一定要git add 和commit  将修改再提交一个commit；或者是直接add，再使用 git merge –continue即可。</p>
+<p>最后再提交。</p>
+<p>2、方法2： git cherry-pick commitID</p>
+<ul>
+<li>将远程分支fetch到本地</li>
+<li>切换到fetch的分支</li>
+<li>cherry-pick 后加原来冲突分支的那个commit的ID</li>
+</ul>
+<p>遇到冲突：修改。</p>
+<p>修改后：git add后，提交一个commit 或者 git cherry-pick –continue 即可。</p>
+<h2 id="不同人修改同一个文件的名字"><a href="#不同人修改同一个文件的名字" class="headerlink" title="不同人修改同一个文件的名字"></a>不同人修改同一个文件的名字</h2><p>1、方法： git push 会有冲突。</p>
+<p>pull一下，本地会有两个文件，自己决定用哪个文件名，删除哪几个，再git add和commit即可。</p>
+<p>注意git 中删除文件：git rm xxxx；</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1265,7 +1480,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1278,7 +1493,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
