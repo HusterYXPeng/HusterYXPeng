@@ -229,6 +229,193 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/20/Maven%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/03/20/Maven%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/" itemprop="url">Java Maven基础配置与入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-20T23:18:00+08:00">
+                2022-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-maven介绍"><a href="#1-maven介绍" class="headerlink" title="1.maven介绍"></a>1.maven介绍</h3><p><strong>Maven</strong>是一个项目管理工具，使用Maven可以来管理企业级的Java项目开发及依赖的管理</p>
+<h3 id="2-maven优势"><a href="#2-maven优势" class="headerlink" title="2.maven优势"></a>2.maven优势</h3><p>传统项目：</p>
+<ul>
+<li>jar包我们需要手动去网上寻找，有些jar包不容易找到，比较麻烦</li>
+<li>会导致项目文件的体积暴增，Java工程中将jar包放在工程根目录或者放在自建的lib目录下；JavaWeb工程会将jar包放在:&#x2F;WEB-INF&#x2F;lib目录下</li>
+<li>当以来多个版本jar包时候，会引起版本冲突</li>
+</ul>
+<p>maven项目：</p>
+<ul>
+<li>Maven团队维护了一个非常全的Maven仓库(中央仓库)，其中几乎包含了所有的jar包，使用Maven创建的工程可以自动到Maven仓库中下载jar包，方便且不易出错。</li>
+<li>在Maven构建的项目中，不会将项目所依赖的jar包拷贝到每一个项目中，而是将jar包统一放在仓库中管理，在项目中只需要引入jar包的位置(坐标)即可。这样实现了jar包的复用。</li>
+<li>Maven采用坐标来管理仓库中的jar包，其中的目录结构为【公司名称+项目&#x2F;产品名称+版本号】，可以根据坐标定位到具体的jar包。即使使用不同公司中同名的jar包，坐标不同（目录结构不同），文件名也不会冲突。</li>
+<li>Maven构建的项目中，通过pom文件对项目中所依赖的jar包及版本进行统一管理，可避免版本冲突。</li>
+<li>在Maven项目中，通过一个命令或者一键就可以实现项目的编译（mvn complie）、测试（mvn test）、打包部署（mvn deploy）、运行（mvn install）等</li>
+</ul>
+<h3 id="3-Maven相关下载配置"><a href="#3-Maven相关下载配置" class="headerlink" title="3.Maven相关下载配置"></a>3.Maven相关下载配置</h3><ul>
+<li><p>官方下载地址：<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a></p>
+</li>
+<li><p>本地仓库：其实就是本地硬盘上的某一目录，该目录中会包含项目中所需要的所有jar包及插件。当所需jar包在本地仓库没有时，从网络上下载下来的jar包也会存放在本地仓库中。因此本地仓库其实就是一个jar包的仓库</p>
+</li>
+<li><p>maven指定的本地仓库的默认位置是在c盘，默认在：C:\Users{当前用户}.m2\repository</p>
+</li>
+<li><p>修改方法：找到[MAVEN_HOME]&#x2F;conf&#x2F;目录中的配置文件settings.xml，修改maven仓库的路径</p>
+</li>
+<li><p>当maven项目中需要依赖jar包时，只需要在项目的pom文件中添加jar对应的坐标，Maven就会到Maven的本地仓库中引用相应的jar包，如果本地仓库没有，就会到远程仓库去下载jar包。如果不配置默认连接的是中央仓库，由于中央仓库面对的是全球用户，所以在下载jar包时，效率可能会比较低。</p>
+</li>
+</ul>
+<h3 id="4-项目idea配置maven"><a href="#4-项目idea配置maven" class="headerlink" title="4.项目idea配置maven"></a>4.项目idea配置maven</h3><ul>
+<li><img src="/image/1647771837399.png" alt="1647771837399"></li>
+</ul>
+<h3 id="5-maven工程目录介绍"><a href="#5-maven工程目录介绍" class="headerlink" title="5.maven工程目录介绍"></a>5.maven工程目录介绍</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1）/src/main/java -- 主目录下的Java目录，用于存放项目中的.java文件</span><br><span class="line"></span><br><span class="line">2）/src/main/resources – 主目下的资源目录，存放项目中的资源文件(如框架的配置文件)</span><br><span class="line"></span><br><span class="line">3）/src/test/java -- 测试目录下的Java目录，用于存放所有单元测试类的.java文件，如Junit测试类</span><br><span class="line"></span><br><span class="line">4）/src/test/resources – 测试目录下的资源目录，用于存放测试类所需资源文件(如框架的配置文件)</span><br><span class="line"></span><br><span class="line">5）/target -- 项目输出目录，编译后的class文件、及项目打成的war包等会输出到此目录中</span><br><span class="line"></span><br><span class="line">6）/pom.xml -- maven项目的核心配置文件，文件中通过坐标来管理项目中的所有jar包和插件。</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-maven项目依赖包下载"><a href="#6-maven项目依赖包下载" class="headerlink" title="6.maven项目依赖包下载"></a>6.maven项目依赖包下载</h3><p>maven的依赖添加以及管理都是在&#x2F;pom.xml文件下完成的</p>
+<p>如：需要使用junit包，或者log的日志包</p>
+<ul>
+<li>到官方的maven仓库<a target="_blank" rel="noopener" href="http://www.mvnrepository.com/%E9%80%89%E6%8B%A9%E8%A6%81%E4%BD%BF%E7%94%A8%E7%9A%84%E7%89%88%E6%9C%AC%E4%BB%A5%E5%8F%8A%E5%B0%86%E5%9D%90%E6%A0%87%E6%89%BE%E5%88%B0">http://www.mvnrepository.com/选择要使用的版本以及将坐标找到</a></li>
+</ul>
+<p><img src="/image/1647772771597.png" alt="1647772771597"></p>
+<ul>
+<li>在&#x2F;pom.xml文件下添加<dependency></dependency></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.13.1&lt;/version&gt;</span><br><span class="line">    &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.17.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.17.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-项目打包"><a href="#7-项目打包" class="headerlink" title="7.项目打包"></a>7.项目打包</h3><p>maven项目打包两种方式，一种是IEDA自带打包方法，另一种是用Maven插件maven-shade-plugin打包</p>
+<ul>
+<li><p>idea自带的打包方式：</p>
+<ul>
+<li>打开IDEA项目 file -&gt; Project Structure</li>
+</ul>
+<p><img src="/image/1647773369810.png" alt="1647773369810"></p>
+<ul>
+<li>选择运行的类文件</li>
+</ul>
+<p><img src="/image/1647773474350.png" alt="1647773474350"></p>
+<ul>
+<li>确定后重新Build Artifas–jar包，如图所示，之后在项目out输出里就会有相应的jar包了。</li>
+</ul>
+<p><img src="/image/1647773536472.png" alt="1647773536472"></p>
+</li>
+<li><p>Maven插件maven-shade-plugin打包</p>
+<ul>
+<li>pom.<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=xml&spm=1001.2101.3001.7020">xml</a>中添加以下代码，可以直接maven打包</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.2.4&lt;/version&gt;</span><br><span class="line">    &lt;executions&gt;</span><br><span class="line">        &lt;execution&gt;</span><br><span class="line">            &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">            &lt;goals&gt;</span><br><span class="line">                &lt;goal&gt;shade&lt;/goal&gt;</span><br><span class="line">            &lt;/goals&gt;</span><br><span class="line">            &lt;configuration&gt;</span><br><span class="line">                &lt;transformers&gt;</span><br><span class="line">                    &lt;transformer implementation=&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&gt;</span><br><span class="line">                        &lt;mainClass&gt;org.sonatype.haven.HavenCli&lt;/mainClass&gt;</span><br><span class="line">                    &lt;/transformer&gt;</span><br><span class="line">                &lt;/transformers&gt;</span><br><span class="line">            &lt;/configuration&gt;</span><br><span class="line">        &lt;/execution&gt;</span><br><span class="line">    &lt;/executions&gt;</span><br><span class="line">&lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1647773749707.png" alt="1647773749707"></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/20/Win%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88PySpark/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1964,7 +2151,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1977,7 +2164,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

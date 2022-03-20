@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,Maven," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.maven介绍Maven是一个项目管理工具，使用Maven可以来管理企业级的Java项目开发及依赖的管理 2.maven优势传统项目：  jar包我们需要手动去网上寻找，有些jar包不容易找到，比较麻烦 会导致项目文件的体积暴增，Java工程中将jar包放在工程根目录或者放在自建的lib目录下；JavaWeb工程会将jar包放在:&#x2F;WEB-INF&#x2F;lib目录下 当以来多个版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Maven基础配置与入门">
+<meta property="og:url" content="http://example.com/2022/03/20/Maven%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="1.maven介绍Maven是一个项目管理工具，使用Maven可以来管理企业级的Java项目开发及依赖的管理 2.maven优势传统项目：  jar包我们需要手动去网上寻找，有些jar包不容易找到，比较麻烦 会导致项目文件的体积暴增，Java工程中将jar包放在工程根目录或者放在自建的lib目录下；JavaWeb工程会将jar包放在:&#x2F;WEB-INF&#x2F;lib目录下 当以来多个版">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/image/1647771837399.png">
+<meta property="og:image" content="http://example.com/image/1647772771597.png">
+<meta property="og:image" content="http://example.com/image/1647773369810.png">
+<meta property="og:image" content="http://example.com/image/1647773474350.png">
+<meta property="og:image" content="http://example.com/image/1647773536472.png">
+<meta property="og:image" content="http://example.com/image/1647773749707.png">
+<meta property="article:published_time" content="2022-03-20T15:18:00.000Z">
+<meta property="article:modified_time" content="2022-03-20T13:08:14.020Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Maven">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/1647771837399.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2022/03/20/Maven基础入门/"/>
+
+
+
+
+
+  <title>Java Maven基础配置与入门 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/20/Maven%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Maven基础配置与入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-20T23:18:00+08:00">
+                2022-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-maven介绍"><a href="#1-maven介绍" class="headerlink" title="1.maven介绍"></a>1.maven介绍</h3><p><strong>Maven</strong>是一个项目管理工具，使用Maven可以来管理企业级的Java项目开发及依赖的管理</p>
+<h3 id="2-maven优势"><a href="#2-maven优势" class="headerlink" title="2.maven优势"></a>2.maven优势</h3><p>传统项目：</p>
+<ul>
+<li>jar包我们需要手动去网上寻找，有些jar包不容易找到，比较麻烦</li>
+<li>会导致项目文件的体积暴增，Java工程中将jar包放在工程根目录或者放在自建的lib目录下；JavaWeb工程会将jar包放在:&#x2F;WEB-INF&#x2F;lib目录下</li>
+<li>当以来多个版本jar包时候，会引起版本冲突</li>
+</ul>
+<p>maven项目：</p>
+<ul>
+<li>Maven团队维护了一个非常全的Maven仓库(中央仓库)，其中几乎包含了所有的jar包，使用Maven创建的工程可以自动到Maven仓库中下载jar包，方便且不易出错。</li>
+<li>在Maven构建的项目中，不会将项目所依赖的jar包拷贝到每一个项目中，而是将jar包统一放在仓库中管理，在项目中只需要引入jar包的位置(坐标)即可。这样实现了jar包的复用。</li>
+<li>Maven采用坐标来管理仓库中的jar包，其中的目录结构为【公司名称+项目&#x2F;产品名称+版本号】，可以根据坐标定位到具体的jar包。即使使用不同公司中同名的jar包，坐标不同（目录结构不同），文件名也不会冲突。</li>
+<li>Maven构建的项目中，通过pom文件对项目中所依赖的jar包及版本进行统一管理，可避免版本冲突。</li>
+<li>在Maven项目中，通过一个命令或者一键就可以实现项目的编译（mvn complie）、测试（mvn test）、打包部署（mvn deploy）、运行（mvn install）等</li>
+</ul>
+<h3 id="3-Maven相关下载配置"><a href="#3-Maven相关下载配置" class="headerlink" title="3.Maven相关下载配置"></a>3.Maven相关下载配置</h3><ul>
+<li><p>官方下载地址：<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a></p>
+</li>
+<li><p>本地仓库：其实就是本地硬盘上的某一目录，该目录中会包含项目中所需要的所有jar包及插件。当所需jar包在本地仓库没有时，从网络上下载下来的jar包也会存放在本地仓库中。因此本地仓库其实就是一个jar包的仓库</p>
+</li>
+<li><p>maven指定的本地仓库的默认位置是在c盘，默认在：C:\Users{当前用户}.m2\repository</p>
+</li>
+<li><p>修改方法：找到[MAVEN_HOME]&#x2F;conf&#x2F;目录中的配置文件settings.xml，修改maven仓库的路径</p>
+</li>
+<li><p>当maven项目中需要依赖jar包时，只需要在项目的pom文件中添加jar对应的坐标，Maven就会到Maven的本地仓库中引用相应的jar包，如果本地仓库没有，就会到远程仓库去下载jar包。如果不配置默认连接的是中央仓库，由于中央仓库面对的是全球用户，所以在下载jar包时，效率可能会比较低。</p>
+</li>
+</ul>
+<h3 id="4-项目idea配置maven"><a href="#4-项目idea配置maven" class="headerlink" title="4.项目idea配置maven"></a>4.项目idea配置maven</h3><ul>
+<li><img src="/image/1647771837399.png" alt="1647771837399"></li>
+</ul>
+<h3 id="5-maven工程目录介绍"><a href="#5-maven工程目录介绍" class="headerlink" title="5.maven工程目录介绍"></a>5.maven工程目录介绍</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1）/src/main/java -- 主目录下的Java目录，用于存放项目中的.java文件</span><br><span class="line"></span><br><span class="line">2）/src/main/resources – 主目下的资源目录，存放项目中的资源文件(如框架的配置文件)</span><br><span class="line"></span><br><span class="line">3）/src/test/java -- 测试目录下的Java目录，用于存放所有单元测试类的.java文件，如Junit测试类</span><br><span class="line"></span><br><span class="line">4）/src/test/resources – 测试目录下的资源目录，用于存放测试类所需资源文件(如框架的配置文件)</span><br><span class="line"></span><br><span class="line">5）/target -- 项目输出目录，编译后的class文件、及项目打成的war包等会输出到此目录中</span><br><span class="line"></span><br><span class="line">6）/pom.xml -- maven项目的核心配置文件，文件中通过坐标来管理项目中的所有jar包和插件。</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-maven项目依赖包下载"><a href="#6-maven项目依赖包下载" class="headerlink" title="6.maven项目依赖包下载"></a>6.maven项目依赖包下载</h3><p>maven的依赖添加以及管理都是在&#x2F;pom.xml文件下完成的</p>
+<p>如：需要使用junit包，或者log的日志包</p>
+<ul>
+<li>到官方的maven仓库<a target="_blank" rel="noopener" href="http://www.mvnrepository.com/%E9%80%89%E6%8B%A9%E8%A6%81%E4%BD%BF%E7%94%A8%E7%9A%84%E7%89%88%E6%9C%AC%E4%BB%A5%E5%8F%8A%E5%B0%86%E5%9D%90%E6%A0%87%E6%89%BE%E5%88%B0">http://www.mvnrepository.com/选择要使用的版本以及将坐标找到</a></li>
+</ul>
+<p><img src="/image/1647772771597.png" alt="1647772771597"></p>
+<ul>
+<li>在&#x2F;pom.xml文件下添加<dependency></dependency></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.13.1&lt;/version&gt;</span><br><span class="line">    &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.17.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.17.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-项目打包"><a href="#7-项目打包" class="headerlink" title="7.项目打包"></a>7.项目打包</h3><p>maven项目打包两种方式，一种是IEDA自带打包方法，另一种是用Maven插件maven-shade-plugin打包</p>
+<ul>
+<li><p>idea自带的打包方式：</p>
+<ul>
+<li>打开IDEA项目 file -&gt; Project Structure</li>
+</ul>
+<p><img src="/image/1647773369810.png" alt="1647773369810"></p>
+<ul>
+<li>选择运行的类文件</li>
+</ul>
+<p><img src="/image/1647773474350.png" alt="1647773474350"></p>
+<ul>
+<li>确定后重新Build Artifas–jar包，如图所示，之后在项目out输出里就会有相应的jar包了。</li>
+</ul>
+<p><img src="/image/1647773536472.png" alt="1647773536472"></p>
+</li>
+<li><p>Maven插件maven-shade-plugin打包</p>
+<ul>
+<li>pom.<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=xml&spm=1001.2101.3001.7020">xml</a>中添加以下代码，可以直接maven打包</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.2.4&lt;/version&gt;</span><br><span class="line">    &lt;executions&gt;</span><br><span class="line">        &lt;execution&gt;</span><br><span class="line">            &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">            &lt;goals&gt;</span><br><span class="line">                &lt;goal&gt;shade&lt;/goal&gt;</span><br><span class="line">            &lt;/goals&gt;</span><br><span class="line">            &lt;configuration&gt;</span><br><span class="line">                &lt;transformers&gt;</span><br><span class="line">                    &lt;transformer implementation=&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&gt;</span><br><span class="line">                        &lt;mainClass&gt;org.sonatype.haven.HavenCli&lt;/mainClass&gt;</span><br><span class="line">                    &lt;/transformer&gt;</span><br><span class="line">                &lt;/transformers&gt;</span><br><span class="line">            &lt;/configuration&gt;</span><br><span class="line">        &lt;/execution&gt;</span><br><span class="line">    &lt;/executions&gt;</span><br><span class="line">&lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1647773749707.png" alt="1647773749707"></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Maven/" rel="tag"># Maven</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/03/20/Win%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88PySpark/" rel="next" title="Win安装单机版PySpark">
+                <i class="fa fa-chevron-left"></i> Win安装单机版PySpark
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-maven%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">1.maven介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-maven%E4%BC%98%E5%8A%BF"><span class="nav-number">2.</span> <span class="nav-text">2.maven优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Maven%E7%9B%B8%E5%85%B3%E4%B8%8B%E8%BD%BD%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">3.Maven相关下载配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%A1%B9%E7%9B%AEidea%E9%85%8D%E7%BD%AEmaven"><span class="nav-number">4.</span> <span class="nav-text">4.项目idea配置maven</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-maven%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">5.</span> <span class="nav-text">5.maven工程目录介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-maven%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E5%8C%85%E4%B8%8B%E8%BD%BD"><span class="nav-number">6.</span> <span class="nav-text">6.maven项目依赖包下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85"><span class="nav-number">7.</span> <span class="nav-text">7.项目打包</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
