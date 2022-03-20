@@ -6,7 +6,6 @@ last_modified_at: 2020-01-15 01:08:25 +0800
 tags: [Git基础, Git提交代码]
 toc:  true
 ---
-{: .message }
 
 
 针对多人协作使用Git的场景
