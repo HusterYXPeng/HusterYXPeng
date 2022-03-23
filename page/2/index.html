@@ -229,6 +229,207 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/18/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/18/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" itemprop="url">Git常用命令使用总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-18T23:18:00+08:00">
+                2020-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="在本地一个文件夹新创建一个-git-仓库"><a href="#在本地一个文件夹新创建一个-git-仓库" class="headerlink" title="在本地一个文件夹新创建一个 git 仓库"></a>在本地一个文件夹新创建一个 git 仓库</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init </span><br></pre></td></tr></table></figure>
+
+<p>这句命令后会在本地文件夹中创建一个 .git 文件夹。</p>
+<p>默认情况下这个文件夹是无法显示的，是隐藏的，但是该文件夹是存在的。</p>
+<h4 id="git-remote-相关操作"><a href="#git-remote-相关操作" class="headerlink" title="git remote 相关操作"></a>git remote 相关操作</h4><p>（1）创建本地库与远程库的链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add xxx(连接名字)    xxx.git</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572437584873.png" alt="1572437584873"></p>
+<p>连接名字用于确定一个连接。</p>
+<p>（2）查看当前所有的remote连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572437693305.png" alt="1572437693305"></p>
+<p>可以查看当前所有的连接</p>
+<p>（3）删除远程连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote remove   xxx(连接名)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Clone"><a href="#Clone" class="headerlink" title="Clone"></a>Clone</h4><p>知道一个远程库的git地址，直接通过  git clone 就代码库的地址就将代码下载下来。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone   https:xxxxx.xxx.git</span><br></pre></td></tr></table></figure>
+
+<p>注意：这个时候会在本地自动创建一个 origin 的远程连接，这个分支默认的。</p>
+<h4 id="fetch：将远程库的某个分支拉到本地就形成新的分支"><a href="#fetch：将远程库的某个分支拉到本地就形成新的分支" class="headerlink" title="fetch：将远程库的某个分支拉到本地就形成新的分支"></a>fetch：将远程库的某个分支拉到本地就形成新的分支</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin develop:dev1</span><br><span class="line">#将远程origin库的develop分支最新代码拉到本地就形成新的分支dev1</span><br></pre></td></tr></table></figure>
+
+<p>这样好处：在于每次最新开发都可以从远程库上develop分支的最新的代码开始开发，并在本地建新的分支，到时候MR的时候，将dev1分支提到远程的develop分支。</p>
+<h4 id="当有多个分支的时候，分支之间切换、删除分支、查看分支"><a href="#当有多个分支的时候，分支之间切换、删除分支、查看分支" class="headerlink" title="当有多个分支的时候，分支之间切换、删除分支、查看分支"></a>当有多个分支的时候，分支之间切换、删除分支、查看分支</h4><p>（1）切换分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout dev1    //由当前分支切换到dev1分支</span><br></pre></td></tr></table></figure>
+
+<p>注意：切换分支了当前本地目录的内容会变化。</p>
+<p>（2）查看当前仓库有哪些分支（本地&#x2F;远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch       //仅查看本地分支</span><br><span class="line">git branch -a    //查看当前本地和远程仓库的所有分支</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image/1572438860560.png" alt="1572438860560"></p>
+<p>执行结果中：带*号的为当前分支</p>
+<p>（3）删除某一分支（本地&#x2F;远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch dev1                           //删除本地库的dev1分支</span><br><span class="line">git push origin --delete [branchname]     //删除远程库的某个分支</span><br></pre></td></tr></table></figure>
+
+<p>（4）本地创建分支（本地）：</p>
+<ul>
+<li>通过fetch拉分支，可以在本地创建分支以外，还有另外办法可以创建分支。</li>
+<li>通过checkout在本地创建分支。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev4    //创建dev4分支，并切换到dev4分支，并且这个时候，假设之前在dev1分支，这时候，dev4分支下面还会有dev1分支下的内容。</span><br><span class="line">---------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>（5）将本地当前分支推送到远程新分支，如果远程分支不存在，则会自动创建分支（远程）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin dev2:dev1    //将本地的dev2的push到远程仓库origin的dev1分支，如果远程没有dev1分支会自动创建新的dev1分支</span><br></pre></td></tr></table></figure>
+
+<h4 id="git配置github用户名和邮箱"><a href="#git配置github用户名和邮箱" class="headerlink" title="git配置github用户名和邮箱"></a>git配置github用户名和邮箱</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;HusterYXPeng&quot;</span><br><span class="line">git config --global user.email &quot;xxxx.@&quot; </span><br></pre></td></tr></table></figure>
+
+<h4 id="修改已经提交commit的名字和配置commit的文字"><a href="#修改已经提交commit的名字和配置commit的文字" class="headerlink" title="修改已经提交commit的名字和配置commit的文字"></a>修改已经提交commit的名字和配置commit的文字</h4><p>（1）修改commit名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend  # 修改提交的commit的 -m 的信息</span><br></pre></td></tr></table></figure>
+
+<p>（2）如何标准配置commit后面 -m 的描述信息</p>
+<ul>
+<li>创建一个commit模板txt文件，文本内容可如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D://commit.txt</span><br><span class="line">-----------------------</span><br><span class="line">单号：</span><br><span class="line">特性/模块名称：</span><br><span class="line">修改原因：</span><br><span class="line">修改内容：</span><br><span class="line">修改人：</span><br><span class="line">检视人：</span><br><span class="line">-----------------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>git配置下该txt，这样后面每次 git commit 的时候，后面不用加 -m 描述信息，后自动弹出上面txt的内容，再自己补上相关的内容即可。git 配置命令如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global commit.template 模板txt的路径（eg：&quot;D://commit.txt&quot;）</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="多个已经commit的commit合并"><a href="#多个已经commit的commit合并" class="headerlink" title="多个已经commit的commit合并"></a>多个已经commit的commit合并</h4><p>比如现在你已经提了一个commit，现在又想改了，并生成了一个commit，加这两个commit合并。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i HEAD~n  （n表示将最前面的n个commit合并）</span><br></pre></td></tr></table></figure>
+
+<p>然后在显示的bash中，将准备合并的n-1个commit前面的单词由 pick 改为 squash， 另外一个的commit信息可以修改为合并后commit的信息，但其前面单词还是pick，最后，保存退出即可。</p>
+<h4 id="查看当前的commit-记录"><a href="#查看当前的commit-记录" class="headerlink" title="查看当前的commit 记录"></a>查看当前的commit 记录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git log -n    # 查看当前前n个commit的详细信息</span><br><span class="line">git log    # 查看当前所有commit的详细信息</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="分支合并：git-merge"><a href="#分支合并：git-merge" class="headerlink" title="分支合并：git merge"></a>分支合并：git merge</h4><p>本地有dev1和dev2分支，将dev2合并到dev1分支。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout dev1 # 先切换到dev1分支</span><br><span class="line">git merge dev2 # 将dev2分支合并到dev1分支，合并后当前还是处于dev1分支</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="将本地分支推到远程主库的分支"><a href="#将本地分支推到远程主库的分支" class="headerlink" title="将本地分支推到远程主库的分支"></a>将本地分支推到远程主库的分支</h4><p>将本地的dev1分支push到远程主库的dev2分支。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin dev1:dev2  # 注意本地分支在前</span><br><span class="line">git push origin dev1:dev2 -f    # 将本地dev1强制推到远程dev2分支，注意这个时候，即使有冲突，也会push成功，远程库dev2分支就是本质dev1的分支一模一样，会覆盖之前dev2分支的内容。</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -427,7 +628,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -440,7 +641,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
