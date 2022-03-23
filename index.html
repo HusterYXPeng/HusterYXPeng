@@ -229,6 +229,139 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/mysql%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/03/24/mysql%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93(%E4%B8%80)/" itemprop="url">musql基础使用总结(一)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-24T07:10:00+08:00">
+                2022-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="from-with-语句"><a href="#from-with-语句" class="headerlink" title="from with 语句"></a>from with 语句</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(select * from database.table)datatable1</span><br><span class="line">where datatable1.xx = &quot;xxx&quot;</span><br></pre></td></tr></table></figure>
+<p>说明：在from后()后的名字，代表选择这部分数据组成的一个临时数据表的别名，datatable1，别名可以用于后续的判断和筛选和排序等等，但是不能<br>作为表名进行插入和写操作。</p>
+<h3 id="将一个已知表的部分符合条件的数据写入另一个表中"><a href="#将一个已知表的部分符合条件的数据写入另一个表中" class="headerlink" title="将一个已知表的部分符合条件的数据写入另一个表中"></a>将一个已知表的部分符合条件的数据写入另一个表中</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create table if not exists database.datatable</span><br><span class="line">(</span><br><span class="line">    d1 string,</span><br><span class="line">    d2 string</span><br><span class="line">);</span><br><span class="line">insert into table database.datatable1 from</span><br><span class="line">(</span><br><span class="line">    select * from database.datatable2</span><br><span class="line">)dd2 where dd2.d1=&quot;xxxx&quot;;</span><br></pre></td></tr></table></figure>
+<p>说明：创建表先判断是否存在，并将database.datatable2表中的d1字段等于xxxx的数据写入新创建的数据库database.datatable1。</p>
+<h3 id="删除整个数据表连同定义一起删除"><a href="#删除整个数据表连同定义一起删除" class="headerlink" title="删除整个数据表连同定义一起删除"></a>删除整个数据表连同定义一起删除</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop table if exists database.datatable1;</span><br></pre></td></tr></table></figure>
+<p>说明：drop命令，删除前先判断是否存在。</p>
+<h3 id="对两个表做join操作并筛选数据字段"><a href="#对两个表做join操作并筛选数据字段" class="headerlink" title="对两个表做join操作并筛选数据字段"></a>对两个表做join操作并筛选数据字段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select d1.xx1 as x1, d1.xx2 as x2, d2.xx3 as x3, d2.xx4 as x4 from table1 d1, table d2 where </span><br><span class="line">d1.xx1 = d2.xx3 and d1.xx3 = d2.xx2</span><br><span class="line">order by d2.xx3,t2.xx1;</span><br></pre></td></tr></table></figure>
+<p>说明：对两个表d1和d2的两个表进行join操作，使用d1的xx1字段与d2的xx3字段进行关联和d1的xx3字段与d2的xx3&#x3D;2字段进行关联，筛选数据后，并根据d2的xx3和xx1字段进行排序。</p>
+<h3 id="判断字段是否为NULL"><a href="#判断字段是否为NULL" class="headerlink" title="判断字段是否为NULL"></a>判断字段是否为NULL</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table1 where xx1!=&quot;null&quot;</span><br></pre></td></tr></table></figure>
+<p>说明：选择数据库table1中xx1字段不为null的数据。</p>
+<h3 id="where判断与字符串截取"><a href="#where判断与字符串截取" class="headerlink" title="where判断与字符串截取"></a>where判断与字符串截取</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from table1 t1, table2 t2 where shustr(t1.xx1, 5, 2)=&quot;xxxx&quot; and t2.xx2 = &quot;123&quot; </span><br></pre></td></tr></table></figure>
+<p>说明：使用substr()函数对字符串进行截取。</p>
+<h3 id="对数据进行group-by"><a href="#对数据进行group-by" class="headerlink" title="对数据进行group by"></a>对数据进行group by</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select xx1 as a1, xx2 as a2, xx3 as a3, count(*)</span><br><span class="line">from table1 group by xx1, xx2, xx3</span><br><span class="line">order by xx1, xx2, xx3</span><br></pre></td></tr></table></figure>
+<p>说明：对t1标根据xx1,xx2,xx3字段进行分组，并统计字段相同的数据的行数，最后基于xx1,xx2,xx3字段进行排序。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1792,205 +1925,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/07/22/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/22/Python%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Python常用的文件夹相关操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T21:18:00+08:00">
-                2020-07-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Python常用的文件夹相关操作</p>
-<p>在python经常遇到文件夹相关的操作，比如：文件夹的创建、复制、删除、移动；文件的创建、复制、删除等，在python中常用的涉及到文件夹的包有：os、shutil。</p>
-<h2 id="文件夹的复制"><a href="#文件夹的复制" class="headerlink" title="文件夹的复制"></a>文件夹的复制</h2><p>作用：文件夹全部复制到另一个文件夹（遍历复制）。</p>
-<p>函数：<strong>shutil.copytree</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rootPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp&quot;</span><br><span class="line">dstPath = &quot;C:/Users/hust_yxp/Desktop/PYtest/temp2&quot;</span><br><span class="line">shutil.copytree(rootPath,dstPath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数是赋值整个文件夹（无论文件夹下还有多少个文件或者是文件夹，都可以复制）</li>
-<li>即使dstpath的文件夹不存在，该函数也是可以自己创建的。</li>
-</ul>
-<h2 id="文件的复制"><a href="#文件的复制" class="headerlink" title="文件的复制"></a>文件的复制</h2><p>作用：将一个文件复制到另一个文件夹下</p>
-<p>函数：<strong>shutil.copy(src,dst)</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 将文件复制到某文件夹下</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2&quot;)</span><br><span class="line"># 将文件复制到某文件夹下并重命名</span><br><span class="line">shutil.copy(&quot;C:/temp/1.txt&quot;, &quot;C:/temp2/2.txt&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数只能复制文件，即src的path只能是具体的文件的路径</li>
-<li>复制到具体的文件夹后，在dst的path可以是文件夹路径也可以是具体文件名（重命名）</li>
-</ul>
-<h2 id="文件夹-x2F-文件的移动（剪切）"><a href="#文件夹-x2F-文件的移动（剪切）" class="headerlink" title="文件夹&#x2F;文件的移动（剪切）"></a>文件夹&#x2F;文件的移动（剪切）</h2><p>作用：将一个文件移动（剪切）到另一个文件夹下</p>
-<p>函数：<strong>shutil.move(srcpath, dstpath)</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将文件夹移动到某文件夹下</span><br><span class="line">shutil.move(dirpath1,dirpath2)</span><br><span class="line"># 将某文件移动到某文件夹下</span><br><span class="line">shutil.move(filepath1, dirpath1)</span><br><span class="line"># 将某文件移动到某文件夹下并重命名</span><br><span class="line">shutil.move(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以移动文件和文件夹都可以</li>
-<li>文件移动，dst可以是文件夹也可以是文件名</li>
-<li>文件夹移动，dst只能是文件夹名</li>
-</ul>
-<h2 id="文件夹的删除移除"><a href="#文件夹的删除移除" class="headerlink" title="文件夹的删除移除"></a>文件夹的删除移除</h2><p>（1）删除空目录</p>
-<p>函数：os.rmdir  ; os.removedirs(相同功能)</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.rmdir(dirpath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>只能删除文件夹</li>
-<li>必须是空的文件夹（文件夹下再有空文件夹也不行）</li>
-</ul>
-<p>（2）删除文件夹文件（最好使用的）</p>
-<p>函数：<strong>shutil.rmtree()</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">### 删除文件夹</span><br><span class="line">shutil.rmtree(dirpath)</span><br><span class="line">### 删除文件</span><br><span class="line">shutil.rmtree(filepath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以删除文件夹和文件</li>
-<li>文件path中可嵌套多个文件和文件都可以删除</li>
-<li>也可以删除空文件夹</li>
-</ul>
-<h2 id="文件的删除移除"><a href="#文件的删除移除" class="headerlink" title="文件的删除移除"></a>文件的删除移除</h2><p>（1）将一个文件删除移除</p>
-<p>函数： os.remove</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.remove(filepath)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>该函数只能删除文件，参数不能是文件夹，只能是文件</li>
-<li>被删除的文件必须是存在的</li>
-</ul>
-<h2 id="文件-x2F-文件夹的重命名"><a href="#文件-x2F-文件夹的重命名" class="headerlink" title="文件&#x2F;文件夹的重命名"></a>文件&#x2F;文件夹的重命名</h2><p>功能：将一个文件夹或者是文件名重命名</p>
-<p>函数：<strong>os.rename()</strong></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 对文件夹重命名（与移动的功能类似）</span><br><span class="line">os.rename(dirpath1,dirpath2)</span><br><span class="line"></span><br><span class="line"># 对文件重命名</span><br><span class="line">os.rename(filepath1, filepath2)</span><br></pre></td></tr></table></figure>
-
-<h2 id="创建文件夹"><a href="#创建文件夹" class="headerlink" title="创建文件夹"></a>创建文件夹</h2><p>（1） <strong>os.mkdir函数</strong>  </p>
-<p>功能：创建文件夹</p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建文件夹</span><br><span class="line">path = &quot;xxx/xxxx&quot;</span><br><span class="line">os.mkdir(path)</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ul>
-<li>可以在创建多级目录</li>
-</ul>
-<p>（2）os.makedirs（）函数</p>
-<p>同上。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2041,7 +1975,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2054,7 +1988,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
