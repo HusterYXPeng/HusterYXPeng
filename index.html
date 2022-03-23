@@ -229,6 +229,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/Git-%E5%A4%A7%E6%96%87%E4%BB%B6lfs%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/03/23/Git-%E5%A4%A7%E6%96%87%E4%BB%B6lfs%E4%BD%BF%E7%94%A8/" itemprop="url">Git-lfs命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-23T08:18:00+08:00">
+                2022-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="将当前文件中大于50M的文件，全部用lfs跟踪起来"><a href="#将当前文件中大于50M的文件，全部用lfs跟踪起来" class="headerlink" title="将当前文件中大于50M的文件，全部用lfs跟踪起来"></a>将当前文件中大于50M的文件，全部用lfs跟踪起来</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ./ -path &quot;./.git&quot; -prune -o -type f -size +50M -print | cut -b 3- | xargs git lfs track </span><br></pre></td></tr></table></figure>
+
+<h2 id="查看当前大文件track状态"><a href="#查看当前大文件track状态" class="headerlink" title="查看当前大文件track状态"></a>查看当前大文件track状态</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git lfs ls-files</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="git-lfs-基础命令"><a href="#git-lfs-基础命令" class="headerlink" title="git lfs 基础命令"></a>git lfs 基础命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git lfs track xxxx    // 用lfs跟踪大文件</span><br><span class="line">git add .gitattr*     // 将git lfs生成的配置文件add到缓存</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/20/Maven%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1944,170 +2069,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/" itemprop="url">Git多人单分支集成协作常见场景</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T23:18:00+08:00">
-                2020-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>针对多人协作使用Git的场景</p>
-<h2 id="不同人修改不同文件场景"><a href="#不同人修改不同文件场景" class="headerlink" title="不同人修改不同文件场景"></a>不同人修改不同文件场景</h2><p>即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。</p>
-<p>1、使用 git clone 的时候注意点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone  xxx.git   xxxx2</span><br></pre></td></tr></table></figure>
-
-<p>作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。</p>
-<p>2、git fetch 说明：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin     //吧origin远端代码fetch到本地	</span><br></pre></td></tr></table></figure>
-
-<p>注意：这个时候，远程分支到本地后，不会对本地代码有影响。</p>
-<p>使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av       //查看本地和远程分支情况</span><br></pre></td></tr></table></figure>
-
-<p>3、使用 get merge 命令对本地代码与刚fetch的远程分支的代码进行merge</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge   xxx       //xxx为刚fetch下来的远程分支</span><br></pre></td></tr></table></figure>
-
-<p>由于是不同人修改的不同的文件，可以直接merge，不会有冲突。</p>
-<h2 id="不同人修改同一文件的不同区域"><a href="#不同人修改同一文件的不同区域" class="headerlink" title="不同人修改同一文件的不同区域"></a>不同人修改同一文件的不同区域</h2><p>1、本地修改代码前使用 git pull</p>
-<p>在每次修改代码中，先执行 git pull 命令，将远程分支与本地分支同步，将本地分支做一个更新。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-
-<p>直接 git pull 即可，无需任何其他命令。</p>
-<p>2、解决步骤：同上。</p>
-<h2 id="不同人修改同一文件的相同区域"><a href="#不同人修改同一文件的相同区域" class="headerlink" title="不同人修改同一文件的相同区域"></a>不同人修改同一文件的相同区域</h2><p>即：merge的时候存在 conflict 的时候。</p>
-<p>1、方法1：</p>
-<p>直接使用git merge 命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge xxx   // xxx为远程分支</span><br></pre></td></tr></table></figure>
-
-<p>有conflict：打开冲突文件，修改</p>
-<p>注意：修改后一定要git add 和commit  将修改再提交一个commit；或者是直接add，再使用 git merge –continue即可。</p>
-<p>最后再提交。</p>
-<p>2、方法2： git cherry-pick commitID</p>
-<ul>
-<li>将远程分支fetch到本地</li>
-<li>切换到fetch的分支</li>
-<li>cherry-pick 后加原来冲突分支的那个commit的ID</li>
-</ul>
-<p>遇到冲突：修改。</p>
-<p>修改后：git add后，提交一个commit 或者 git cherry-pick –continue 即可。</p>
-<h2 id="不同人修改同一个文件的名字"><a href="#不同人修改同一个文件的名字" class="headerlink" title="不同人修改同一个文件的名字"></a>不同人修改同一个文件的名字</h2><p>1、方法： git push 会有冲突。</p>
-<p>pull一下，本地会有两个文件，自己决定用哪个文件名，删除哪几个，再git add和commit即可。</p>
-<p>注意git 中删除文件：git rm xxxx；</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -2151,7 +2119,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
