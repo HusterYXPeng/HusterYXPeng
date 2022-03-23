@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="常用Linux命令将数据从一个机器拷贝到另一个远程机器123scp .&#x2F;xxxxx root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx     &#x2F;&#x2F; 将本地文件拷贝到远程其他linux机器上scp root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx .&#x2F;xxxxx     &#x2F;&#x2F; 将远程机器上某个文件拷贝到本地机器  当前机器访问远程机器的文件夹123sudo sshfs -">
+<meta name="description" content="常用Linux命令将数据从一个机器拷贝到另一个远程机器12scp .&#x2F;xxxxx root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx     &#x2F;&#x2F; 将本地文件拷贝到远程其他linux机器上scp root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx .&#x2F;xxxxx     &#x2F;&#x2F; 将远程机器上某个文件拷贝到本地机器  当前机器访问远程机器的文件夹12sudo sshfs -o">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常用Linux命令">
 <meta property="og:url" content="http://example.com/2022/03/23/%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="JoliceYu的个人博客">
-<meta property="og:description" content="常用Linux命令将数据从一个机器拷贝到另一个远程机器123scp .&#x2F;xxxxx root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx     &#x2F;&#x2F; 将本地文件拷贝到远程其他linux机器上scp root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx .&#x2F;xxxxx     &#x2F;&#x2F; 将远程机器上某个文件拷贝到本地机器  当前机器访问远程机器的文件夹123sudo sshfs -">
+<meta property="og:description" content="常用Linux命令将数据从一个机器拷贝到另一个远程机器12scp .&#x2F;xxxxx root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx     &#x2F;&#x2F; 将本地文件拷贝到远程其他linux机器上scp root@xx.xx.xx.xx:&#x2F;home&#x2F;xxx&#x2F;xxxx .&#x2F;xxxxx     &#x2F;&#x2F; 将远程机器上某个文件拷贝到本地机器  当前机器访问远程机器的文件夹12sudo sshfs -o">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-03-23T04:10:00.000Z">
-<meta property="article:modified_time" content="2022-03-23T04:39:18.172Z">
+<meta property="article:modified_time" content="2022-03-23T04:45:55.483Z">
 <meta property="article:author" content="Xipeng Yu">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="命令">
@@ -301,9 +301,9 @@
       
 
       
-        <h2 id="常用Linux命令"><a href="#常用Linux命令" class="headerlink" title="常用Linux命令"></a>常用Linux命令</h2><h4 id="将数据从一个机器拷贝到另一个远程机器"><a href="#将数据从一个机器拷贝到另一个远程机器" class="headerlink" title="将数据从一个机器拷贝到另一个远程机器"></a>将数据从一个机器拷贝到另一个远程机器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp ./xxxxx root@xx.xx.xx.xx:/home/xxx/xxxx     // 将本地文件拷贝到远程其他linux机器上</span><br><span class="line"></span><br><span class="line">scp root@xx.xx.xx.xx:/home/xxx/xxxx ./xxxxx     // 将远程机器上某个文件拷贝到本地机器</span><br></pre></td></tr></table></figure>
+        <h2 id="常用Linux命令"><a href="#常用Linux命令" class="headerlink" title="常用Linux命令"></a>常用Linux命令</h2><h4 id="将数据从一个机器拷贝到另一个远程机器"><a href="#将数据从一个机器拷贝到另一个远程机器" class="headerlink" title="将数据从一个机器拷贝到另一个远程机器"></a>将数据从一个机器拷贝到另一个远程机器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp ./xxxxx root@xx.xx.xx.xx:/home/xxx/xxxx     // 将本地文件拷贝到远程其他linux机器上</span><br><span class="line">scp root@xx.xx.xx.xx:/home/xxx/xxxx ./xxxxx     // 将远程机器上某个文件拷贝到本地机器</span><br></pre></td></tr></table></figure>
 
-<h4 id="当前机器访问远程机器的文件夹"><a href="#当前机器访问远程机器的文件夹" class="headerlink" title="当前机器访问远程机器的文件夹"></a>当前机器访问远程机器的文件夹</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo sshfs -o allow other -o reconnect root@xx.xx.xx.xx:/home/data1</span><br><span class="line">// 在本地机器访问远程机器上的 data1 文件夹</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="当前机器访问远程机器的文件夹"><a href="#当前机器访问远程机器的文件夹" class="headerlink" title="当前机器访问远程机器的文件夹"></a>当前机器访问远程机器的文件夹</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sshfs -o allow other -o reconnect root@xx.xx.xx.xx:/home/data1</span><br><span class="line">// 在本地机器访问远程机器上的 data1 文件夹</span><br></pre></td></tr></table></figure>
 
 <h4 id="列举文件夹下所有文件的大小按MB统计"><a href="#列举文件夹下所有文件的大小按MB统计" class="headerlink" title="列举文件夹下所有文件的大小按MB统计"></a>列举文件夹下所有文件的大小按MB统计</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -csh ./xxx/xx/*</span><br></pre></td></tr></table></figure>
       
