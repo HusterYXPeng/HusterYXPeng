@@ -97,7 +97,24 @@ order by
 说明：对t1标根据xx1,xx2,xx3字段进行分组，并统计字段相同的数据的行数，最后基于xx1,xx2,xx3字段进行排序。
 
 
+### 查看一个表的前N行
+```sql
+select * from table1 limit N
+```
 
+### 查看一个表的每个字段的数据类型
+方法1：
+```sql
+desc table1;        
+```
+方法2：
+```sql
+show columns from table1;       
+```
+方法3：
+```sql
+show create table table1;  # 创建表的原始语句      
+```
 
 
 
