@@ -85,6 +85,42 @@ A     0601    02:15         5           5
 
 
 ### 使用LAG()函数和LEAD()函数取某个字段
+```sql
+select xx1, xx2, time1,
+    lag(time1, 1, "start") over(
+        PARTITION BY 
+            xx1, xx2, 
+            order by time1
+    ) as time2
+from 
+    table1
+```
+说明：对所有数据按照xx1，xx2取窗口进行排序，在窗口内，再根据time1进行排序，之后取每条数据的前一条数据的time1作为新的time2字段。
+```
+xx1 xx2 time1 ==>> time2
+A    a  01:01        空
+A    a  01:04       01:01
+B    c  01:02        空
+B    c  02:09       01:02
+B    m  09:09        空
+```
+这个也可以作为实现前面的相邻数据之前相差数据的条数。
 
 
-
+### 数据写入与数据老化、幂等
+```sql
+insert overwrite 
+    table table1(date)
+select xx1, xx2, date from 
+    table2
+where xx1>0
+```
+将数据按照date进行分区overwrite写入，假设写入01-01号的数据，这样其余天的数据不会被overwrite。
+同时，01-01号的数据多次写入不会存在重复数据，保证每次写入都擦除之前的01-01的数据。
+数据老化
+```sql
+insert overwrite table table1
+select xx1, xx2, time1 from 
+table2 where unix_timestamp(time1, "yyyy/MM/dd HH:mm:ss") > nix_timestamp(current(), "yyyy/MM/dd HH:mm:ss")-86400*7
+```
+说明：每次写入数据都是全量insert overwrite写入，会覆盖之前的所有数据，但是每次写入的时候不是所有的数据都写入，而是根据time1字段判断，只写入距离当前时间点过去7天内的数据。
