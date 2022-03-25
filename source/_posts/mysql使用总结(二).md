@@ -1,6 +1,6 @@
 ---
 layout: post
-title: musql基础使用总结(二)
+title: mysql基础使用总结(二)
 date: 2022-03-24 09:10 +0800
 last_modified_at: 2022-03-24 09:10 +0800
 categories: SQL
