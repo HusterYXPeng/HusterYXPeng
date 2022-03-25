@@ -3,6 +3,7 @@ layout: post
 title: Python常用的路径相关操作
 date: 2020-08-05 23:18 +0800
 last_modified_at: 2020-02-05 01:08:25 +0800
+categories: Python
 tags: [Python, 路径操作]
 toc:  true
 ---

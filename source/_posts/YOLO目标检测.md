@@ -3,6 +3,7 @@ layout: post
 title: YOLO-V1目标检测
 date: 2021-01-11 21:32 +0800
 last_modified_at: 2020-02-09 02:08:25 +0800
+categories: 计算机视觉
 tags: [CV, 目标检测, YOLO]
 toc:  true
 ---

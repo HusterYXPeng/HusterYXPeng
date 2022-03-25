@@ -3,6 +3,7 @@ layout: post
 title: Java Maven基础配置与入门
 date: 2022-03-20 23:18 +0800
 last_modified_at: 2022-03-20 23:18 +0800
+categories: Java
 tags: [Java, Maven]
 toc:  true
 ---

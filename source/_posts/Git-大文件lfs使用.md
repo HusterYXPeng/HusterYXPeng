@@ -3,6 +3,7 @@ layout: post
 title: Git-lfs命令
 date: 2022-03-23 08:18 +0800
 last_modified_at: 2022-03-23 08:18 +0800
+categories: Git
 tags: [Git基础, Git命令]
 toc:  true
 ---

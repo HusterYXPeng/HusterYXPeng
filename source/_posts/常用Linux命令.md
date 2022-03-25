@@ -3,6 +3,7 @@ layout: post
 title: 常用Linux命令
 date: 2022-03-23 12:10 +0800
 last_modified_at: 2022-03-23 12:10 +0800
+categories: Linux
 tags: [Linux, 命令]
 toc:  true
 ---

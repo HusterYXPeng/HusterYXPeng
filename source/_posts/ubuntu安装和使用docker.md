@@ -3,6 +3,7 @@ layout: post
 title: Ubuntu安装与使用docker
 date: 2022-03-19 22:07 +0800
 last_modified_at: 2022-03-19 22:07 +0800
+categories: Docker
 tags: [Docker, 安装]
 toc:  true
 ---

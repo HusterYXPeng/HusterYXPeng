@@ -3,6 +3,7 @@ layout: post
 title: K8S和Yarn命令总结(一)
 date: 2022-03-25 08:11 +0800
 last_modified_at: 2022-03-25 09:10 +0800
+categories: Docker
 tags: [k8s, yarn, docker]
 toc:  true
 ---
