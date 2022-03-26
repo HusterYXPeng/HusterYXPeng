@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Git基础,Git提交代码," />
+  <meta name="keywords" content="kafka,消息队列," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="针对多人协作使用Git的场景 不同人修改不同文件场景即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。 1、使用 git clone 的时候注意点： 1git clone  xxx.git   xxxx2  作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。 2、git fe">
+<meta name="description" content="假设：当前处于 &#x2F;usr&#x2F;bin&#x2F;kafka 的kafka安装目录 启动消费者1bin&#x2F;kafka-console-consumer.sh --bootstrap-server xx.xx.x.xxx:9092 --topic myTopic --consumer.config .&#x2F;config&#x2F;consumer.properties   启动生产者1bin&#x2F;kafk">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git多人单分支集成协作常见场景">
-<meta property="og:url" content="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:title" content="Kafka基础与入门">
+<meta property="og:url" content="http://example.com/2022/03/26/Kafka%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="JoliceYu的个人博客">
-<meta property="og:description" content="针对多人协作使用Git的场景 不同人修改不同文件场景即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。 1、使用 git clone 的时候注意点： 1git clone  xxx.git   xxxx2  作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。 2、git fe">
+<meta property="og:description" content="假设：当前处于 &#x2F;usr&#x2F;bin&#x2F;kafka 的kafka安装目录 启动消费者1bin&#x2F;kafka-console-consumer.sh --bootstrap-server xx.xx.x.xxx:9092 --topic myTopic --consumer.config .&#x2F;config&#x2F;consumer.properties   启动生产者1bin&#x2F;kafk">
 <meta property="og:locale">
-<meta property="article:published_time" content="2020-01-15T15:18:00.000Z">
-<meta property="article:modified_time" content="2022-03-25T12:15:08.636Z">
+<meta property="article:published_time" content="2022-03-26T01:10:00.000Z">
+<meta property="article:modified_time" content="2022-03-26T05:04:21.193Z">
 <meta property="article:author" content="Xipeng Yu">
-<meta property="article:tag" content="Git基础">
-<meta property="article:tag" content="Git提交代码">
+<meta property="article:tag" content="kafka">
+<meta property="article:tag" content="消息队列">
 <meta name="twitter:card" content="summary">
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2020/01/15/Git多人单分支集成协作常见场景/"/>
+  <link rel="canonical" href="http://example.com/2022/03/26/Kafka基础入门/"/>
 
 
 
 
 
-  <title>Git多人单分支集成协作常见场景 | JoliceYu的个人博客</title>
+  <title>Kafka基础与入门 | JoliceYu的个人博客</title>
   
 
 
@@ -264,7 +264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/15/Git%E5%A4%9A%E4%BA%BA%E5%8D%95%E5%88%86%E6%94%AF%E9%9B%86%E6%88%90%E5%8D%8F%E4%BD%9C%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/26/Kafka%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -281,7 +281,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Git多人单分支集成协作常见场景</h1>
+          <h1 class="post-title" itemprop="name headline">Kafka基础与入门</h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T23:18:00+08:00">
-                2020-01-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-26T09:10:00+08:00">
+                2022-03-26
               </time>
             
 
@@ -316,8 +316,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
                   </a>
                 </span>
 
@@ -353,48 +353,12 @@
       
 
       
-        <p>针对多人协作使用Git的场景</p>
-<h2 id="不同人修改不同文件场景"><a href="#不同人修改不同文件场景" class="headerlink" title="不同人修改不同文件场景"></a>不同人修改不同文件场景</h2><p>即：p1修改了工程的f1文件，p2修改了工程的f2文件，p2已经提交了commit，p1再来提交的时候，就会显示不是fast-forward的情况。</p>
-<p>1、使用 git clone 的时候注意点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone  xxx.git   xxxx2</span><br></pre></td></tr></table></figure>
+        <p>假设：当前处于 &#x2F;usr&#x2F;bin&#x2F;kafka 的kafka安装目录</p>
+<h3 id="启动消费者"><a href="#启动消费者" class="headerlink" title="启动消费者"></a>启动消费者</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server xx.xx.x.xxx:9092 --topic myTopic --consumer.config ./config/consumer.properties </span><br></pre></td></tr></table></figure>
 
-<p>作用：在git clone后指定clone到本地后的文件夹命名为xxxx2。</p>
-<p>2、git fetch 说明：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin     //吧origin远端代码fetch到本地	</span><br></pre></td></tr></table></figure>
+<h3 id="启动生产者"><a href="#启动生产者" class="headerlink" title="启动生产者"></a>启动生产者</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-producer.sh --broker-list xx.xx.x.xxx:9092 --topic myTopic</span><br></pre></td></tr></table></figure>
 
-<p>注意：这个时候，远程分支到本地后，不会对本地代码有影响。</p>
-<p>使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av       //查看本地和远程分支情况</span><br></pre></td></tr></table></figure>
-
-<p>3、使用 get merge 命令对本地代码与刚fetch的远程分支的代码进行merge</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge   xxx       //xxx为刚fetch下来的远程分支</span><br></pre></td></tr></table></figure>
-
-<p>由于是不同人修改的不同的文件，可以直接merge，不会有冲突。</p>
-<h2 id="不同人修改同一文件的不同区域"><a href="#不同人修改同一文件的不同区域" class="headerlink" title="不同人修改同一文件的不同区域"></a>不同人修改同一文件的不同区域</h2><p>1、本地修改代码前使用 git pull</p>
-<p>在每次修改代码中，先执行 git pull 命令，将远程分支与本地分支同步，将本地分支做一个更新。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-
-<p>直接 git pull 即可，无需任何其他命令。</p>
-<p>2、解决步骤：同上。</p>
-<h2 id="不同人修改同一文件的相同区域"><a href="#不同人修改同一文件的相同区域" class="headerlink" title="不同人修改同一文件的相同区域"></a>不同人修改同一文件的相同区域</h2><p>即：merge的时候存在 conflict 的时候。</p>
-<p>1、方法1：</p>
-<p>直接使用git merge 命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge xxx   // xxx为远程分支</span><br></pre></td></tr></table></figure>
-
-<p>有conflict：打开冲突文件，修改</p>
-<p>注意：修改后一定要git add 和commit  将修改再提交一个commit；或者是直接add，再使用 git merge –continue即可。</p>
-<p>最后再提交。</p>
-<p>2、方法2： git cherry-pick commitID</p>
-<ul>
-<li>将远程分支fetch到本地</li>
-<li>切换到fetch的分支</li>
-<li>cherry-pick 后加原来冲突分支的那个commit的ID</li>
-</ul>
-<p>遇到冲突：修改。</p>
-<p>修改后：git add后，提交一个commit 或者 git cherry-pick –continue 即可。</p>
-<h2 id="不同人修改同一个文件的名字"><a href="#不同人修改同一个文件的名字" class="headerlink" title="不同人修改同一个文件的名字"></a>不同人修改同一个文件的名字</h2><p>1、方法： git push 会有冲突。</p>
-<p>pull一下，本地会有两个文件，自己决定用哪个文件名，删除哪几个，再git add和commit即可。</p>
-<p>注意git 中删除文件：git rm xxxx；</p>
+<h3 id="创建topic"><a href="#创建topic" class="headerlink" title="创建topic"></a>创建topic</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --zookeeper xxx.xx.xx.xx:2181 --replication-factor 1 --partitions 3 --topic myTopic </span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -412,9 +376,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Git%E5%9F%BA%E7%A1%80/" rel="tag"># Git基础</a>
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
           
-            <a href="/tags/Git%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81/" rel="tag"># Git提交代码</a>
+            <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag"># 消息队列</a>
           
         </div>
       
@@ -427,15 +391,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2022/03/25/K8S%E5%92%8CYarn%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%B8%80)/" rel="next" title="K8S和Yarn命令总结(一)">
+                <i class="fa fa-chevron-left"></i> K8S和Yarn命令总结(一)
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/01/18/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" rel="prev" title="Git常用命令使用总结">
-                Git常用命令使用总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -567,7 +531,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E4%B8%8D%E5%90%8C%E6%96%87%E4%BB%B6%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">不同人修改不同文件场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8D%E5%90%8C%E5%8C%BA%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">不同人修改同一文件的不同区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%90%8C%E5%8C%BA%E5%9F%9F"><span class="nav-number">3.</span> <span class="nav-text">不同人修改同一文件的相同区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%BA%BA%E4%BF%AE%E6%94%B9%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E5%90%8D%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">不同人修改同一个文件的名字</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-number">1.</span> <span class="nav-text">启动消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%94%9F%E4%BA%A7%E8%80%85"><span class="nav-number">2.</span> <span class="nav-text">启动生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAtopic"><span class="nav-number">3.</span> <span class="nav-text">创建topic</span></a></li></ol></div>
             
 
           </div>
