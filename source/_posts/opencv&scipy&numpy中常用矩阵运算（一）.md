@@ -1,14 +1,12 @@
 ---
 layout: post
-title: 常用Linux命令
+title: opencv&scipy&numpy中常用矩阵运算（一）
 date: 2022-03-30 19:10 +0800
 last_modified_at: 2022-03-30 19:10 +0800
 categories: Python
 tags: [CNN, 矩阵运算]
 toc:  true
 ---
-
-# opencv&scipy&numpy中常用矩阵运算（一）
 
 ## Array常用操作
 
