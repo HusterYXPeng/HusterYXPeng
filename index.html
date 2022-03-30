@@ -259,6 +259,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/30/opencv&scipy&numpy%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/03/30/opencv&scipy&numpy%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-30T22:26:39+08:00">
+                2022-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="opencv-amp-scipy-amp-numpy中常用矩阵运算（一）"><a href="#opencv-amp-scipy-amp-numpy中常用矩阵运算（一）" class="headerlink" title="opencv&amp;scipy&amp;numpy中常用矩阵运算（一）"></a>opencv&amp;scipy&amp;numpy中常用矩阵运算（一）</h1><h2 id="Array常用操作"><a href="#Array常用操作" class="headerlink" title="Array常用操作"></a>Array常用操作</h2><h3 id="1、矩阵维度变换-np-transpose-函数"><a href="#1、矩阵维度变换-np-transpose-函数" class="headerlink" title="1、矩阵维度变换 np.transpose 函数"></a>1、矩阵维度变换 np.transpose 函数</h3><p>作用：矩阵维度变换，[2， 100， 100] 变换为 [100, 2, 100]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">np.transpose(arr, [1, 0, 2])</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-、矩阵增加维度-np-expand-dims"><a href="#2-、矩阵增加维度-np-expand-dims" class="headerlink" title="2 、矩阵增加维度 np.expand_dims"></a>2 、矩阵增加维度 np.expand_dims</h3><p>作用：矩阵增加维度，[100,100]变换为[1,100,100]</p>
+<p>经常与np.repeat()函数一起使用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">np.expand_dims(array, 0)		# 增加一个维度</span><br><span class="line">   [100, 100] =&gt; [1, 100, 100]</span><br><span class="line">np.expand_dims(array, 0).repeat(4, axis=0)  # 增加一个维度，并复制该维度</span><br><span class="line">   [100, 100] =&gt; [4, 100, 100]</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、删除矩阵单维度-np-squeeze"><a href="#3、删除矩阵单维度-np-squeeze" class="headerlink" title="3、删除矩阵单维度 np.squeeze"></a>3、删除矩阵单维度 np.squeeze</h3><p>作用：矩阵维度删除，[1, 100, 100]变换为[100, 100]。注意：仅能删除维度值为1的维度</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.squeeze(arr, axis=0)   # 删除第一个维度，如果维度值为1，删除成功，否则报错</span><br><span class="line">np.squeeze(arr)           # 删除所有维度中维度值为1的维度</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、numpy-array基本属性操作"><a href="#4、numpy-array基本属性操作" class="headerlink" title="4、numpy.array基本属性操作"></a>4、numpy.array基本属性操作</h3><p>作用：获取array的基本属性，容易记错的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">np.Array arr;</span><br><span class="line">arr.ndim     # 矩阵的维度数，三维矩阵为3，四维矩阵为4</span><br><span class="line">arr.shape    # 矩阵的shape，为list，没有括号</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、np-argsort-函数对矩阵按照某一维进行排序"><a href="#5、np-argsort-函数对矩阵按照某一维进行排序" class="headerlink" title="5、np.argsort()函数对矩阵按照某一维进行排序"></a>5、np.argsort()函数对矩阵按照某一维进行排序</h3><p>可以用于对矩阵的某一维度进行排序，排序的结果就是该维度从小到大的索引的下标。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">arr = np.random.rand(3, 4)</span><br><span class="line">print(arr.shape)</span><br><span class="line">print(arr)</span><br><span class="line">arr2 = np.argsort(arr, axis=1)</span><br><span class="line">print(arr2)</span><br><span class="line"></span><br><span class="line">## output:</span><br><span class="line">(3, 4)</span><br><span class="line">[[ 0.25527801  0.28870203  0.13308197  0.40236823]</span><br><span class="line"> [ 0.57291876  0.22652327  0.96109344  0.60414358]</span><br><span class="line"> [ 0.87348642  0.43462071  0.70254728  0.88925431]]</span><br><span class="line">[[2 0 1 3]    //第一行，第三个数最小，最后一个数最大</span><br><span class="line"> [1 0 3 2]</span><br><span class="line"> [1 2 0 3]]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Scipy相关"><a href="#Scipy相关" class="headerlink" title="Scipy相关"></a>Scipy相关</h2><h3 id="1、scipy-spatial-distance-cdist函数计算矩阵之间距离"><a href="#1、scipy-spatial-distance-cdist函数计算矩阵之间距离" class="headerlink" title="1、scipy.spatial.distance.cdist函数计算矩阵之间距离"></a>1、scipy.spatial.distance.cdist函数计算矩阵之间距离</h3><p>作用：scipy.spatial.distance 模块下 计算两个点集之间每2个点之间的距离</p>
+<p>eg：有一个二维点集A，另外有一个二维点集B，A中有m个点，B中有n个点，该函数可以计算m*n个距离，即A中每个点与B中每个点依次计算距离，得到一个m * n的矩阵，代表每两个点对之间的距离。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import scipy</span><br><span class="line">import scipy.spatial</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">arr1 = np.random.rand(3, 2)</span><br><span class="line">arr2 = np.random.rand(4, 2)</span><br><span class="line">dist_arr = scipy.spatial.distance.cdist(arr1, arr2)</span><br><span class="line">print(dist_arr.shape)</span><br><span class="line">print(dist_arr)</span><br><span class="line"></span><br><span class="line"># output</span><br><span class="line">(3, 4)</span><br><span class="line">[[ 0.79519252  0.9242954   0.91473169  0.23748187]</span><br><span class="line"> [ 0.77753607  0.88705038  1.1765303   0.18053772]</span><br><span class="line"> [ 0.17226682  0.22484498  0.61399408  0.74316168]]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、使用scipy-spatial模块下的Delaunay-函数对点集进行三角剖分并显示"><a href="#2、使用scipy-spatial模块下的Delaunay-函数对点集进行三角剖分并显示" class="headerlink" title="2、使用scipy.spatial模块下的Delaunay()函数对点集进行三角剖分并显示"></a>2、使用scipy.spatial模块下的Delaunay()函数对点集进行三角剖分并显示</h3><p>作用：对一个点集进行三角刨分</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">from scipy.spatial import Delaunay</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">points = np.array([[0, 0], [0, 1], [1, 2], [3, 5], [2, 7], [0, 6], [-1, 2]])</span><br><span class="line">tri = Delaunay(points)</span><br><span class="line"></span><br><span class="line">plt.triplot(points[:,0], points[:,1], tri.simplices.copy())</span><br><span class="line">plt.plot(points[:,0], points[:,1], &#x27;o&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>显示结果：</p>
+<p><img src="/Image/1648648957751.png" alt="1648648957751"></p>
+<h3 id="opencv相关"><a href="#opencv相关" class="headerlink" title="opencv相关"></a>opencv相关</h3><h3 id="1、cv-pointPolygonTest-函数计算点是否在polygon中。"><a href="#1、cv-pointPolygonTest-函数计算点是否在polygon中。" class="headerlink" title="1、cv.pointPolygonTest 函数计算点是否在polygon中。"></a>1、cv.pointPolygonTest 函数计算点是否在polygon中。</h3><p>作用：可以用于判断一个二维的点是否在一个plygon中</p>
+<h3 id="2、cv2-drawContours-函数将polygon-画在-图像矩阵上。"><a href="#2、cv2-drawContours-函数将polygon-画在-图像矩阵上。" class="headerlink" title="2、cv2.drawContours 函数将polygon 画在 图像矩阵上。"></a>2、cv2.drawContours 函数将polygon 画在 图像矩阵上。</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/26/Kafka%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1787,170 +1932,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/21/Docker%E5%9F%BA%E7%A1%80%E4%B8%8E%E7%90%86%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JoliceYu的个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2022/02/21/Docker%E5%9F%BA%E7%A1%80%E4%B8%8E%E7%90%86%E8%A7%A3/" itemprop="url">Docker基础与理解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-02-21T22:07:00+08:00">
-                2022-02-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Docker-基础"><a href="#Docker-基础" class="headerlink" title="Docker 基础"></a>Docker 基础</h2><p>1、Docker 用Go语言实现， 对<strong>进程</strong>进行进行封装，属于<strong>操作系统级别的虚拟化</strong>技术。</p>
-<p>隔离的进程独立于宿主和其它的隔离的进程，称之为 容器。<br>ji<br><strong>Docker</strong> 在容器的基础上，进行了进一步的封装，从<strong>文件系统、网络互联到进程隔离</strong>等等，极大的简化了容器的创建和维护。</p>
-<p>2、Docker对于DevOps的价值</p>
-<p>一次创建与配置，在任何地方的创建与配置，可以在任何地方正常运行。</p>
-<p>使用 <code>Docker</code> 可以通过定制应用镜像来实现持续集成、持续交付、部署。开发人员可以通过DockerFile 来进行镜像构建，而运维人员则可以直接在生产环境中快速部署该镜像。</p>
-<p>使用 [&#96;DockerFile使镜像构建透明化，不仅仅开发团队可以理解应用运行环境，也方便运维团队理解应用运行所需条件，帮助更好的生产环境中部署该镜像。</p>
-<p>3、镜像的维护与扩展</p>
-<p>Docker使用的<strong>分层存储以及镜像的技术</strong>，使得应用重复部分的复用更为容易，也使得应用的维护更新更加简单，<strong>基于基础镜像进一步扩展镜像</strong>也变得非常简单。此外，Docker 团队同各个开源项目团队一起维护了一大批高质量的官方镜像，既可以直接在生产环境使用，又可以作为基础进一步定制，大大的降低了应用服务的镜像制作成本。</p>
-<h2 id="Docker-概念"><a href="#Docker-概念" class="headerlink" title="Docker 概念"></a>Docker 概念</h2><p>操作系统分为<strong>内核和用户空间</strong>。对于 Linux 而言，内核启动后，会挂载 <code>root</code> 文件系统为其提供用户空间支持。而 Docker 镜像（Image），就相当于是一个 <code>root</code> 文件系统。比如官方镜像 <code>ubuntu:18.04</code> 就包含了完整的一套 Ubuntu 18.04 最小系统的 <code>root</code> 文件系统。</p>
-<p>Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。</p>
-<p>1、镜像 Image</p>
-<p>镜像 Image相当于一个root文件系统。</p>
-<p>镜像<strong>分层构建</strong>：镜像构建会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。比如，删除前一层文件的操作，实际不是真的删除前一层的文件，而是仅在当前层标记为该文件已删除。在最终容器运行的时候，虽然不会看到这个文件，但是实际上该文件会一直跟随镜像。</p>
-<p>分层存储的特征还使得镜像的复用、定制变的更为容易。甚至可以用之前构建好的镜像作为基础层，然后进一步添加新的层，以定制自己所需的内容，构建新的镜像。</p>
-<p>2、容器 Container</p>
-<p>镜像是静态的定义，容器是镜像执行时的实体，容器可以被创建、启动、删除、暂停等。镜像（<code>Image</code>）和容器（<code>Container</code>）的关系，就像是面向对象程序设计中的 <code>类</code> 和 <code>实例</code> 一样。</p>
-<p><strong>容器的实质是进程</strong>，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linux_namespaces">命名空间</a>。因此容器可以拥有自己的 <code>root</code> 文件系统、自己的网络配置、自己的进程空间。<strong>容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样</strong>。这种特性使得容器封装的应用比直接在宿主运行更加安全。</p>
-<p>容器存储层：镜像是分层存储的，每个容器运行时，以镜像为基础层，在其上构建一个当前容器的存储层，这个存储层为容器运行时读写而准备的存储层，为 容器存储层。容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。</p>
-<p>数据存储：容器不应该向其存储层内写入任何数据，容器存储层要保持无状态化。所有的文件写入操作，都应该使用 数据卷、或者绑定宿主目录，在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高。<strong>数据卷</strong>的<strong>生存周期独立于容器，容器消亡，数据卷不会消亡</strong>。因此，使用数据卷后，容器删除或者重新运行之后，数据却不会丢失。</p>
-<h2 id="Docker仓库"><a href="#Docker仓库" class="headerlink" title="Docker仓库"></a>Docker仓库</h2><p>Docker Registry：本质上是一个管理镜像的服务，类似于 github 一样。Docker Registry 公开服务是开放给用户使用、允许用户管理镜像的 Registry 服务。一般这类公开服务允许用户免费上传、下载公开的镜像，并可能提供收费服务供用户管理私有镜像。最常用的Register公开服务是官方的Docker Hub，拥有很多高质量的官方镜像。eg Docker官方Hub DockerHub，也是默认的 register。</p>
-<p>国内由于网络原因，导致很多国外的Hub地址无法访问、网速慢，国内的云计算厂商提供了针对 DockerHub的镜像服务，称之为 加速器。</p>
-<p>Docker Registry：包含多个库，每个仓库可以包含多个标签tag，每个tag对应一个镜像。一个仓库会包含同一个<strong>软件不同版本的镜像</strong>，而标签就常用于对应该软件的各个版本。我们可以通过 <code>&lt;仓库名&gt;:&lt;标签&gt;</code> 的格式来指定具体是这个软件哪个版本的镜像。如果不给出标签，将以 <code>latest</code> 作为默认标签。</p>
-<p>仓库名指定是什么镜像，tag指定软件的版本。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2001,7 +1982,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2022,7 +2003,7 @@
               
               
               <div class="site-state-item site-state-tags">
-                <a href="/archives/index.html">
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
