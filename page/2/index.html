@@ -1744,11 +1744,458 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/03/26/densenet%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/26/densenet%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" itemprop="url">Densenet网络介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T22:07:00+08:00">
+                2018-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h4><p>最近的研究表明： 在卷积网络中，如果靠近输出的层和靠近输入层有shorter connect的时候，网络可以设计的更深、具有更高的准确率以及更高效的训练。在这篇论文中，我们提出了denseNet的结构，在DenseNet中每个层以前向的方式与后面的层进行连接。传统的具有L层的神经网络，具有L个连接，但是DenseNet中L层的网络具有（L+1）*L&#x2F;2这么多个连接。对于每个层，之前所有的网络层都作为输入，这个层也作为了之后所有层的输入。<strong>DenseNet网络具有以下几个优势：1）网络缓和了梯度消失；2）强化了网络中特征的前向传播；3）鼓励网络中特征的重用；4）减少了网络的参数</strong>。在实验后，这个网络可以超过现在最好的网络，需要更好的计算量，以及有了更好的表现。</p>
+<h4 id="二、介绍"><a href="#二、介绍" class="headerlink" title="二、介绍"></a>二、介绍</h4><p>从近期的研究来看，CNN模型变得越来越深，但是随着网络模型的变深，有一个新的问题出现了，就是随着信息从网络输入传到最后，或者是梯度信息从最后传到输入，信息会丢失。现在的一些研究，比如残差网络resnet或者是其他的改进都是基于添加一些short path的连接，即：都是早期的输入层到后期的层之间添加short path的连接。该论文提出了一种网路结构：保证网络中最大的信息流动，每个层的输入为之前的所有层的输出，当前层的输出也被作为之后所有层的输入。网络的图解如图1所示：</p>
+<p><img src="https://img-blog.csdn.net/20180326192023644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>与残差网络相比：在多个输入会和的时候，resnet的处理办法是将相应的层进行累加，说的明白点，就是下图中的x和F(x)的C、H和W参数必须是一致的，在汇聚的时候，对应的元素是相加的。但是<strong>在densenet中，多个输入是通过串联的方式叠加到一起的，因此需要多个输入的H和w参数的一致的，这里是resnet很大的区别</strong>。在densenet中，每个层的输出都会作为后面的每个层的输入，以及当前的层的输入是前面所有层的输入的串联叠加后的结果。比如网络中的第L层，就有L个输入，但是在一般的传统的网络中，一个层只有一个输入的。<br>虽然从直觉上来说，这样做是使得网络的参数加大，但是反直觉的是，这样做，恰恰降低了网络的参数，因为这种结构不需要重新学习冗余的特征图了。传统的前向传播的网络结构相当于一种状态算法，状态一层层向后传递，每个层将读取前层的状态，再传递后后面的层，这样改变了状态信息，同时也传递了需要保存的信息。在resnet中，前面层的信息可以直接通过short 连接直接连到后面的后面的层。最近的关于残差网络的研究表明，很多层其实对结果贡献不大，事实上在训练的过程中被随机的丢弃了，即drop了。<strong>DenseNet结构每层的输出很小（eg：每个层12个卷积核），这比传统的网络比如VGG等500多个卷积核相比，减少了很多，这也就是网络参数量少的原因了。每层的输出很小，这样相当于每次加了一小部分特征图到了总的特征中</strong>，同时使部分信息不变的，最后做分类所用的信息有每个层的作用，即：在最后做分类的时候用到了之前每个层的结果。<br>还有一个很大的作用就是：<strong>提升了信息和梯度在网络中的流动，使得网络更容易去训练</strong>。因为最后的决策层用到了之前每个层的信息，因此，每个层都对最后的loss具有直接的贡献。同时，densenet在小数据集上还有很好的防止过拟合的作用。<br><img src="https://img-blog.csdn.net/20180326192136346?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h4 id="三、详细细节"><a href="#三、详细细节" class="headerlink" title="三、详细细节"></a>三、详细细节</h4><p>考虑一个图像输入X0，通过整个网络。这个网络具有L层，每个层相当于实现了一个非线性变换H，非线性变换可以被综合表示成： BN-&gt;RELU-&gt;Pooling或者Conv。在残差网络中，第l层的输出作为l+1层的输入，可以表示成： X(l+1)&#x3D;Hl(X(l))，那么残差网络可以表示成如下：<br><img src="https://img-blog.csdn.net/20180326192248616?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br> 相比之下，DenseNet可以表示成：<br> <img src="https://img-blog.csdn.net/20180326192325167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br> 后面的实现就是前面L-1个层的输出的串联，为第L层的输入。<br> <img src="https://img-blog.csdn.net/20180326192356291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br> <strong>复合功能</strong>：定义复合功能为3个连续操作， BN-&gt;RELU-&gt;ConV(3<em>3)。即相当于这3个操作连在一起相当于一个复合的操作，网络中每层都是这样的组合。<br><strong>Pooling实现</strong>： 因为多个输入之间串联的时候需要保证每个输入的W和H参数一直才可以串联叠加，但是不可能保证从开始到最后map的大小不变。因为在网络中将网络分为了多个dense block的单元，*<em>两个dense block单元之间连接的部分叫做变换层（transition layer），这个层具体操作是卷积和池化，核心就是： BN-&gt;ConV(1</em>1)-&gt;ave pooling(2<em>2).</em></em><br><strong>增长率K</strong>：每个层经过多个输入后输出的map的数量叫做网络的增长率，即每层的卷积核的个数。因此第L层具有 k0+（L-1）<em>k个输入，但是有k个输出，输出是固定的，其中k0是输入图的C，k是网络的增长率。K是一个超参数，从实验结果可以观察到，相对较小的增长率k对网络优化具有很大的作用。<br><strong>Bottleneck layer</strong>： 虽然每个层只有K个输出，但是后面的层的输入还是很大的，这样参数量还是很大，因此为了压缩参数，在每个block内，每个3<em>3的卷积前加一个1</em>1的卷积核，进行输入的压缩，这样可以大大降低输入3</em>3的map的数量，降低了参数。这样的话，每个block内部，复合操作就是： BN-&gt;RELU-&gt;CONV(1<em>1)-&gt;BN-&gt;RELU-&gt;ConV(3</em>3)。为了和原始的densenet进行对比，具有这样结构的densenet叫做dense-B结构。<br><strong>参数压缩</strong>：为了进一步压缩参数，在两个block之间的变换层做了一些改变，如果一个block的输出有m个map，我们让变换层输出为theta*m的map个数，这里的theta叫做网络的压缩因子。这个theta是一个0到1的小数，具有这样结构的网络叫做Dense-C，在实验中theta的取值是0.5。<br>同时具有<strong>Bottleneck layer和Translation layer</strong>这2种结构的叫： Dense-BC。<br>实验的网络模型如下：<br><img src="https://img-blog.csdn.net/20180326192434790?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTIyNzMxMjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/12/01/roi_pooling%E5%B1%82caffe%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/01/roi_pooling%E5%B1%82caffe%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3/" itemprop="url">roi_pooling层caffe源码理解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T21:18:00+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在看fasterrcnn以及和maskrcnn的时候，发现自己对fasterrcnn的roi_pooling层的原理还是不是很明白，之前只是知道roi_pooling是将rpn输出的一个roi的区域映射成一个固定大小的map，再送入后面的分类层进行分类。最近看了下roi_pooling层的源码，顿悟了。</p>
+<h3 id="1、roi-pooling在proto中的定义"><a href="#1、roi-pooling在proto中的定义" class="headerlink" title="1、roi_pooling在proto中的定义"></a>1、roi_pooling在proto中的定义</h3><p> 根据看caffe源码的原则，先看该成在caffe.proto文件中的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// Message that stores parameters used by ROIPoolingLayer</span><br><span class="line">message ROIPoolingParameter &#123;</span><br><span class="line">  // Pad, kernel size, and stride are all given as a single value for equal</span><br><span class="line">  // dimensions in height and width or as Y, X pairs.</span><br><span class="line">  // 设置pool后的map的高度和宽度</span><br><span class="line">  optional uint32 pooled_h = 1 [default = 0]; // The pooled output height</span><br><span class="line">  optional uint32 pooled_w = 2 [default = 0]; // The pooled output width</span><br><span class="line">  // Multiplicative spatial scale factor to translate ROI coords from their</span><br><span class="line">  // input scale to the scale used when pooling</span><br><span class="line">  # 设置从原图到pool前的feature map的比例的大小</span><br><span class="line">  optional float spatial_scale = 3 [default = 1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 从这里可以看出，在网络定义文件中定义roi_pooling层需要设置3个参数，分别是pooled_h 、pooled_w 以及spatial_scale 的值。前2个值分别为pool后的map的宽度和高度，比如在fasterrcnn中即为6*6，后面这个值<br> spatial_scale 为从原图到pool前的feature map的比例的大小，因为rpn输出的roi的坐标是基于原图的，转换到feature map，是有一个比例的。<br> 再来看看在fasterrcnn中，roi_pooling层的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#========= RCNN ============</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;roi_pool_conv5&quot;</span><br><span class="line">  type: &quot;ROIPooling&quot;</span><br><span class="line">  bottom: &quot;conv5&quot;</span><br><span class="line">  bottom: &quot;rois&quot;</span><br><span class="line">  top: &quot;roi_pool_conv5&quot;</span><br><span class="line">  roi_pooling_param &#123;</span><br><span class="line">    pooled_w: 6</span><br><span class="line">    pooled_h: 6</span><br><span class="line">    spatial_scale: 0.0625 # 1/16</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 相关的参数设置和caffe.proto中定义的一致。</p>
+<h3 id="2、roi-pooling源码"><a href="#2、roi-pooling源码" class="headerlink" title="2、roi_pooling源码"></a>2、roi_pooling源码</h3><p> 在这里，主要是关注其前向传播的函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">namespace caffe &#123;</span><br><span class="line"></span><br><span class="line">// 从net定义文件中获取roi_pooling层的相关参数</span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::LayerSetUp(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">  //获取解析后的roi_pooling层的参数</span><br><span class="line">  ROIPoolingParameter roi_pool_param = this-&gt;layer_param_.roi_pooling_param();</span><br><span class="line">  // 如果设置的pooling后的宽度高度小于9，则报错</span><br><span class="line">  CHECK_GT(roi_pool_param.pooled_h(), 0)</span><br><span class="line">      &lt;&lt; &quot;pooled_h must be &gt; 0&quot;;</span><br><span class="line">  CHECK_GT(roi_pool_param.pooled_w(), 0)</span><br><span class="line">      &lt;&lt; &quot;pooled_w must be &gt; 0&quot;;</span><br><span class="line">  // 以下三个参数都是在网络定义中设置的。</span><br><span class="line">  // 经过pooling后的map的高度</span><br><span class="line">  pooled_height_ = roi_pool_param.pooled_h();</span><br><span class="line">  // 经过pooling后的map的宽度</span><br><span class="line">  pooled_width_ = roi_pool_param.pooled_w();</span><br><span class="line">  // 从原图到pool前feature map的比例参数，在fasterrcnn中是1/16</span><br><span class="line">  spatial_scale_ = roi_pool_param.spatial_scale();</span><br><span class="line">  LOG(INFO) &lt;&lt; &quot;Spatial scale: &quot; &lt;&lt; spatial_scale_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::Reshape(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">	// 获取输入pool层feature map的C、H和W</span><br><span class="line">  channels_ = bottom[0]-&gt;channels();</span><br><span class="line">  height_ = bottom[0]-&gt;height();</span><br><span class="line">  width_ = bottom[0]-&gt;width();</span><br><span class="line">  // 设置top即输出层的blob的参数，这里的输出blob，num与输入的roi的个数一致</span><br><span class="line">  // channel和输入图的feature map的输入一致； 高度和宽度是自己在net定义中设置的。</span><br><span class="line">  top[0]-&gt;Reshape(bottom[1]-&gt;num(), channels_, pooled_height_,</span><br><span class="line">      pooled_width_);</span><br><span class="line">  // max_idx_为类定义的辅助的变量，用于记录max_pool时的最大值的来源，用于反向传播梯度的反传</span><br><span class="line">  max_idx_.Reshape(bottom[1]-&gt;num(), channels_, pooled_height_,</span><br><span class="line">      pooled_width_);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::Forward_cpu(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">  const Dtype* bottom_data = bottom[0]-&gt;cpu_data();			// 输入的feature map的数据的指针</span><br><span class="line">  const Dtype* bottom_rois = bottom[1]-&gt;cpu_data();			//输入的roi的数据的指针</span><br><span class="line">  // Number of ROIs</span><br><span class="line">  int num_rois = bottom[1]-&gt;num();			// roi的个数</span><br><span class="line">  int batch_size = bottom[0]-&gt;num();			// 输入的feature map的batch数</span><br><span class="line">  int top_count = top[0]-&gt;count();			//输出top的blob的总的元素个数</span><br><span class="line"></span><br><span class="line">  Dtype* top_data = top[0]-&gt;mutable_cpu_data();		//输出top的blob的数据的首地址</span><br><span class="line">  caffe_set(top_count, Dtype(-FLT_MAX), top_data);			//将输出的top的blob的数据全部置为负的最大值，这样在max_pool时有用</span><br><span class="line">  int* argmax_data = max_idx_.mutable_cpu_data();			//获取临时的max_idx_这个blob的数据指针</span><br><span class="line">  caffe_set(top_count, -1, argmax_data);		//获取临时的max_idx_这个blob的数据全部置为-1</span><br><span class="line"></span><br><span class="line">  // For each ROI R = [batch_index x1 y1 x2 y2]: max pool over R</span><br><span class="line">  for (int n = 0; n &lt; num_rois; ++n) </span><br><span class="line">  &#123;</span><br><span class="line">	  // 注意;实际处理的时候一次性处理的是一个batch的图像，所以feature map是一个batch的，即num数</span><br><span class="line">    int roi_batch_ind = bottom_rois[0];		//获取当前roi属于输入的feature map中batch中第几个图的roi</span><br><span class="line">	// 获得roi区域对应到feature map上的区域，这里round是四舍五入求近似</span><br><span class="line">    int roi_start_w = round(bottom_rois[1] * spatial_scale_);</span><br><span class="line">    int roi_start_h = round(bottom_rois[2] * spatial_scale_);</span><br><span class="line">    int roi_end_w = round(bottom_rois[3] * spatial_scale_);</span><br><span class="line">    int roi_end_h = round(bottom_rois[4] * spatial_scale_);</span><br><span class="line">	// 当前roi所属于的batch的值必须小于feature map的batch_size的值，但是大于0</span><br><span class="line">    CHECK_GE(roi_batch_ind, 0);</span><br><span class="line">    CHECK_LT(roi_batch_ind, batch_size);</span><br><span class="line"></span><br><span class="line">	 // 获取一个roi映射到feature map上的区域的大小</span><br><span class="line">    int roi_height = max(roi_end_h - roi_start_h + 1, 1);</span><br><span class="line">    int roi_width = max(roi_end_w - roi_start_w + 1, 1);</span><br><span class="line">	// 根据 获取一个roi映射到feature map上的区域的大小和roi_pool后map大小，获取pool的map上一个元素在feature map上的大小</span><br><span class="line">    const Dtype bin_size_h = static_cast&lt;Dtype&gt;(roi_height)</span><br><span class="line">                             / static_cast&lt;Dtype&gt;(pooled_height_);</span><br><span class="line">    const Dtype bin_size_w = static_cast&lt;Dtype&gt;(roi_width)</span><br><span class="line">                             / static_cast&lt;Dtype&gt;(pooled_width_);</span><br><span class="line"></span><br><span class="line">	// 获取输入的batch_size个feature map上的第roi_batch_ind个feature map的数据的地址</span><br><span class="line">    const Dtype* batch_data = bottom_data + bottom[0]-&gt;offset(roi_batch_ind);</span><br><span class="line"></span><br><span class="line">	// 遍历</span><br><span class="line">    for (int c = 0; c &lt; channels_; ++c) &#123;</span><br><span class="line">      for (int ph = 0; ph &lt; pooled_height_; ++ph) &#123;</span><br><span class="line">        for (int pw = 0; pw &lt; pooled_width_; ++pw) &#123;</span><br><span class="line">          // Compute pooling region for this output unit:</span><br><span class="line">			// 获取每个pool后的map上每个元素所对应在feature map上的起始和终止的相对坐标</span><br><span class="line">          int hstart = static_cast&lt;int&gt;(floor(static_cast&lt;Dtype&gt;(ph)</span><br><span class="line">                                              * bin_size_h));</span><br><span class="line">          int wstart = static_cast&lt;int&gt;(floor(static_cast&lt;Dtype&gt;(pw)</span><br><span class="line">                                              * bin_size_w));</span><br><span class="line">          int hend = static_cast&lt;int&gt;(ceil(static_cast&lt;Dtype&gt;(ph + 1)</span><br><span class="line">                                           * bin_size_h));</span><br><span class="line">          int wend = static_cast&lt;int&gt;(ceil(static_cast&lt;Dtype&gt;(pw + 1)</span><br><span class="line">                                           * bin_size_w));</span><br><span class="line"></span><br><span class="line">		  //获取每个pool后的map上每个元素所对应在feature map上的起始和终止的绝对坐标</span><br><span class="line">          hstart = min(max(hstart + roi_start_h, 0), height_);</span><br><span class="line">          hend = min(max(hend + roi_start_h, 0), height_);</span><br><span class="line">          wstart = min(max(wstart + roi_start_w, 0), width_);</span><br><span class="line">          wend = min(max(wend + roi_start_w, 0), width_);</span><br><span class="line"></span><br><span class="line">          bool is_empty = (hend &lt;= hstart) || (wend &lt;= wstart);</span><br><span class="line"></span><br><span class="line">          const int pool_index = ph * pooled_width_ + pw;</span><br><span class="line">          if (is_empty) </span><br><span class="line">		  &#123;</span><br><span class="line">            top_data[pool_index] = 0;</span><br><span class="line">            argmax_data[pool_index] = -1;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">		  // 求最大值</span><br><span class="line">          for (int h = hstart; h &lt; hend; ++h) &#123;</span><br><span class="line">            for (int w = wstart; w &lt; wend; ++w) &#123;</span><br><span class="line">              const int index = h * width_ + w;</span><br><span class="line">              if (batch_data[index] &gt; top_data[pool_index]) </span><br><span class="line">			  &#123;</span><br><span class="line">				  // 将最大值存储</span><br><span class="line">                top_data[pool_index] = batch_data[index];		//得到最大的那个数据值</span><br><span class="line">                argmax_data[pool_index] = index;			//反向的时候需要用到的，需要记录最大值的那个下标</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      //feature map 的一个channel遍历完后，batch_data指针feature map的下一个channel</span><br><span class="line">      batch_data += bottom[0]-&gt;offset(0, 1);</span><br><span class="line">	  //feature map 的一个channel遍历完后，top_data指针自身的下一个channel</span><br><span class="line">      top_data += top[0]-&gt;offset(0, 1);</span><br><span class="line">	  //argmax_data 同上</span><br><span class="line">      argmax_data += max_idx_.offset(0, 1);</span><br><span class="line">    &#125;</span><br><span class="line">    // Increment ROI data pointer，转到下一个roi区域</span><br><span class="line">	// 转到下一个roi的位置</span><br><span class="line">    bottom_rois += bottom[1]-&gt;offset(1);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意以下几点:</p>
+<p>1、输入roi_pool前的feature map是一个batch_size 的。</p>
+<p>2、输出的top的blob的形状参数如下： num * C* H * W，其中num与roi区域的个数是一致的。C的值和输入feature map的通道数是一致的， H和W分别是设置的值。</p>
+<p>3、注意3个函数，celi函数向上取整，round函数四舍五入取整，floor函数向下取整。比如数据2.7，三个函数的取值分别为： 3、 3、 2。</p>
+<p>4、实际在执行maxpool的时候，是对feature map上的每个通道分别执行max的操作的，最后输出的top的通道和输入feature map的C通道数是一致的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/11/30/MaskRCNN%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/30/MaskRCNN%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" itemprop="url">MaskRCNN阅读笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-30T22:07:00+08:00">
+                2017-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h3><p> mask-rcnn本质上在fasterrcnn的基础上加了一个预测每个二值掩膜mask的分支，相当于在之前fasterrcnn的基础上，fasterrcnn将目标框出，maskrcnn在目标框内对目标做一个实例分割。整理思路如下：<br> <img src="https://img-blog.csdnimg.cn/img_convert/e5dbeb9678afee54cf311ddeb67e4f77.png" alt="这里写图片描述"><br>  在faster的基础上预测出了每个目标框，maskrcnn在框内对每个像素再进行预测，预测每个像素是否属于这个框所属的类别。eg：上图上，最大的那个框预测为人这一类别，那么mask相当于对这个框内每个像素是不是人做了一个二分类，最后生成了一个二值的掩膜。</p>
+<h3 id="2、介绍"><a href="#2、介绍" class="headerlink" title="2、介绍"></a>2、介绍</h3><p> 在fasterrcnn的基础上添加一个mask的分支，对rpn之后的每个roi区域，预测一个二值的mask掩膜。提出了一种roialign的层，roialign层在roipooling层的基础上做了改进。在roipooling层计算时，是将RPN的输出的结果即roi区域（注意这时的roi区域信息是对应原图的坐标信息），映射到feature map上，再对feature map上对应的区域划分成7<em>7的区域，再对每个区域进行maxpooling最终得到了7</em>7的feature，给后面的网络进行预测。这么做在做分类的时候影响不大，但是在做像素级的实例分割有很大的问题，即7*7<br> 的图和原图上对应的区域没有很好的空间位置对应关系，出现了misalignment的问题。因此，提出了roialign层，roialign层对提高分割精度有很大的作用，大约提高了10%到50%的精度。</p>
+<h3 id="3、roialign层"><a href="#3、roialign层" class="headerlink" title="3、roialign层"></a>3、roialign层</h3><p> 最核心的点。相对roipooling会造成最后的7<em>7和原始的roi区域对不齐的情况，首先roi的坐标是对应的原图的，从原图到feature map有一个stride的对应关系，  比如原始roi是100</em>100的，在原图的(15,15)的位置，考虑stride&#x3D;16，那么对应到feature map上会是 100&#x2F;16和100&#x2F;16的区域，坐标是(15&#x2F;16, 15&#x2F;16)的点，再对该区域做7<em>7 划分，7</em>7的图上，横坐标1的距离对应到feature上就是100&#x2F;112的距离，那么7<em>7的图上第一个点(0,0)的点对应到feature map上对应的坐标是(15&#x2F;16, 15&#x2F;16)，那么怎么得到7</em>7的图上的(0,0)处的值呢，很明显，根据(15&#x2F;16, 15&#x2F;16)在feature map上对这个坐标周围的4个整点的坐标进行双线性插值，即得到了<em>7的图上的(0,0)处的值。同理，得到7</em>7的图上的坐标为(x,y)处对应到feature map上的坐标为(15&#x2F;16+x * 100&#x2F;112, 15&#x2F;16+y* 100&#x2F;112)，这个坐标是是一个小数，即在feature map上对该坐标点周围的4个整点坐标进行插值即可。这也就对应了文中的：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/6735ff370a8d6b01e073d0c5ba927aef.png" alt="这里写图片描述"></p>
+<h3 id="4、mask分支"><a href="#4、mask分支" class="headerlink" title="4、mask分支"></a>4、mask分支</h3><p> 经过roialign后后每个roi区域对应的就是m<em>m的图（在上面的例子上m&#x3D;7），mask分支就是对每个roi产生的K+1个m</em>m的二值掩膜，如果目标由20种，那么这里会预测20个m<em>m的二值掩膜，这里为啥这么需要遇到21个呢，一方面20种目标还有一种是背景，所以是21；另一方面，在计算loss的时候，21个二值mask只有一个有作用，比如这个roi区域的fastrcnn的部分预测为类别1，吧么这21个mask只有第2个参与loss的计算，这样相当于将roi的类别预测和这里的二值分割分开了，也就是论文说的解耦了。每个mask都是二值的0或者1，对应的就是该值是否就是roi对应的类别，最后计算的也是一个二进制损失，最后在roi上的整体损失是： cls分类损失+box坐标回归损失+mask掩膜损失。对应论文中的：<br> <img src="https://img-blog.csdnimg.cn/img_convert/6037c46e565826ab6d43760e48dc0df5.png" alt="这里写图片描述"><br> 注意的就是：最后m</em>m的mask是resize到roi的大小和原图做的损失。<br>  <img src="https://img-blog.csdnimg.cn/img_convert/4d104a14bf9127243de26f812355d781.png" alt="这里写图片描述"></p>
+<h3 id="5、拓展"><a href="#5、拓展" class="headerlink" title="5、拓展"></a>5、拓展</h3><p>  在论文的最后指出，该方法不仅可以用于像素级的实例分割，还可以用于人体姿态估计等。下面是论文的结果：<br>  <img src="https://img-blog.csdnimg.cn/img_convert/2a1b6d12cdc6eb1080247f7d85cf9ff0.png" alt="这里写图片描述"><br> 以及在人体姿态估计上的结果：<br> <img src="https://img-blog.csdnimg.cn/img_convert/9c53d4e7dd97e78c9ffd0c098ac07e2c.png" alt="这里写图片描述"></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p> 以上也是自己的一些理解，因为官方的代码一直没有出来，所以还是有些不确定。感觉整个文章核心的点就是RoiAlign层的理解。（<a target="_blank" rel="noopener" href="https://github.com/zuokai/roialign/blob/master/roi_align_layer.cpp%EF%BC%89%E8%BF%99%E6%98%AF%E7%BD%91%E4%B8%8A%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Ecaffe%E7%9A%84roialign%E5%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%BA%90%E7%A0%81%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AF%B9%E6%AF%94caffe%E7%9A%84roi_pooling%E5%B1%82%E7%9A%84%E6%BA%90%E7%A0%81%E8%BF%9B%E8%A1%8C%E5%AF%B9%E6%AF%94%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E4%B8%A4%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%82">https://github.com/zuokai/roialign/blob/master/roi_align_layer.cpp）这是网上的一个基于caffe的roialign层的实现源码，可以对比caffe的roi_pooling层的源码进行对比，可以发现两者的区别。</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -1794,7 +2241,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1805,7 +2252,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1816,7 +2263,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/archives/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="目标检测,FasterRCNN," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在看fasterrcnn以及和maskrcnn的时候，发现自己对fasterrcnn的roi_pooling层的原理还是不是很明白，之前只是知道roi_pooling是将rpn输出的一个roi的区域映射成一个固定大小的map，再送入后面的分类层进行分类。最近看了下roi_pooling层的源码，顿悟了。 1、roi_pooling在proto中的定义 根据看caffe源码的原则，先看该成在caff">
+<meta property="og:type" content="article">
+<meta property="og:title" content="roi_pooling层caffe源码理解">
+<meta property="og:url" content="http://example.com/2017/12/01/roi_pooling%E5%B1%82caffe%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="在看fasterrcnn以及和maskrcnn的时候，发现自己对fasterrcnn的roi_pooling层的原理还是不是很明白，之前只是知道roi_pooling是将rpn输出的一个roi的区域映射成一个固定大小的map，再送入后面的分类层进行分类。最近看了下roi_pooling层的源码，顿悟了。 1、roi_pooling在proto中的定义 根据看caffe源码的原则，先看该成在caff">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-12-01T13:18:00.000Z">
+<meta property="article:modified_time" content="2022-04-03T09:34:30.040Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="FasterRCNN">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2017/12/01/roi_pooling层caffe代码理解/"/>
+
+
+
+
+
+  <title>roi_pooling层caffe源码理解 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/12/01/roi_pooling%E5%B1%82caffe%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">roi_pooling层caffe源码理解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T21:18:00+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在看fasterrcnn以及和maskrcnn的时候，发现自己对fasterrcnn的roi_pooling层的原理还是不是很明白，之前只是知道roi_pooling是将rpn输出的一个roi的区域映射成一个固定大小的map，再送入后面的分类层进行分类。最近看了下roi_pooling层的源码，顿悟了。</p>
+<h3 id="1、roi-pooling在proto中的定义"><a href="#1、roi-pooling在proto中的定义" class="headerlink" title="1、roi_pooling在proto中的定义"></a>1、roi_pooling在proto中的定义</h3><p> 根据看caffe源码的原则，先看该成在caffe.proto文件中的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// Message that stores parameters used by ROIPoolingLayer</span><br><span class="line">message ROIPoolingParameter &#123;</span><br><span class="line">  // Pad, kernel size, and stride are all given as a single value for equal</span><br><span class="line">  // dimensions in height and width or as Y, X pairs.</span><br><span class="line">  // 设置pool后的map的高度和宽度</span><br><span class="line">  optional uint32 pooled_h = 1 [default = 0]; // The pooled output height</span><br><span class="line">  optional uint32 pooled_w = 2 [default = 0]; // The pooled output width</span><br><span class="line">  // Multiplicative spatial scale factor to translate ROI coords from their</span><br><span class="line">  // input scale to the scale used when pooling</span><br><span class="line">  # 设置从原图到pool前的feature map的比例的大小</span><br><span class="line">  optional float spatial_scale = 3 [default = 1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 从这里可以看出，在网络定义文件中定义roi_pooling层需要设置3个参数，分别是pooled_h 、pooled_w 以及spatial_scale 的值。前2个值分别为pool后的map的宽度和高度，比如在fasterrcnn中即为6*6，后面这个值<br> spatial_scale 为从原图到pool前的feature map的比例的大小，因为rpn输出的roi的坐标是基于原图的，转换到feature map，是有一个比例的。<br> 再来看看在fasterrcnn中，roi_pooling层的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#========= RCNN ============</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;roi_pool_conv5&quot;</span><br><span class="line">  type: &quot;ROIPooling&quot;</span><br><span class="line">  bottom: &quot;conv5&quot;</span><br><span class="line">  bottom: &quot;rois&quot;</span><br><span class="line">  top: &quot;roi_pool_conv5&quot;</span><br><span class="line">  roi_pooling_param &#123;</span><br><span class="line">    pooled_w: 6</span><br><span class="line">    pooled_h: 6</span><br><span class="line">    spatial_scale: 0.0625 # 1/16</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 相关的参数设置和caffe.proto中定义的一致。</p>
+<h3 id="2、roi-pooling源码"><a href="#2、roi-pooling源码" class="headerlink" title="2、roi_pooling源码"></a>2、roi_pooling源码</h3><p> 在这里，主要是关注其前向传播的函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">namespace caffe &#123;</span><br><span class="line"></span><br><span class="line">// 从net定义文件中获取roi_pooling层的相关参数</span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::LayerSetUp(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">  //获取解析后的roi_pooling层的参数</span><br><span class="line">  ROIPoolingParameter roi_pool_param = this-&gt;layer_param_.roi_pooling_param();</span><br><span class="line">  // 如果设置的pooling后的宽度高度小于9，则报错</span><br><span class="line">  CHECK_GT(roi_pool_param.pooled_h(), 0)</span><br><span class="line">      &lt;&lt; &quot;pooled_h must be &gt; 0&quot;;</span><br><span class="line">  CHECK_GT(roi_pool_param.pooled_w(), 0)</span><br><span class="line">      &lt;&lt; &quot;pooled_w must be &gt; 0&quot;;</span><br><span class="line">  // 以下三个参数都是在网络定义中设置的。</span><br><span class="line">  // 经过pooling后的map的高度</span><br><span class="line">  pooled_height_ = roi_pool_param.pooled_h();</span><br><span class="line">  // 经过pooling后的map的宽度</span><br><span class="line">  pooled_width_ = roi_pool_param.pooled_w();</span><br><span class="line">  // 从原图到pool前feature map的比例参数，在fasterrcnn中是1/16</span><br><span class="line">  spatial_scale_ = roi_pool_param.spatial_scale();</span><br><span class="line">  LOG(INFO) &lt;&lt; &quot;Spatial scale: &quot; &lt;&lt; spatial_scale_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::Reshape(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">	// 获取输入pool层feature map的C、H和W</span><br><span class="line">  channels_ = bottom[0]-&gt;channels();</span><br><span class="line">  height_ = bottom[0]-&gt;height();</span><br><span class="line">  width_ = bottom[0]-&gt;width();</span><br><span class="line">  // 设置top即输出层的blob的参数，这里的输出blob，num与输入的roi的个数一致</span><br><span class="line">  // channel和输入图的feature map的输入一致； 高度和宽度是自己在net定义中设置的。</span><br><span class="line">  top[0]-&gt;Reshape(bottom[1]-&gt;num(), channels_, pooled_height_,</span><br><span class="line">      pooled_width_);</span><br><span class="line">  // max_idx_为类定义的辅助的变量，用于记录max_pool时的最大值的来源，用于反向传播梯度的反传</span><br><span class="line">  max_idx_.Reshape(bottom[1]-&gt;num(), channels_, pooled_height_,</span><br><span class="line">      pooled_width_);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ROIPoolingLayer&lt;Dtype&gt;::Forward_cpu(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">  const Dtype* bottom_data = bottom[0]-&gt;cpu_data();			// 输入的feature map的数据的指针</span><br><span class="line">  const Dtype* bottom_rois = bottom[1]-&gt;cpu_data();			//输入的roi的数据的指针</span><br><span class="line">  // Number of ROIs</span><br><span class="line">  int num_rois = bottom[1]-&gt;num();			// roi的个数</span><br><span class="line">  int batch_size = bottom[0]-&gt;num();			// 输入的feature map的batch数</span><br><span class="line">  int top_count = top[0]-&gt;count();			//输出top的blob的总的元素个数</span><br><span class="line"></span><br><span class="line">  Dtype* top_data = top[0]-&gt;mutable_cpu_data();		//输出top的blob的数据的首地址</span><br><span class="line">  caffe_set(top_count, Dtype(-FLT_MAX), top_data);			//将输出的top的blob的数据全部置为负的最大值，这样在max_pool时有用</span><br><span class="line">  int* argmax_data = max_idx_.mutable_cpu_data();			//获取临时的max_idx_这个blob的数据指针</span><br><span class="line">  caffe_set(top_count, -1, argmax_data);		//获取临时的max_idx_这个blob的数据全部置为-1</span><br><span class="line"></span><br><span class="line">  // For each ROI R = [batch_index x1 y1 x2 y2]: max pool over R</span><br><span class="line">  for (int n = 0; n &lt; num_rois; ++n) </span><br><span class="line">  &#123;</span><br><span class="line">	  // 注意;实际处理的时候一次性处理的是一个batch的图像，所以feature map是一个batch的，即num数</span><br><span class="line">    int roi_batch_ind = bottom_rois[0];		//获取当前roi属于输入的feature map中batch中第几个图的roi</span><br><span class="line">	// 获得roi区域对应到feature map上的区域，这里round是四舍五入求近似</span><br><span class="line">    int roi_start_w = round(bottom_rois[1] * spatial_scale_);</span><br><span class="line">    int roi_start_h = round(bottom_rois[2] * spatial_scale_);</span><br><span class="line">    int roi_end_w = round(bottom_rois[3] * spatial_scale_);</span><br><span class="line">    int roi_end_h = round(bottom_rois[4] * spatial_scale_);</span><br><span class="line">	// 当前roi所属于的batch的值必须小于feature map的batch_size的值，但是大于0</span><br><span class="line">    CHECK_GE(roi_batch_ind, 0);</span><br><span class="line">    CHECK_LT(roi_batch_ind, batch_size);</span><br><span class="line"></span><br><span class="line">	 // 获取一个roi映射到feature map上的区域的大小</span><br><span class="line">    int roi_height = max(roi_end_h - roi_start_h + 1, 1);</span><br><span class="line">    int roi_width = max(roi_end_w - roi_start_w + 1, 1);</span><br><span class="line">	// 根据 获取一个roi映射到feature map上的区域的大小和roi_pool后map大小，获取pool的map上一个元素在feature map上的大小</span><br><span class="line">    const Dtype bin_size_h = static_cast&lt;Dtype&gt;(roi_height)</span><br><span class="line">                             / static_cast&lt;Dtype&gt;(pooled_height_);</span><br><span class="line">    const Dtype bin_size_w = static_cast&lt;Dtype&gt;(roi_width)</span><br><span class="line">                             / static_cast&lt;Dtype&gt;(pooled_width_);</span><br><span class="line"></span><br><span class="line">	// 获取输入的batch_size个feature map上的第roi_batch_ind个feature map的数据的地址</span><br><span class="line">    const Dtype* batch_data = bottom_data + bottom[0]-&gt;offset(roi_batch_ind);</span><br><span class="line"></span><br><span class="line">	// 遍历</span><br><span class="line">    for (int c = 0; c &lt; channels_; ++c) &#123;</span><br><span class="line">      for (int ph = 0; ph &lt; pooled_height_; ++ph) &#123;</span><br><span class="line">        for (int pw = 0; pw &lt; pooled_width_; ++pw) &#123;</span><br><span class="line">          // Compute pooling region for this output unit:</span><br><span class="line">			// 获取每个pool后的map上每个元素所对应在feature map上的起始和终止的相对坐标</span><br><span class="line">          int hstart = static_cast&lt;int&gt;(floor(static_cast&lt;Dtype&gt;(ph)</span><br><span class="line">                                              * bin_size_h));</span><br><span class="line">          int wstart = static_cast&lt;int&gt;(floor(static_cast&lt;Dtype&gt;(pw)</span><br><span class="line">                                              * bin_size_w));</span><br><span class="line">          int hend = static_cast&lt;int&gt;(ceil(static_cast&lt;Dtype&gt;(ph + 1)</span><br><span class="line">                                           * bin_size_h));</span><br><span class="line">          int wend = static_cast&lt;int&gt;(ceil(static_cast&lt;Dtype&gt;(pw + 1)</span><br><span class="line">                                           * bin_size_w));</span><br><span class="line"></span><br><span class="line">		  //获取每个pool后的map上每个元素所对应在feature map上的起始和终止的绝对坐标</span><br><span class="line">          hstart = min(max(hstart + roi_start_h, 0), height_);</span><br><span class="line">          hend = min(max(hend + roi_start_h, 0), height_);</span><br><span class="line">          wstart = min(max(wstart + roi_start_w, 0), width_);</span><br><span class="line">          wend = min(max(wend + roi_start_w, 0), width_);</span><br><span class="line"></span><br><span class="line">          bool is_empty = (hend &lt;= hstart) || (wend &lt;= wstart);</span><br><span class="line"></span><br><span class="line">          const int pool_index = ph * pooled_width_ + pw;</span><br><span class="line">          if (is_empty) </span><br><span class="line">		  &#123;</span><br><span class="line">            top_data[pool_index] = 0;</span><br><span class="line">            argmax_data[pool_index] = -1;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">		  // 求最大值</span><br><span class="line">          for (int h = hstart; h &lt; hend; ++h) &#123;</span><br><span class="line">            for (int w = wstart; w &lt; wend; ++w) &#123;</span><br><span class="line">              const int index = h * width_ + w;</span><br><span class="line">              if (batch_data[index] &gt; top_data[pool_index]) </span><br><span class="line">			  &#123;</span><br><span class="line">				  // 将最大值存储</span><br><span class="line">                top_data[pool_index] = batch_data[index];		//得到最大的那个数据值</span><br><span class="line">                argmax_data[pool_index] = index;			//反向的时候需要用到的，需要记录最大值的那个下标</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      //feature map 的一个channel遍历完后，batch_data指针feature map的下一个channel</span><br><span class="line">      batch_data += bottom[0]-&gt;offset(0, 1);</span><br><span class="line">	  //feature map 的一个channel遍历完后，top_data指针自身的下一个channel</span><br><span class="line">      top_data += top[0]-&gt;offset(0, 1);</span><br><span class="line">	  //argmax_data 同上</span><br><span class="line">      argmax_data += max_idx_.offset(0, 1);</span><br><span class="line">    &#125;</span><br><span class="line">    // Increment ROI data pointer，转到下一个roi区域</span><br><span class="line">	// 转到下一个roi的位置</span><br><span class="line">    bottom_rois += bottom[1]-&gt;offset(1);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意以下几点:</p>
+<p>1、输入roi_pool前的feature map是一个batch_size 的。</p>
+<p>2、输出的top的blob的形状参数如下： num * C* H * W，其中num与roi区域的个数是一致的。C的值和输入feature map的通道数是一致的， H和W分别是设置的值。</p>
+<p>3、注意3个函数，celi函数向上取整，round函数四舍五入取整，floor函数向下取整。比如数据2.7，三个函数的取值分别为： 3、 3、 2。</p>
+<p>4、实际在执行maxpool的时候，是对feature map上的每个通道分别执行max的操作的，最后输出的top的通道和输入feature map的C通道数是一致的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag"># 目标检测</a>
+          
+            <a href="/tags/FasterRCNN/" rel="tag"># FasterRCNN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/30/MaskRCNN%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="next" title="MaskRCNN阅读笔记">
+                <i class="fa fa-chevron-left"></i> MaskRCNN阅读笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/26/densenet%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="prev" title="Densenet网络介绍">
+                Densenet网络介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/archives/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81roi-pooling%E5%9C%A8proto%E4%B8%AD%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">1、roi_pooling在proto中的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81roi-pooling%E6%BA%90%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">2、roi_pooling源码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

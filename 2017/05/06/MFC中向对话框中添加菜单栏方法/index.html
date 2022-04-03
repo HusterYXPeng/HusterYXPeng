@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MFC," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在MFC中一般基于对话框的MFC界面是没有菜单栏的，基于文档视图结构的MFC界面是有菜单栏的，那么怎么在基于对话框的MFC界面中添加菜单栏。下面是基于网上的博客啥的自己整理的。 一、在资源视图中将menu加入资源视图中1、在MFC中新建一个基于对话框的MFC界面工程，打开资源视图截图如下：  里面是默认没有menu资源的。这时就需要我们手动添加menu资源了。2、在资源视图中添加menu资源还是在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MFC中向对话框中添加菜单栏方法">
+<meta property="og:url" content="http://example.com/2017/05/06/MFC%E4%B8%AD%E5%90%91%E5%AF%B9%E8%AF%9D%E6%A1%86%E4%B8%AD%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95%E6%A0%8F%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="在MFC中一般基于对话框的MFC界面是没有菜单栏的，基于文档视图结构的MFC界面是有菜单栏的，那么怎么在基于对话框的MFC界面中添加菜单栏。下面是基于网上的博客啥的自己整理的。 一、在资源视图中将menu加入资源视图中1、在MFC中新建一个基于对话框的MFC界面工程，打开资源视图截图如下：  里面是默认没有menu资源的。这时就需要我们手动添加menu资源了。2、在资源视图中添加menu资源还是在">
+<meta property="og:locale">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/8d132f0909781f4442f6bbf453b77234.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/cac64960da9ca18ffc8d96064d20e3f9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/7729252364fb40dde74d5dcffdb988ad.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/95a240694985ec1ddb38262ed83e58be.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/70328026606361fc97b595571fa6aa96.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/dd356f507622e76af77fdffc77b15e22.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/bf562c1c4ddaa9561307c936bee522ff.png">
+<meta property="article:published_time" content="2017-05-06T14:07:00.000Z">
+<meta property="article:modified_time" content="2022-04-03T10:16:50.370Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="MFC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/8d132f0909781f4442f6bbf453b77234.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2017/05/06/MFC中向对话框中添加菜单栏方法/"/>
+
+
+
+
+
+  <title>MFC中向对话框中添加菜单栏方法 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/05/06/MFC%E4%B8%AD%E5%90%91%E5%AF%B9%E8%AF%9D%E6%A1%86%E4%B8%AD%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95%E6%A0%8F%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MFC中向对话框中添加菜单栏方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-06T22:07:00+08:00">
+                2017-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在MFC中一般基于对话框的MFC界面是没有菜单栏的，基于文档视图结构的MFC界面是有菜单栏的，那么怎么在基于对话框的MFC界面中添加菜单栏。下面是基于网上的博客啥的自己整理的。</p>
+<h3 id="一、在资源视图中将menu加入资源视图中"><a href="#一、在资源视图中将menu加入资源视图中" class="headerlink" title="一、在资源视图中将menu加入资源视图中"></a>一、在资源视图中将menu加入资源视图中</h3><p>1、在MFC中新建一个基于对话框的MFC界面工程，打开资源视图截图如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/8d132f0909781f4442f6bbf453b77234.png" alt="这里写图片描述"></p>
+<p>里面是默认没有menu资源的。这时就需要我们手动添加menu资源了。<br>2、在资源视图中添加menu资源<br>还是在资源视图中，任选一个空白的地方“右击”，弹出如下界面，选择“添加资源（A）”功能<br><img src="https://img-blog.csdnimg.cn/img_convert/cac64960da9ca18ffc8d96064d20e3f9.png" alt="这里写图片描述"><br>之后在弹出的对话框中选择menu资源，再单击“新建”按钮，界面如下：<br><img src="https://img-blog.csdnimg.cn/img_convert/7729252364fb40dde74d5dcffdb988ad.png" alt="这里写图片描述"><br><strong>注意</strong>：这个时候在工程的资源视图中已经有了menu资源。接下来就是新建menu资源了。</p>
+<h3 id="二、在资源视图添加菜单栏"><a href="#二、在资源视图添加菜单栏" class="headerlink" title="二、在资源视图添加菜单栏"></a>二、在资源视图添加菜单栏</h3><p>1、在资源视图中添加菜单栏<br>步骤：在资源视图中，选中“menu”资源，右击，选择“插入Menu”，之后在资源视图的Menu下面就有了一个菜单栏，如下图：<br><img src="https://img-blog.csdnimg.cn/img_convert/95a240694985ec1ddb38262ed83e58be.png" alt="这里写图片描述"><br>双击具体新建的菜单栏就可以对菜单栏进行编辑了。<br>2、对插入的菜单栏进行编辑<br>（1）修改菜单栏的ID，<strong>注意</strong>：记住ID，后面有用<br>（2）修改菜单栏为我们想要的样子，如下：<br><img src="https://img-blog.csdnimg.cn/img_convert/70328026606361fc97b595571fa6aa96.png" alt="这里写图片描述"><br><strong>注意</strong>：此处，菜单栏有个ID，菜单栏上每个项都会有ID。</p>
+<h3 id="三、将菜单栏添加到对话框界面"><a href="#三、将菜单栏添加到对话框界面" class="headerlink" title="三、将菜单栏添加到对话框界面"></a>三、将菜单栏添加到对话框界面</h3><p>1、将菜单栏添加到界面<br>打开你新加入的菜单项，单击“项目”–&gt;“添加现有项”，在这里选择已有的类，就是你要为其添加菜单的对话框的类，例如，***Dlg.cpp。然后确定。如下图所示：<br><img src="https://img-blog.csdnimg.cn/img_convert/dd356f507622e76af77fdffc77b15e22.png" alt="这里写图片描述"><br><strong>注意</strong>：这里选择对话框的类的时候，一定要选择你需要添加菜单的对话框的cpp文件，特别是有多个对话框的时候一定要注意。<br>###<strong>四、在对话框文件中添加相应的代码<br>1、在对话框类.h文件中声明CMenu变量<br>打开对话框头文件</strong>*Dlg.h，声明CMenu 变量,例如m_Menu;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMenu m_Menu;</span><br></pre></td></tr></table></figure>
+
+<p>2、在对话框类.cpp文件中添加代码<br>打开<em><strong>Dlg.cpp 文件，在</strong></em>Dlg::OnInitDlg()中加入如下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m_Menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1</span><br></pre></td></tr></table></figure>
+
+<p>为你加入的菜单的ID，在Resource视图的Menu文件夹下可以找到。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetMenu(&amp;m_Menu);</span><br></pre></td></tr></table></figure>
+
+<p>这样就OK了，调试一下，菜单就已经出现在对应的对话框中。<br>成功运行之后的对话框界面如下：<br><img src="https://img-blog.csdnimg.cn/img_convert/bf562c1c4ddaa9561307c936bee522ff.png" alt="这里写图片描述"><br>成功添加了菜单栏之后就可以和在文档视图模式下一样对菜单进行操作，添加具体菜单项，以及为具体的菜单项添加消息处理函数等。</p>
+<p><strong>参考博客</strong>：<a target="_blank" rel="noopener" href="http://blog.csdn.net/apxar/article/details/12690431">http://blog.csdn.net/apxar/article/details/12690431</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MFC/" rel="tag"># MFC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/27/OpenCV%E4%B8%ADMat,%E5%9B%BE%E5%83%8F%E4%BA%8C%E7%BB%B4%E6%8C%87%E9%92%88%E5%92%8CCxImage%E7%B1%BB%E7%9A%84%E8%BD%AC%E6%8D%A2/" rel="next" title="OpenCV中Mat,图像二维指针和CxImage类的转换">
+                <i class="fa fa-chevron-left"></i> OpenCV中Mat,图像二维指针和CxImage类的转换
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/%E5%8A%A8%E6%80%81&%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E4%BB%A5%E5%8F%8AMD&MDd&MT&MTd%E7%BC%96%E8%AF%91/" rel="prev" title="动态、静态编译以及MD、MDd、MT、MTd编译">
+                动态、静态编译以及MD、MDd、MT、MTd编译 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/archives/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%9C%A8%E8%B5%84%E6%BA%90%E8%A7%86%E5%9B%BE%E4%B8%AD%E5%B0%86menu%E5%8A%A0%E5%85%A5%E8%B5%84%E6%BA%90%E8%A7%86%E5%9B%BE%E4%B8%AD"><span class="nav-number">1.</span> <span class="nav-text">一、在资源视图中将menu加入资源视图中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9C%A8%E8%B5%84%E6%BA%90%E8%A7%86%E5%9B%BE%E6%B7%BB%E5%8A%A0%E8%8F%9C%E5%8D%95%E6%A0%8F"><span class="nav-number">2.</span> <span class="nav-text">二、在资源视图添加菜单栏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B0%86%E8%8F%9C%E5%8D%95%E6%A0%8F%E6%B7%BB%E5%8A%A0%E5%88%B0%E5%AF%B9%E8%AF%9D%E6%A1%86%E7%95%8C%E9%9D%A2"><span class="nav-number">3.</span> <span class="nav-text">三、将菜单栏添加到对话框界面</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

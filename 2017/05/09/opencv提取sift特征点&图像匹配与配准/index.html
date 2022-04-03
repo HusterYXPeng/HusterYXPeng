@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OpenCV,SIFT," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在实际中提取图像的sift特征点，再对特征点做匹配，形成特征点对，最后计算图像变换的矩阵，一般为单应矩阵，再利用单应矩阵进行图像的配准，现在基于OpenCV实现相关的算法和步骤，具体代码和主要的函数讲解如下。 代码如下1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV中提取SIFT特征点、图像匹配、图像配准">
+<meta property="og:url" content="http://example.com/2017/05/09/opencv%E6%8F%90%E5%8F%96sift%E7%89%B9%E5%BE%81%E7%82%B9&%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%85%8D%E5%87%86/index.html">
+<meta property="og:site_name" content="JoliceYu的个人博客">
+<meta property="og:description" content="在实际中提取图像的sift特征点，再对特征点做匹配，形成特征点对，最后计算图像变换的矩阵，一般为单应矩阵，再利用单应矩阵进行图像的配准，现在基于OpenCV实现相关的算法和步骤，具体代码和主要的函数讲解如下。 代码如下1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950">
+<meta property="og:locale">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/97cd7c56889336553650f66d32aa075f.png">
+<meta property="article:published_time" content="2017-05-09T14:07:00.000Z">
+<meta property="article:modified_time" content="2022-04-03T09:58:47.104Z">
+<meta property="article:author" content="Xipeng Yu">
+<meta property="article:tag" content="OpenCV">
+<meta property="article:tag" content="SIFT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/97cd7c56889336553650f66d32aa075f.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2017/05/09/opencv提取sift特征点&图像匹配与配准/"/>
+
+
+
+
+
+  <title>OpenCV中提取SIFT特征点、图像匹配、图像配准 | JoliceYu的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JoliceYu的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Jolice-Yu</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/05/09/opencv%E6%8F%90%E5%8F%96sift%E7%89%B9%E5%BE%81%E7%82%B9&%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D%E4%B8%8E%E9%85%8D%E5%87%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JoliceYu的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenCV中提取SIFT特征点、图像匹配、图像配准</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T22:07:00+08:00">
+                2017-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在实际中提取图像的sift特征点，再对特征点做匹配，形成特征点对，最后计算图像变换的矩阵，一般为单应矩阵，再利用单应矩阵进行图像的配准，现在基于OpenCV实现相关的算法和步骤，具体代码和主要的函数讲解如下。</p>
+<h3 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a>代码如下</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include &lt;opencv2/core/core.hpp&gt;</span><br><span class="line">#include &lt;opencv2/highgui/highgui.hpp&gt;</span><br><span class="line">#include &lt;opencv2/features2d/features2d.hpp&gt;</span><br><span class="line">#include &lt;opencv2/nonfree/nonfree.hpp&gt;</span><br><span class="line">#include &quot;opencv2/calib3d/calib3d.hpp&quot;</span><br><span class="line">#include &lt;highgui.h&gt;  </span><br><span class="line">#include &lt;cv.h&gt;  </span><br><span class="line">#include&lt;vector&gt;</span><br><span class="line">#include&lt;cmath&gt;</span><br><span class="line"></span><br><span class="line">#define PI 3.14159265358979323846264338327950288419716939937510582097</span><br><span class="line">using namespace std;</span><br><span class="line">using namespace cv;</span><br><span class="line"></span><br><span class="line">void main()</span><br><span class="line">&#123;	</span><br><span class="line">	//读取原始基准图和待匹配图</span><br><span class="line">	Mat srcImg1 = imread(&quot;1.JPG&quot;);		//待配准图</span><br><span class="line">	Mat srcImg2 = imread(&quot;2.JPG&quot;);		//基准图</span><br><span class="line"></span><br><span class="line">	//显示基准和待配准图</span><br><span class="line">	imshow(&quot;待配准图&quot;, srcImg1);</span><br><span class="line">	imshow(&quot;基准图&quot;, srcImg2);</span><br><span class="line"></span><br><span class="line">	//定义SIFT特征检测类对象</span><br><span class="line">	SiftFeatureDetector siftDetector1;</span><br><span class="line">	SiftFeatureDetector siftDetector2;</span><br><span class="line">	</span><br><span class="line">	//定义KeyPoint变量</span><br><span class="line">	vector&lt;KeyPoint&gt;keyPoints1;</span><br><span class="line">	vector&lt;KeyPoint&gt;keyPoints2;</span><br><span class="line"></span><br><span class="line">	//特征点检测</span><br><span class="line">	siftDetector1.detect(srcImg1, keyPoints1);</span><br><span class="line">	siftDetector2.detect(srcImg2, keyPoints2);</span><br><span class="line"></span><br><span class="line">	//绘制特征点(关键点)</span><br><span class="line">	Mat feature_pic1, feature_pic2;</span><br><span class="line">	drawKeypoints(srcImg1, keyPoints1, feature_pic1, Scalar::all(-1));</span><br><span class="line">	drawKeypoints(srcImg2, keyPoints2, feature_pic2, Scalar::all(-1));</span><br><span class="line"></span><br><span class="line">	drawKeypoints(srcImg1, keyPoints1, feature_pic1, Scalar(0, 255, 0), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);</span><br><span class="line">	drawKeypoints(srcImg2, keyPoints2, feature_pic2, Scalar(0, 255, 0), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);</span><br><span class="line"></span><br><span class="line">	//显示原图</span><br><span class="line"></span><br><span class="line">	//显示结果</span><br><span class="line">	imshow(&quot;feature1&quot;, feature_pic1);</span><br><span class="line">	imshow(&quot;feature2&quot;, feature_pic2);</span><br><span class="line"></span><br><span class="line">	//计算特征点描述符 / 特征向量提取</span><br><span class="line">	SiftDescriptorExtractor descriptor;</span><br><span class="line">	Mat description1;</span><br><span class="line">	descriptor.compute(srcImg1, keyPoints1, description1);</span><br><span class="line">	Mat description2;</span><br><span class="line">	descriptor.compute(srcImg2, keyPoints2, description2);</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; keyPoints1.size() &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; description1.cols &lt;&lt; endl;		//列数</span><br><span class="line">	cout &lt;&lt; description1.rows &lt;&lt; endl;		//行数</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	//进行BFMatch暴力匹配</span><br><span class="line">	//BruteForceMatcher&lt;L2&lt;float&gt;&gt;matcher;    //实例化暴力匹配器</span><br><span class="line">	FlannBasedMatcher matcher;  //实例化FLANN匹配器</span><br><span class="line">	vector&lt;DMatch&gt;matches;   //定义匹配结果变量</span><br><span class="line">	matcher.match(description1, description2, matches);  //实现描述符之间的匹配</span><br><span class="line">	</span><br><span class="line">	//中间变量</span><br><span class="line">	int i,j,k;double sum=0;double b;</span><br><span class="line"></span><br><span class="line">	double max_dist = 0;  </span><br><span class="line">    double min_dist = 100;  </span><br><span class="line">    for(int i=0; i&lt;matches.size(); i++)  </span><br><span class="line">    &#123;  </span><br><span class="line">        double dist = matches[i].distance;  </span><br><span class="line">        if(dist &lt; min_dist) </span><br><span class="line">			min_dist = dist;  </span><br><span class="line">        if(dist &gt; max_dist) </span><br><span class="line">			max_dist = dist;  </span><br><span class="line">    &#125;  </span><br><span class="line">    cout&lt;&lt;&quot;最大距离：&quot;&lt;&lt;max_dist&lt;&lt;endl;  </span><br><span class="line">    cout&lt;&lt;&quot;最小距离：&quot;&lt;&lt;min_dist&lt;&lt;endl;  </span><br><span class="line">  </span><br><span class="line">    //筛选出较好的匹配点  </span><br><span class="line">    vector&lt;DMatch&gt; good_matches;  </span><br><span class="line">	double dThreshold = 0.5;    //匹配的阈值，越大匹配的点数越多</span><br><span class="line">    for(int i=0; i&lt;matches.size(); i++)  </span><br><span class="line">    &#123;  </span><br><span class="line">        if(matches[i].distance &lt; dThreshold * max_dist)  </span><br><span class="line">        &#123;  </span><br><span class="line">            good_matches.push_back(matches[i]);  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">	//RANSAC 消除误匹配特征点 主要分为三个部分：</span><br><span class="line">	//1）根据matches将特征点对齐,将坐标转换为float类型</span><br><span class="line">	//2）使用求基础矩阵方法findFundamentalMat,得到RansacStatus</span><br><span class="line">	//3）根据RansacStatus来将误匹配的点也即RansacStatus[i]=0的点删除</span><br><span class="line"></span><br><span class="line">   //根据matches将特征点对齐,将坐标转换为float类型</span><br><span class="line">    vector&lt;KeyPoint&gt; R_keypoint01,R_keypoint02;</span><br><span class="line">    for (i=0;i&lt;good_matches.size();i++)   </span><br><span class="line">    &#123;</span><br><span class="line">        R_keypoint01.push_back(keyPoints1[good_matches[i].queryIdx]);</span><br><span class="line">        R_keypoint02.push_back(keyPoints2[good_matches[i].trainIdx]);</span><br><span class="line">       // 这两句话的理解：R_keypoint1是要存储img01中能与img02匹配的特征点，</span><br><span class="line">       // matches中存储了这些匹配点对的img01和img02的索引值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	//坐标转换</span><br><span class="line">    vector&lt;Point2f&gt;p01,p02;</span><br><span class="line">    for (i=0;i&lt;good_matches.size();i++)</span><br><span class="line">    &#123;</span><br><span class="line">        p01.push_back(R_keypoint01[i].pt);</span><br><span class="line">        p02.push_back(R_keypoint02[i].pt);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	//计算基础矩阵并剔除误匹配点</span><br><span class="line">    vector&lt;uchar&gt; RansacStatus;</span><br><span class="line">	Mat Fundamental= findHomography(p01,p02,RansacStatus,CV_RANSAC);</span><br><span class="line">	Mat dst;</span><br><span class="line">	warpPerspective(srcImg1, dst, Fundamental,Size(srcImg1.cols,srcImg1.rows));</span><br><span class="line"></span><br><span class="line">	imshow(&quot;配准后的图&quot;,dst );</span><br><span class="line">	imwrite(&quot;dst.jpg&quot;, dst);</span><br><span class="line"></span><br><span class="line">	//剔除误匹配的点对</span><br><span class="line">    vector&lt;KeyPoint&gt; RR_keypoint01,RR_keypoint02;</span><br><span class="line">    vector&lt;DMatch&gt; RR_matches;            //重新定义RR_keypoint 和RR_matches来存储新的关键点和匹配矩阵</span><br><span class="line">    int index=0;</span><br><span class="line">    for (i=0;i&lt;good_matches.size();i++)</span><br><span class="line">    &#123;</span><br><span class="line">        if (RansacStatus[i]!=0)</span><br><span class="line">        &#123;</span><br><span class="line">            RR_keypoint01.push_back(R_keypoint01[i]);</span><br><span class="line">            RR_keypoint02.push_back(R_keypoint02[i]);</span><br><span class="line">            good_matches[i].queryIdx=index;</span><br><span class="line">            good_matches[i].trainIdx=index;</span><br><span class="line">            RR_matches.push_back(good_matches[i]);</span><br><span class="line">            index++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	cout&lt;&lt;&quot;找到的特征点对：&quot;&lt;&lt;RR_matches.size()&lt;&lt;endl;</span><br><span class="line">	</span><br><span class="line">	//画出消除误匹配后的图</span><br><span class="line">	Mat img_RR_matches;</span><br><span class="line">    drawMatches(srcImg1,RR_keypoint01,srcImg2,RR_keypoint02,RR_matches,img_RR_matches, Scalar(0, 255, 0), Scalar::all(-1));</span><br><span class="line">    imshow(&quot;消除误匹配点后&quot;,img_RR_matches);</span><br><span class="line">	imwrite(&quot;匹配图.jpg&quot;, img_RR_matches);</span><br><span class="line">	</span><br><span class="line">	waitKey(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二、主要函数解释"><a href="#二、主要函数解释" class="headerlink" title="二、主要函数解释"></a>二、主要函数解释</h3><p><font size = "3">1、findHomography函数：根据匹配点对坐标对的值，和RANSAC随机一致性算法剔除误匹配点对，并计算两幅图的单应矩阵。<br><strong>主要参数：参数1–待配准图中特征点坐标向量，</strong><br><strong>参数2–基准图像中特征点坐标向量；</strong><br><strong>返回值–计算出的3*3的单应矩阵的值，该矩阵即代表两幅图的变换关系</strong><br>注意：这个函数计算处单应矩阵，最少需要4对成功的匹配点对。<br>2、warpPerspective函数：根据单应矩阵，对待配准的图像进行重采样，计算配准后的图。<br><strong>主要参数：参数1–待配准图类对象，</strong><br><strong>参数2–待匹配图根据单应矩阵变换后的输出图像类对象；</strong><br><strong>参数3–单应矩阵；</strong><br><strong>参数4–输出图像类对象的大小，即输出图像的高度和宽度；</strong><br><strong>返回值–计算出的3*3的单应矩阵的值，该矩阵即代表两幅图的变换关系</strong></p>
+<h3 id="三、算法运行效果"><a href="#三、算法运行效果" class="headerlink" title="三、算法运行效果"></a>三、算法运行效果</h3><p><img src="https://img-blog.csdnimg.cn/img_convert/97cd7c56889336553650f66d32aa075f.png" alt="这里写图片描述"><br><font size = "3">运行效果：从待匹配图到匹配后的图，图像发生了一定的旋转，同时向基准图像靠拢了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+          
+            <a href="/tags/SIFT/" rel="tag"># SIFT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/08/%E5%8A%A8%E6%80%81&%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E4%BB%A5%E5%8F%8AMD&MDd&MT&MTd%E7%BC%96%E8%AF%91/" rel="next" title="动态、静态编译以及MD、MDd、MT、MTd编译">
+                <i class="fa fa-chevron-left"></i> 动态、静态编译以及MD、MDd、MT、MTd编译
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/26/MATLAB%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%89%80%E6%9C%89%E5%9B%BE%E5%83%8F/" rel="prev" title="MATLAB读取文件夹下所有图像">
+                MATLAB读取文件夹下所有图像 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/archives/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B"><span class="nav-number">1.</span> <span class="nav-text">代码如下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0%E8%A7%A3%E9%87%8A"><span class="nav-number">2.</span> <span class="nav-text">二、主要函数解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">三、算法运行效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xipeng Yu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
