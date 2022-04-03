@@ -1159,8 +1159,9 @@
           
             <h2 id="常用Linux命令"><a href="#常用Linux命令" class="headerlink" title="常用Linux命令"></a>常用Linux命令</h2><h4 id="将数据从一个机器拷贝到另一个远程机器"><a href="#将数据从一个机器拷贝到另一个远程机器" class="headerlink" title="将数据从一个机器拷贝到另一个远程机器"></a>将数据从一个机器拷贝到另一个远程机器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp ./xxxxx root@xx.xx.xx.xx:/home/xxx/xxxx     // 将本地文件拷贝到远程其他linux机器上</span><br><span class="line">scp root@xx.xx.xx.xx:/home/xxx/xxxx ./xxxxx     // 将远程机器上某个文件拷贝到本地机器</span><br></pre></td></tr></table></figure>
 
-<h4 id="当前机器访问远程机器的文件夹"><a href="#当前机器访问远程机器的文件夹" class="headerlink" title="当前机器访问远程机器的文件夹"></a>当前机器访问远程机器的文件夹</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sshfs -o allow other -o reconnect root@xx.xx.xx.xx:/home/data1</span><br><span class="line">// 在本地机器访问远程机器上的 data1 文件夹</span><br></pre></td></tr></table></figure>
-
+<h4 id="当前机器访问远程机器的文件夹"><a href="#当前机器访问远程机器的文件夹" class="headerlink" title="当前机器访问远程机器的文件夹"></a>当前机器访问远程机器的文件夹</h4><p>说明：十分好用，特别是在训练模型的时候，不必将庞大的数据集拷贝到各个环境上。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sshfs -o allow_other -o reconnect root@xx.xx.xx.xx:/home/data1 /dev/data1/</span><br><span class="line">// 在本地机器/dev/data1访问远程机器上的 data1 文件夹</span><br></pre></td></tr></table></figure>
+<p>注意：（1）在本地机器提前安装sshfs包<br>（2）后面的那个路径，必须是一个空的文件夹，必须提前创建好且是空的文件夹</p>
 <h4 id="列举文件夹下所有文件的大小按MB统计"><a href="#列举文件夹下所有文件的大小按MB统计" class="headerlink" title="列举文件夹下所有文件的大小按MB统计"></a>列举文件夹下所有文件的大小按MB统计</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -csh ./xxx/xx/*</span><br></pre></td></tr></table></figure>
           
         
