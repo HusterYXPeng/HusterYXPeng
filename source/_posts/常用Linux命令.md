@@ -17,11 +17,14 @@ scp root@xx.xx.xx.xx:/home/xxx/xxxx ./xxxxx     // 将远程机器上某个文�
 ```
 
 #### 当前机器访问远程机器的文件夹
+说明：十分好用，特别是在训练模型的时候，不必将庞大的数据集拷贝到各个环境上。
+```
+sudo sshfs -o allow_other -o reconnect root@xx.xx.xx.xx:/home/data1 /dev/data1/
+// 在本地机器/dev/data1访问远程机器上的 data1 文件夹
+```
+注意：（1）在本地机器提前安装sshfs包
+（2）后面的那个路径，必须是一个空的文件夹，必须提前创建好且是空的文件夹
 
-```
-sudo sshfs -o allow other -o reconnect root@xx.xx.xx.xx:/home/data1
-// 在本地机器访问远程机器上的 data1 文件夹
-```
 
 #### 列举文件夹下所有文件的大小按MB统计
 ```
